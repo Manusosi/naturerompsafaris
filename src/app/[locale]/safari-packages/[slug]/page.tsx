@@ -1,3 +1,4 @@
+import { publicLabel } from '@/lib/i18n/public-label';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
@@ -106,22 +107,25 @@ export default async function SafariPackageDetailPage({ params }: SafariPackageD
             <article className='min-w-0'>
               <section>
                 <h2 className='brand-heading font-display text-[clamp(1.9rem,3vw,2.55rem)] leading-tight'>
-                  Package Overview
+                  {publicLabel(locale, 'Package Overview')}
                 </h2>
                 <div className='mt-5 grid gap-3 sm:grid-cols-3'>
                   <PackageFact
-                    label='Comfort'
+                    label={publicLabel(locale, 'Comfort')}
                     value={formatComfortTierLabel(safariPackage.comfortTier)}
                   />
                   <PackageFact
-                    label='Duration'
+                    label={publicLabel(locale, 'Duration')}
                     value={
                       linkedTour
                         ? formatTourDuration(linkedTour.days, linkedTour.nights)
                         : 'Custom safari'
                     }
                   />
-                  <PackageFact label='From' value={packagePrice ?? 'On request'} />
+                  <PackageFact
+                    label={publicLabel(locale, 'From')}
+                    value={packagePrice ?? 'On request'}
+                  />
                 </div>
                 {safariPackage.contentHtml ? (
                   <div
@@ -136,14 +140,19 @@ export default async function SafariPackageDetailPage({ params }: SafariPackageD
               {linkedTour ? (
                 <section className='mt-12 border-t border-[var(--brand-line)] pt-10'>
                   <h2 className='brand-heading font-display text-[clamp(1.75rem,2.6vw,2.35rem)] leading-tight'>
-                    Linked Safari Route
+                    {publicLabel(locale, 'Linked Safari Route')}
                   </h2>
                   <p className='brand-body mt-3 max-w-2xl text-base leading-7'>
-                    This package is built on {linkedTour.title}. Compare the route, itinerary, and
-                    inclusions on the full trip detail page.
+                    {publicLabel(locale, 'This package is built on')} {linkedTour.title}
+                    {publicLabel(
+                      locale,
+                      '. Compare the route, itinerary, and inclusions on the full trip detail page.'
+                    )}
                   </p>
                   <div className='mt-6'>
-                    <BrandButton href={linkedTour.href}>View Full Trip</BrandButton>
+                    <BrandButton href={linkedTour.href}>
+                      {publicLabel(locale, 'View Full Trip')}
+                    </BrandButton>
                   </div>
                 </section>
               ) : null}
@@ -151,11 +160,13 @@ export default async function SafariPackageDetailPage({ params }: SafariPackageD
               {safariPackage.pricingTier ? (
                 <section className='mt-12 border-t border-[var(--brand-line)] pt-10'>
                   <h2 className='brand-heading font-display text-[clamp(1.75rem,2.6vw,2.35rem)] leading-tight'>
-                    Package Price Table
+                    {publicLabel(locale, 'Package Price Table')}
                   </h2>
                   <p className='brand-body mt-3 max-w-2xl text-base leading-7'>
-                    Prices are per person and vary by season, group size, rooming, and lodge
-                    availability.
+                    {publicLabel(
+                      locale,
+                      'Prices are per person and vary by season, group size, rooming, and lodge availability.'
+                    )}
                   </p>
                   <div className='mt-6'>
                     <TourPricingTable
@@ -171,22 +182,24 @@ export default async function SafariPackageDetailPage({ params }: SafariPackageD
             <aside className='h-fit lg:sticky lg:top-[calc(var(--brand-header-h)+5.25rem)]'>
               <div className='brand-contact-credentials-box'>
                 <p className='text-xs font-bold uppercase tracking-[0.14em] text-[var(--brand-muted)]'>
-                  Package from
+                  {publicLabel(locale, 'Package from')}
                 </p>
                 <strong className='font-price mt-2 block text-3xl text-[var(--brand-brown)]'>
                   {packagePrice ?? 'Custom quote'}
                 </strong>
                 <p className='brand-body mt-4 text-sm leading-6'>
-                  Request the exact quote for your dates, preferred comfort level, and number of
-                  travelers.
+                  {publicLabel(
+                    locale,
+                    'Request the exact quote for your dates, preferred comfort level, and number of travelers.'
+                  )}
                 </p>
                 <BrandButtonGroup className='mt-5'>
                   <BrandButton href={localePath(locale, '/contact')}>
-                    Enquire About Package
+                    {publicLabel(locale, 'Enquire About Package')}
                   </BrandButton>
                   {linkedTour ? (
                     <BrandButton href={linkedTour.href} variant='accent-outline'>
-                      View Full Trip
+                      {publicLabel(locale, 'View Full Trip')}
                     </BrandButton>
                   ) : null}
                 </BrandButtonGroup>

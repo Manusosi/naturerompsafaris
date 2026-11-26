@@ -1,6 +1,6 @@
 'use server';
 
-import { revalidatePath } from 'next/cache';
+import { revalidatePath, revalidateTag } from 'next/cache';
 
 import { requirePortalSession } from '@/lib/auth/portal';
 import { createClient } from '@/lib/supabase/server';
@@ -123,6 +123,8 @@ export async function saveAccommodation(input: {
     if (error) throw new Error(mapLocaleSlugError(error.message, 'accommodation'));
   }
 
+  revalidateTag('accommodations', 'max');
+  revalidateTag('sitemap-accommodations', 'max');
   revalidatePath('/portal/accommodations');
   revalidatePath('/en/accommodations');
   if (input.status === 'published') {

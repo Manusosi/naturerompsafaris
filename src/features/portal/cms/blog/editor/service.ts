@@ -156,7 +156,11 @@ export async function saveArticle(input: {
   revalidateTag('blog-posts', 'max');
   if (input.status === 'published') {
     notifyPublishedContent({ pathPrefix: 'blog', slug: values.slug });
-    scheduleAutoTranslate(() => autoTranslateBlogPostById(postId));
+    scheduleAutoTranslate(async () => {
+      await autoTranslateBlogPostById(postId);
+      revalidateTag('blog-posts', 'max');
+      revalidateTag('sitemap-blog', 'max');
+    });
   }
   return { id: postId };
 }

@@ -1,5 +1,6 @@
 'use client';
 
+import { publicLabel } from '@/lib/i18n/public-label';
 import { Icons } from '@/components/icons';
 import { BrandButton } from '@/components/public/ui/brand-button';
 import {
@@ -33,17 +34,19 @@ export function ThankYouContent({ locale, sourceParam }: ThankYouContentProps) {
             <span className='brand-thank-you__spark brand-thank-you__spark--3' />
           </div>
 
-          <p className='brand-thank-you__eyebrow'>Enquiry received</p>
+          <p className='brand-thank-you__eyebrow'>{publicLabel(locale, 'Enquiry received')}</p>
           <h1 className='brand-thank-you__heading font-display'>{copy.heading}</h1>
           <p className='brand-thank-you__body'>{copy.body}</p>
           <p className='brand-thank-you__note'>
-            No payment is collected on this website. We listen first and tailor suggestions to your
-            interests.
+            {publicLabel(
+              locale,
+              'No payment is collected on this website. We listen first and tailor suggestions to your interests.'
+            )}
           </p>
 
           <div className='brand-thank-you__actions'>
             <BrandButton href={localePath(locale)} variant='gold'>
-              Back to homepage
+              {publicLabel(locale, 'Back to homepage')}
             </BrandButton>
             <BrandButton href={localePath(locale, copy.secondaryHref)} variant='accent-outline'>
               {copy.secondaryLabel}

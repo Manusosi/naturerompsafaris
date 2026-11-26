@@ -1,4 +1,6 @@
 'use client';
+import { publicLabel } from '@/lib/i18n/public-label';
+import { usePublicLocale } from '@/lib/i18n/use-public-locale';
 
 import { useRef } from 'react';
 import gsap from 'gsap';
@@ -22,6 +24,7 @@ type ContactAdvantagesListProps = {
 };
 
 export function ContactAdvantagesList({ className }: ContactAdvantagesListProps) {
+  const locale = usePublicLocale();
   const listRef = useRef<HTMLUListElement>(null);
 
   useGSAP(
@@ -94,8 +97,8 @@ export function ContactAdvantagesList({ className }: ContactAdvantagesListProps)
           <span aria-hidden className='brand-contact-sidebar-advantage-icon' data-advantage-icon>
             <Icons.check />
           </span>
-          <span data-advantage-text data-full-text={advantage}>
-            {advantage}
+          <span data-advantage-text data-full-text={publicLabel(locale, advantage)}>
+            {publicLabel(locale, advantage)}
           </span>
         </li>
       ))}

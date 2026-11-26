@@ -1,3 +1,4 @@
+import { publicLabel } from '@/lib/i18n/public-label';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -21,13 +22,13 @@ type SiteFooterProps = {
   siteSettings: PublicSiteSettings;
 };
 
-function FooterLinkColumn({ column }: { column: PublicFooterColumn }) {
+function FooterLinkColumn({ column, locale }: { column: PublicFooterColumn; locale: string }) {
   return (
-    <nav aria-label={column.title}>
-      <h3>{column.title}</h3>
+    <nav aria-label={publicLabel(locale, column.title)}>
+      <h3>{publicLabel(locale, column.title)}</h3>
       {column.links.map((link) => (
         <Link href={link.href} key={`${column.title}-${link.href}`}>
-          {link.label}
+          {publicLabel(locale, link.label)}
         </Link>
       ))}
     </nav>
@@ -61,20 +62,20 @@ export function SiteFooter({ footerColumns, locale, siteSettings }: SiteFooterPr
               width={132}
             />
           </Link>
-          <p className='nr-footer__about'>{description}</p>
+          <p className='nr-footer__about'>{publicLabel(locale, description)}</p>
           <Link className='nr-footer__quote' href={localePath(locale, '/contact')}>
-            Request a custom quote
+            {publicLabel(locale, 'Request a custom quote')}
             <Icons.arrowRight />
           </Link>
           <PublicSocialLinks className='nr-footer__social' socialLinks={siteSettings.socialLinks} />
         </div>
-        {quickLinks ? <FooterLinkColumn column={quickLinks} /> : null}
-        {safariLinks ? <FooterLinkColumn column={safariLinks} /> : null}
+        {quickLinks ? <FooterLinkColumn locale={locale} column={quickLinks} /> : null}
+        {safariLinks ? <FooterLinkColumn locale={locale} column={safariLinks} /> : null}
         <div className='nr-footer__contact-col'>
-          <h3>Contact Us</h3>
+          <h3>{publicLabel(locale, 'Contact Us')}</h3>
           <dl className='nr-footer__details'>
             <div className='nr-footer__detail'>
-              <dt>Mobile &amp; Whatsapp:</dt>
+              <dt>{publicLabel(locale, 'Mobile & WhatsApp:')}</dt>
               <dd>
                 <div className='nr-footer__actions'>
                   <span className='nr-footer__phones'>
@@ -103,13 +104,13 @@ export function SiteFooter({ footerColumns, locale, siteSettings }: SiteFooterPr
                     target='_blank'
                   >
                     <Icons.whatsapp aria-hidden />
-                    WhatsApp chat
+                    {publicLabel(locale, 'WhatsApp chat')}
                   </a>
                 </div>
               </dd>
             </div>
             <div className='nr-footer__detail'>
-              <dt>Email:</dt>
+              <dt>{publicLabel(locale, 'Email:')}</dt>
               <dd>
                 <a
                   className='nr-footer__action nr-footer__action--email'
@@ -130,10 +131,10 @@ export function SiteFooter({ footerColumns, locale, siteSettings }: SiteFooterPr
             {siteSettings.siteName}.
           </div>
           {policyColumn ? (
-            <nav aria-label='Legal policies' className='nr-footer__legal'>
+            <nav aria-label={publicLabel(locale, 'Legal policies')} className='nr-footer__legal'>
               {policyColumn.links.map((link) => (
                 <Link href={link.href} key={link.href} prefetch>
-                  {link.label}
+                  {publicLabel(locale, link.label)}
                 </Link>
               ))}
             </nav>

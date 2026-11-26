@@ -1,5 +1,7 @@
 'use client';
+import { usePublicLocale } from '@/lib/i18n/use-public-locale';
 
+import { publicLabel } from '@/lib/i18n/public-label';
 import { Icons } from '@/components/icons';
 import { BRAND_WHATSAPP } from '@/config/brand';
 import { whatsAppHref } from '@/lib/public/whatsapp';
@@ -10,11 +12,12 @@ import { whatsAppHref } from '@/lib/public/whatsapp';
  * channels never overlap. Reuses the shared BRAND_WHATSAPP contact + message.
  */
 export function FloatingWhatsApp() {
+  const locale = usePublicLocale();
   const href = whatsAppHref(BRAND_WHATSAPP.phone, BRAND_WHATSAPP.message);
 
   return (
     <a
-      aria-label='Chat with Nature Romp Safaris on WhatsApp'
+      aria-label={publicLabel(locale, 'Chat with Nature Romp Safaris on WhatsApp')}
       className='group fixed bottom-6 right-6 z-[60] flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-lg shadow-black/25 transition-transform duration-200 hover:scale-110 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white motion-safe:animate-[brand-wa-pulse_2.4s_ease-out_infinite]'
       href={href}
       rel='noopener noreferrer'
@@ -22,7 +25,7 @@ export function FloatingWhatsApp() {
     >
       <Icons.whatsapp aria-hidden className='h-7 w-7' />
       <span className='pointer-events-none absolute right-16 whitespace-nowrap rounded-md bg-[var(--brand-primary-dark)] px-3 py-1.5 text-xs font-semibold text-white opacity-0 shadow-md transition-opacity duration-200 group-hover:opacity-100'>
-        Chat on WhatsApp
+        {publicLabel(locale, 'Chat on WhatsApp')}
       </span>
     </a>
   );

@@ -1,3 +1,4 @@
+import { publicLabel } from '@/lib/i18n/public-label';
 import { TourCard } from '@/components/public/cards/content-cards';
 import { BrandButton } from '@/components/public/ui/brand-button';
 import { localePath } from '@/lib/public/locale-path';
@@ -71,14 +72,21 @@ export function DestinationTripsSection({
         ) : (
           <div className='mt-8 rounded-[var(--brand-radius)] border border-dashed border-[var(--brand-line)] bg-white px-8 py-14 text-center'>
             <h3 className='brand-heading font-display text-2xl'>
-              Safaris to {destinationName} coming soon
+              {publicLabel(locale, 'Safaris to')} {destinationName}{' '}
+              {publicLabel(locale, 'coming soon')}
             </h3>
             <p className='brand-body mx-auto mt-3 max-w-xl'>
-              We are putting together itineraries that visit {destinationName}. In the meantime, our
-              team can build a custom safari around this destination for you.
+              {publicLabel(locale, 'We are putting together itineraries that visit')}{' '}
+              {destinationName}
+              {publicLabel(
+                locale,
+                '. In the meantime, our team can build a custom safari around this destination for you.'
+              )}
             </p>
             <div className='mt-6'>
-              <BrandButton href={localePath(locale, '/contact')}>Plan a Custom Safari</BrandButton>
+              <BrandButton href={localePath(locale, '/contact')}>
+                {publicLabel(locale, 'Plan a Custom Safari')}
+              </BrandButton>
             </div>
           </div>
         )}

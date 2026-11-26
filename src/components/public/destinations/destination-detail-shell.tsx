@@ -1,3 +1,4 @@
+import { publicLabel } from '@/lib/i18n/public-label';
 import { Icons } from '@/components/icons';
 import { AccommodationGallery } from '@/components/public/accommodations/accommodation-gallery';
 import { DestinationInquiryPanel } from '@/components/public/destinations/destination-inquiry-panel';
@@ -64,18 +65,18 @@ export function DestinationDetailShell({ destination, locale }: DestinationDetai
       <section className='border-b border-[var(--brand-line)] bg-white'>
         <div className='brand-container py-6 md:py-8'>
           <nav
-            aria-label='Breadcrumb'
+            aria-label={publicLabel(locale, 'Breadcrumb')}
             className='mb-6 flex flex-wrap gap-2 text-sm text-[var(--brand-muted)]'
           >
             <a className='hover:text-[var(--brand-primary)]' href={localePath(locale)}>
-              Home
+              {publicLabel(locale, 'Home')}
             </a>
             <span>/</span>
             <a
               className='hover:text-[var(--brand-primary)]'
               href={localePath(locale, '/destinations')}
             >
-              Destinations
+              {publicLabel(locale, 'Destinations')}
             </a>
             <span>/</span>
             <span className='text-[var(--brand-ink)]'>{destination.name}</span>
@@ -98,7 +99,7 @@ export function DestinationDetailShell({ destination, locale }: DestinationDetai
                 ) : null}
               </div>
 
-              <p className='brand-eyebrow mt-5'>Destination Guide</p>
+              <p className='brand-eyebrow mt-5'>{publicLabel(locale, 'Destination Guide')}</p>
               <h1 className='brand-heading mt-2 font-display text-[clamp(2rem,4vw,3rem)] leading-tight'>
                 {destination.name}
               </h1>
@@ -117,7 +118,9 @@ export function DestinationDetailShell({ destination, locale }: DestinationDetai
 
               {destination.descriptionHtml ? (
                 <section className='mt-10 scroll-mt-36' id='why-go'>
-                  <h2 className={SECTION_HEADING}>About {destination.name}</h2>
+                  <h2 className={SECTION_HEADING}>
+                    {publicLabel(locale, 'About')} {destination.name}
+                  </h2>
                   <div
                     className='brand-legal-prose mt-4 max-w-full break-words [&_img]:max-w-full [&_table]:block [&_table]:max-w-full [&_table]:overflow-x-auto'
                     dangerouslySetInnerHTML={{ __html: destination.descriptionHtml }}
@@ -127,7 +130,7 @@ export function DestinationDetailShell({ destination, locale }: DestinationDetai
 
               {destination.bestTime ? (
                 <section className='mt-10 scroll-mt-36' id='when-to-go'>
-                  <h2 className={SECTION_HEADING}>Best time to visit</h2>
+                  <h2 className={SECTION_HEADING}>{publicLabel(locale, 'Best time to visit')}</h2>
                   <p className='brand-body mt-4 inline-flex items-center gap-2 text-[15px] leading-7'>
                     <Icons.calendar className='size-5 shrink-0 text-[var(--brand-primary)]' />
                     {destination.bestTime}
@@ -137,7 +140,10 @@ export function DestinationDetailShell({ destination, locale }: DestinationDetai
 
               {destination.wildlife.length ? (
                 <section className='mt-10 scroll-mt-36' id='where-to-go'>
-                  <h2 className={SECTION_HEADING}>Key {destination.name} Highlights</h2>
+                  <h2 className={SECTION_HEADING}>
+                    {publicLabel(locale, 'Key')} {destination.name}{' '}
+                    {publicLabel(locale, 'Highlights')}
+                  </h2>
                   {/* Light whiteboard-style panel; highlights flow in two columns. */}
                   <div
                     className='brand-contact-credentials-box mt-4 !p-6 md:!p-8'
@@ -190,7 +196,7 @@ export function DestinationDetailShell({ destination, locale }: DestinationDetai
               href={localePath(locale, '/destinations')}
             >
               <Icons.chevronLeft className='size-4' />
-              Back to all destinations
+              {publicLabel(locale, 'Back to all destinations')}
             </a>
           </div>
         </div>

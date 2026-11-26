@@ -1,3 +1,4 @@
+import { publicLabel } from '@/lib/i18n/public-label';
 import { NationalParkCard } from '@/components/public/national-parks/national-park-card';
 import { BrandButton } from '@/components/public/ui/brand-button';
 import { localePath } from '@/lib/public/locale-path';
@@ -21,13 +22,14 @@ export function DestinationParksSection({
       <div className='brand-container'>
         <div className='flex flex-wrap items-end justify-between gap-4'>
           <div>
-            <p className='brand-eyebrow'>National Parks</p>
+            <p className='brand-eyebrow'>{publicLabel(locale, 'National Parks')}</p>
             <h2 className='brand-heading mt-3 font-display text-[clamp(1.75rem,3.5vw,2.5rem)] leading-tight'>
-              Parks in {destinationName}
+              {publicLabel(locale, 'Parks in')} {destinationName}
             </h2>
             <p className='brand-body mt-4 max-w-3xl text-base leading-8'>
-              Explore the reserves and wildlife areas linked to {destinationName}, then jump
-              straight to safaris that visit each park.
+              {publicLabel(locale, 'Explore the reserves and wildlife areas linked to')}{' '}
+              {destinationName}
+              {publicLabel(locale, ', then jump straight to safaris that visit each park.')}
             </p>
           </div>
           <BrandButton
@@ -35,7 +37,7 @@ export function DestinationParksSection({
             size='sm'
             variant='accent-outline'
           >
-            Browse All Parks
+            {publicLabel(locale, 'Browse All Parks')}
           </BrandButton>
         </div>
 

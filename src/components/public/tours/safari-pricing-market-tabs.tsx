@@ -1,5 +1,7 @@
 'use client';
+import { usePublicLocale } from '@/lib/i18n/use-public-locale';
 
+import { publicLabel } from '@/lib/i18n/public-label';
 import { useState } from 'react';
 
 import { Icons } from '@/components/icons';
@@ -24,19 +26,24 @@ function localRatesWhatsAppHref(safariName: string) {
 }
 
 function LocalRatesUnavailable({ safariName }: { safariName: string }) {
+  const locale = usePublicLocale();
   const trip = safariName.trim() || 'this safari';
 
   return (
     <div className='brand-contact-credentials-box'>
       <p className='text-xs font-bold uppercase tracking-[0.14em] text-[var(--brand-gold)]'>
-        Resident rates · KES
+        {publicLabel(locale, 'Resident rates · KES')}
       </p>
-      <h3 className='brand-heading font-display mt-2 text-xl'>Please check back later</h3>
+      <h3 className='brand-heading font-display mt-2 text-xl'>
+        {publicLabel(locale, 'Please check back later')}
+      </h3>
       <p className='brand-body mt-3 text-sm leading-7'>
-        Resident Kenya Shilling prices for{' '}
-        <strong className='text-[var(--brand-heading)]'>{trip}</strong> are not published yet.
-        Non-resident USD rates are on the other tab. WhatsApp us if you need a resident quote for
-        this safari in the meantime.
+        {publicLabel(locale, 'Resident Kenya Shilling prices for')}{' '}
+        <strong className='text-[var(--brand-heading)]'>{trip}</strong>{' '}
+        {publicLabel(
+          locale,
+          'are not published yet. Non-resident USD rates are on the other tab. WhatsApp us if you need a resident quote for this safari in the meantime.'
+        )}
       </p>
       <a
         className='mt-5 inline-flex items-center gap-2 rounded-[var(--brand-button-radius)] bg-[#25D366] px-4 py-2.5 text-xs font-bold uppercase tracking-wide text-white transition hover:bg-[#1ebe5d]'
@@ -45,7 +52,7 @@ function LocalRatesUnavailable({ safariName }: { safariName: string }) {
         target='_blank'
       >
         <Icons.whatsapp className='h-4 w-4' />
-        WhatsApp for KES rates
+        {publicLabel(locale, 'WhatsApp for KES rates')}
       </a>
     </div>
   );
@@ -56,11 +63,16 @@ export function SafariPricingMarketTabs({
   local,
   safariName
 }: SafariPricingMarketTabsProps) {
+  const locale = usePublicLocale();
   const [market, setMarket] = useState<PricingMarket>('usd');
 
   return (
     <div>
-      <div aria-label='Rate type' className='brand-pricing-market' role='tablist'>
+      <div
+        aria-label={publicLabel(locale, 'Rate type')}
+        className='brand-pricing-market'
+        role='tablist'
+      >
         <button
           aria-selected={market === 'usd'}
           className={cn('brand-pricing-market__tab', market === 'usd' && 'is-active')}
@@ -68,7 +80,7 @@ export function SafariPricingMarketTabs({
           role='tab'
           type='button'
         >
-          Non-Resident Rates (USD)
+          {publicLabel(locale, 'Non-Resident Rates (USD)')}
         </button>
         <button
           aria-selected={market === 'local'}
@@ -77,7 +89,7 @@ export function SafariPricingMarketTabs({
           role='tab'
           type='button'
         >
-          Resident Rates (KES)
+          {publicLabel(locale, 'Resident Rates (KES)')}
         </button>
       </div>
 

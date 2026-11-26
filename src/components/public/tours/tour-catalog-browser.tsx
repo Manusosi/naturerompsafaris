@@ -1,5 +1,6 @@
 'use client';
 
+import { publicLabel } from '@/lib/i18n/public-label';
 import { useEffect, useState } from 'react';
 
 import { TourCard } from '@/components/public/cards/content-cards';
@@ -94,7 +95,8 @@ export function TourCatalogBrowser({
       <div className='mb-6 flex items-baseline justify-between gap-3'>
         <h2 className='brand-heading font-display text-2xl'>{listingTitle}</h2>
         <span className='text-sm text-[var(--brand-muted)]'>
-          {visibleTours.length} {visibleTours.length === 1 ? 'tour' : 'tours'} found
+          {visibleTours.length} {visibleTours.length === 1 ? 'tour' : 'tours'}{' '}
+          {publicLabel(locale, 'found')}
         </span>
       </div>
       {visibleTours.length ? (

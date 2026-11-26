@@ -1,6 +1,8 @@
 'use client';
 
 import { useEffect, useRef, useState, type ReactNode } from 'react';
+import { useParams } from 'next/navigation';
+import { publicLabel } from '@/lib/i18n/public-label';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 
@@ -55,6 +57,7 @@ export function PublicPageHero({
   titleTone = 'white',
   children
 }: PublicPageHeroProps) {
+  const locale = useParams<{ locale: string }>()?.locale ?? 'en';
   const contentRef = useRef<HTMLDivElement>(null);
   const isPipeUppercase = breadcrumbStyle === 'pipe-uppercase';
 
@@ -121,7 +124,7 @@ export function PublicPageHero({
             aria-hidden
             className='pointer-events-none absolute left-1/2 top-1/2 h-[56.25vw] min-h-full w-[177.78vh] min-w-full -translate-x-1/2 -translate-y-1/2'
             src={`https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&controls=0&loop=1&playlist=${videoId}&playsinline=1&rel=0&modestbranding=1&showinfo=0`}
-            title='Background video'
+            title={publicLabel(locale, 'Background video')}
           />
         </>
       ) : sliderImages.length > 0 ? (
@@ -143,7 +146,7 @@ export function PublicPageHero({
           style={{ backgroundImage: `url("${imageUrl}")` }}
         />
       )}
-      <span className='sr-only'>{imageAlt}</span>
+      <span className='sr-only'>{publicLabel(locale, imageAlt)}</span>
       <div
         aria-hidden
         className='absolute inset-0'
@@ -159,7 +162,7 @@ export function PublicPageHero({
           <div className='mx-auto max-w-3xl text-center' ref={contentRef}>
             {breadcrumbs?.length ? (
               <nav
-                aria-label='Breadcrumb'
+                aria-label={publicLabel(locale, 'Breadcrumb')}
                 className={cn(
                   'mb-8 flex flex-wrap items-center justify-center gap-x-3 text-sm md:mb-10',
                   isPipeUppercase
@@ -176,10 +179,10 @@ export function PublicPageHero({
                     ) : null}
                     {crumb.href ? (
                       <a className='transition-colors hover:text-white' href={crumb.href}>
-                        {crumb.label}
+                        {publicLabel(locale, crumb.label)}
                       </a>
                     ) : (
-                      <span className='text-white'>{crumb.label}</span>
+                      <span className='text-white'>{publicLabel(locale, crumb.label)}</span>
                     )}
                   </span>
                 ))}
@@ -192,7 +195,7 @@ export function PublicPageHero({
                   eyebrowTone === 'white' ? 'text-white' : 'brand-eyebrow'
                 )}
               >
-                {effectiveEyebrow}
+                {publicLabel(locale, effectiveEyebrow)}
               </p>
             ) : null}
             <h1
@@ -201,21 +204,24 @@ export function PublicPageHero({
                 titleTone === 'gold' ? 'text-[var(--brand-gold)]' : 'text-white'
               )}
             >
-              {effectiveTitle}
+              {publicLabel(locale, effectiveTitle)}
             </h1>
             {showGoldLine ? <span aria-hidden className='brand-gold-line mt-5' /> : null}
             {effectiveDescription ? (
               <p className='mx-auto mt-6 max-w-2xl text-lg leading-8 text-white/85'>
-                {effectiveDescription}
+                {publicLabel(locale, effectiveDescription)}
               </p>
             ) : null}
             {effectiveCta ? (
               <div className='mt-8'>
                 {ctaVariant === 'ghost-hero' ? (
-                  <PublicHeroGhostCta href={effectiveCta.href} label={effectiveCta.label} />
+                  <PublicHeroGhostCta
+                    href={effectiveCta.href}
+                    label={publicLabel(locale, effectiveCta.label)}
+                  />
                 ) : (
                   <BrandButton href={effectiveCta.href} variant='gold'>
-                    {effectiveCta.label}
+                    {publicLabel(locale, effectiveCta.label)}
                   </BrandButton>
                 )}
               </div>

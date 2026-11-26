@@ -1,5 +1,7 @@
 'use client';
+import { usePublicLocale } from '@/lib/i18n/use-public-locale';
 
+import { publicLabel } from '@/lib/i18n/public-label';
 import * as React from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
@@ -184,6 +186,7 @@ function OptionField({
   options: ReadonlyArray<{ label: string; value: string }>;
   value: string;
 }) {
+  const locale = usePublicLocale();
   return (
     <FieldLabel label={label}>
       <select
@@ -193,7 +196,7 @@ function OptionField({
         onChange={(event) => onChange(event.target.value)}
         value={value}
       >
-        <option value=''>Select</option>
+        <option value=''>{publicLabel(locale, 'Select')}</option>
         {options.map((option) => (
           <option key={option.value} value={option.value}>
             {option.label}
@@ -285,7 +288,7 @@ function TourInquiryForm({
         <div className='space-y-4'>
           <form.AppField name='name'>
             {(field) => (
-              <FieldLabel label='Full name *'>
+              <FieldLabel label={publicLabel(locale, 'Full name *')}>
                 <input
                   className={fieldClassName}
                   name={field.name}
@@ -301,7 +304,7 @@ function TourInquiryForm({
 
           <form.AppField name='email'>
             {(field) => (
-              <FieldLabel label='Email *'>
+              <FieldLabel label={publicLabel(locale, 'Email *')}>
                 <input
                   className={fieldClassName}
                   name={field.name}
@@ -318,7 +321,7 @@ function TourInquiryForm({
 
           <form.AppField name='country'>
             {(field) => (
-              <FieldLabel label='Nationality / Country *'>
+              <FieldLabel label={publicLabel(locale, 'Nationality / Country *')}>
                 <CountryCombobox
                   onBlur={field.handleBlur}
                   onChange={(country) => {
@@ -335,7 +338,7 @@ function TourInquiryForm({
 
           <form.AppField name='phone'>
             {(field) => (
-              <FieldLabel label='Phone *'>
+              <FieldLabel label={publicLabel(locale, 'Phone *')}>
                 <input
                   className={fieldClassName}
                   name={field.name}
@@ -352,7 +355,7 @@ function TourInquiryForm({
           </form.AppField>
 
           <div>
-            <span className={labelClassName}>Travel dates</span>
+            <span className={labelClassName}>{publicLabel(locale, 'Travel dates')}</span>
             <form.AppField name='travelStartDate'>
               {(startField) => (
                 <form.AppField name='travelEndDate'>
@@ -384,7 +387,7 @@ function TourInquiryForm({
               {(field) => (
                 <>
                   <CounterStepper
-                    label='Adults *'
+                    label={publicLabel(locale, 'Adults *')}
                     min={1}
                     onBlur={field.handleBlur}
                     onChange={field.handleChange}
@@ -399,7 +402,7 @@ function TourInquiryForm({
               {(field) => (
                 <>
                   <CounterStepper
-                    label='Children'
+                    label={publicLabel(locale, 'Children')}
                     onBlur={field.handleBlur}
                     onChange={field.handleChange}
                     value={field.state.value}
@@ -413,7 +416,7 @@ function TourInquiryForm({
               {(field) => (
                 <>
                   <CounterStepper
-                    label='Infants'
+                    label={publicLabel(locale, 'Infants')}
                     onBlur={field.handleBlur}
                     onChange={field.handleChange}
                     value={field.state.value}
@@ -427,7 +430,7 @@ function TourInquiryForm({
           <form.AppField name='budgetTier'>
             {(field) => (
               <OptionField
-                label='Budget preference'
+                label={publicLabel(locale, 'Budget preference')}
                 name={field.name}
                 onBlur={field.handleBlur}
                 onChange={field.handleChange}
@@ -439,7 +442,7 @@ function TourInquiryForm({
 
           <form.AppField name='budget'>
             {(field) => (
-              <FieldLabel label='Budget per person (USD)'>
+              <FieldLabel label={publicLabel(locale, 'Budget per person (USD)')}>
                 <input
                   className={fieldClassName}
                   inputMode='numeric'
@@ -456,7 +459,7 @@ function TourInquiryForm({
           <form.AppField name='travelPlanningStage'>
             {(field) => (
               <OptionField
-                label='Travel planning stage'
+                label={publicLabel(locale, 'Travel planning stage')}
                 name={field.name}
                 onBlur={field.handleBlur}
                 onChange={field.handleChange}
@@ -469,7 +472,7 @@ function TourInquiryForm({
           <form.AppField name='tripType'>
             {(field) => (
               <OptionField
-                label='Trip type'
+                label={publicLabel(locale, 'Trip type')}
                 name={field.name}
                 onBlur={field.handleBlur}
                 onChange={field.handleChange}
@@ -481,13 +484,16 @@ function TourInquiryForm({
 
           <form.AppField name='message'>
             {(field) => (
-              <FieldLabel label='Notes'>
+              <FieldLabel label={publicLabel(locale, 'Notes')}>
                 <textarea
                   className={cn(fieldClassName, 'min-h-24 resize-y')}
                   name={field.name}
                   onBlur={field.handleBlur}
                   onChange={(event) => field.handleChange(event.target.value)}
-                  placeholder='Tell us your preferred comfort level, dates, or questions.'
+                  placeholder={publicLabel(
+                    locale,
+                    'Tell us your preferred comfort level, dates, or questions.'
+                  )}
                   value={field.state.value}
                 />
               </FieldLabel>
@@ -504,7 +510,10 @@ function TourInquiryForm({
             {mutation.isPending ? 'Sending...' : 'Send Trip Enquiry'}
           </form.SubmitButton>
           <p className='text-xs text-[var(--brand-muted)]'>
-            No payment is collected here. We aim to respond within 24 hours.
+            {publicLabel(
+              locale,
+              'No payment is collected here. We aim to respond within 24 hours.'
+            )}
           </p>
           {submitStatus === 'error' ? (
             <p className='text-sm text-red-700'>
@@ -573,15 +582,20 @@ export function TourInquiryPanel({
         {price ? (
           <p className='mt-2'>
             <span className='text-xs uppercase tracking-wide text-[var(--brand-muted)]'>
-              Price from
+              {publicLabel(locale, 'Price from')}
             </span>
             <strong className='font-price block text-3xl text-[var(--brand-brown)]'>{price}</strong>
           </p>
         ) : (
-          <p className='font-display text-2xl text-[var(--brand-brown)]'>Custom quote</p>
+          <p className='font-display text-2xl text-[var(--brand-brown)]'>
+            {publicLabel(locale, 'Custom quote')}
+          </p>
         )}
         <p className='mt-4 text-sm leading-6 text-[var(--brand-muted)]'>
-          Request the exact quote for your dates, comfort level, and number of travelers.
+          {publicLabel(
+            locale,
+            'Request the exact quote for your dates, comfort level, and number of travelers.'
+          )}
         </p>
         <div className='mt-5 brand-dual-actions'>
           <button
@@ -595,7 +609,7 @@ export function TourInquiryPanel({
             onClick={handleToggleForm}
             type='button'
           >
-            Enquire Now
+            {publicLabel(locale, 'Enquire Now')}
             <Icons.chevronDown
               className={cn('size-4 transition-transform', showForm && 'rotate-180')}
             />
@@ -604,14 +618,16 @@ export function TourInquiryPanel({
             className='inline-flex items-center justify-center rounded-[var(--brand-button-radius)] border border-[var(--brand-line)] px-4 py-2.5 text-xs font-bold uppercase tracking-wide text-[var(--brand-primary)] transition hover:bg-[var(--brand-ivory)]'
             href='#price-seasons'
           >
-            View Cost Tables
+            {publicLabel(locale, 'View Cost Tables')}
           </a>
         </div>
       </div>
 
       {showForm ? (
         <div className='brand-contact-credentials-box' ref={formRef}>
-          <h3 className='brand-heading font-display text-lg'>Plan this trip</h3>
+          <h3 className='brand-heading font-display text-lg'>
+            {publicLabel(locale, 'Plan this trip')}
+          </h3>
           <p className='mt-1 text-sm text-[var(--brand-muted)]'>{tourTitle}</p>
           <div className='mt-5'>
             <TourInquiryForm locale={locale} tourSlug={tourSlug} tourTitle={tourTitle} />

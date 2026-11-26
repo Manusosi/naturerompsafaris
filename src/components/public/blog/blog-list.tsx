@@ -1,5 +1,7 @@
 'use client';
+import { usePublicLocale } from '@/lib/i18n/use-public-locale';
 
+import { publicLabel } from '@/lib/i18n/public-label';
 import * as React from 'react';
 
 import { BlogCard } from '@/components/public/blog/blog-card';
@@ -16,6 +18,7 @@ type BlogListProps = {
 const ALL_CATEGORIES = 'all';
 
 export function BlogList({ contactHref, posts }: BlogListProps) {
+  const locale = usePublicLocale();
   const [activeCategory, setActiveCategory] = React.useState<string>(ALL_CATEGORIES);
   const [search, setSearch] = React.useState('');
 
@@ -44,7 +47,7 @@ export function BlogList({ contactHref, posts }: BlogListProps) {
           <div className='flex flex-wrap gap-2'>
             <CategoryChip
               active={activeCategory === ALL_CATEGORIES}
-              label='All'
+              label={publicLabel(locale, 'All')}
               onClick={() => setActiveCategory(ALL_CATEGORIES)}
             />
             {categories.map((category) => (
@@ -62,7 +65,7 @@ export function BlogList({ contactHref, posts }: BlogListProps) {
             <input
               className='w-full rounded-[var(--brand-radius)] border border-[var(--brand-line)] bg-white py-2.5 pl-9 pr-3 text-sm text-[var(--brand-ink)] outline-none focus:border-[var(--brand-primary)]'
               onChange={(event) => setSearch(event.target.value)}
-              placeholder='Search articles'
+              placeholder={publicLabel(locale, 'Search articles')}
               type='search'
               value={search}
             />

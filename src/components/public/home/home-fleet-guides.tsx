@@ -1,5 +1,6 @@
 'use client';
 
+import { publicLabel } from '@/lib/i18n/public-label';
 import Image from 'next/image';
 
 import { Icons } from '@/components/icons';
@@ -46,15 +47,16 @@ export function HomeFleetGuides({ locale }: { locale: string }) {
       <div className='brand-container brand-section'>
         <div className='grid gap-12 lg:grid-cols-2 lg:items-start lg:gap-16'>
           <ScrollReveal from='left'>
-            <p className='brand-eyebrow'>How you travel with us</p>
+            <p className='brand-eyebrow'>{publicLabel(locale, 'How you travel with us')}</p>
             <h2 className='brand-heading mt-3 font-display text-[clamp(1.875rem,4vw,3rem)] leading-[1.1]'>
-              Your Land Cruiser and guide stay with you the whole way
+              {publicLabel(locale, 'Your Land Cruiser and guide stay with you the whole way')}
             </h2>
             <span className='brand-gold-line brand-gold-line--left' />
             <p className='brand-body mt-6 max-w-xl text-base leading-8'>
-              Nature Romp safaris run in a private 4x4 Land Cruiser, not a packed minivan unless you
-              ask for one. The pop-up roof, the extra height for photos, and a guide who already
-              knows how you like the day paced: that is the difference guests remember.
+              {publicLabel(
+                locale,
+                'Nature Romp safaris run in a private 4x4 Land Cruiser, not a packed minivan unless you ask for one. The pop-up roof, the extra height for photos, and a guide who already knows how you like the day paced: that is the difference guests remember.'
+              )}
             </p>
             <TrustedChecklist items={FLEET_HIGHLIGHTS} />
             <BrandButtonGroup className='mt-8'>
@@ -64,7 +66,7 @@ export function HomeFleetGuides({ locale }: { locale: string }) {
                 variant='primary'
               >
                 <Icons.fleet className='h-4 w-4 shrink-0 transition-transform duration-500 ease-out group-hover:-translate-y-0.5 group-hover:scale-110' />
-                View Our Fleet
+                {publicLabel(locale, 'View Our Fleet')}
               </BrandButton>
               <BrandButton
                 className='group'
@@ -72,7 +74,7 @@ export function HomeFleetGuides({ locale }: { locale: string }) {
                 variant='accent-outline'
               >
                 <Icons.teams className='h-4 w-4 shrink-0 transition-transform duration-500 ease-out group-hover:scale-110' />
-                Meet Our Guides
+                {publicLabel(locale, 'Meet Our Guides')}
                 <Icons.arrowRight className='h-4 w-4 shrink-0 transition-transform duration-300 group-hover:translate-x-1' />
               </BrandButton>
             </BrandButtonGroup>

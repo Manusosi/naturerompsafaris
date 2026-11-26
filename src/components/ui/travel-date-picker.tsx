@@ -1,4 +1,6 @@
 'use client';
+import { publicLabel } from '@/lib/i18n/public-label';
+import { usePublicLocale } from '@/lib/i18n/use-public-locale';
 
 import * as React from 'react';
 
@@ -46,6 +48,7 @@ export function TravelDateCarousel({
   value,
   variant = 'default'
 }: TravelDateCarouselProps) {
+  const locale = usePublicLocale();
   const isCompact = variant === 'compact';
   const [showCalendar, setShowCalendar] = React.useState(isCompact);
   const [windowStart, setWindowStart] = React.useState(0);
@@ -120,14 +123,14 @@ export function TravelDateCarousel({
   return (
     <div className={cn('brand-travel-date-field', isCompact && 'brand-travel-date-field--compact')}>
       <div className='brand-travel-date-field-header'>
-        <p className='brand-travel-date-label'>{label}</p>
+        <p className='brand-travel-date-label'>{publicLabel(locale, label)}</p>
         {!isCompact ? (
           <button
             className='brand-travel-date-show-more'
             onClick={() => (showCalendar ? closeCalendar() : openCalendar())}
             type='button'
           >
-            {showCalendar ? 'Hide calendar' : 'Show more dates'}
+            {publicLabel(locale, showCalendar ? 'Hide calendar' : 'Show more dates')}
           </button>
         ) : null}
       </div>
@@ -135,7 +138,7 @@ export function TravelDateCarousel({
       {!isCompact && !showCalendar ? (
         <div className='brand-travel-date-carousel-wrap'>
           <button
-            aria-label='Show earlier dates'
+            aria-label={publicLabel(locale, 'Show earlier dates')}
             className='brand-travel-date-nav'
             disabled={!canGoPrev}
             onClick={handlePrevious}
@@ -161,14 +164,16 @@ export function TravelDateCarousel({
                   type='button'
                 >
                   <span className='brand-travel-date-card-weekday'>
-                    {date.toLocaleDateString('en-US', { weekday: 'short' })}
+                    {date.toLocaleDateString(locale, { weekday: 'short' })}
                   </span>
                   <span className='brand-travel-date-card-day'>{date.getDate()}</span>
                   <span className='brand-travel-date-card-month'>
-                    {date.toLocaleDateString('en-US', { month: 'short' })}
+                    {date.toLocaleDateString(locale, { month: 'short' })}
                   </span>
                   {contextLabel ? (
-                    <span className='brand-travel-date-card-badge'>{contextLabel}</span>
+                    <span className='brand-travel-date-card-badge'>
+                      {publicLabel(locale, contextLabel)}
+                    </span>
                   ) : null}
                 </button>
               );
@@ -180,12 +185,15 @@ export function TravelDateCarousel({
               type='button'
             >
               <Icons.calendar className='brand-travel-date-card-more-icon' />
-              <span>Show more dates</span>
+              <span>{publicLabel(locale, 'Show more dates')}</span>
             </button>
           </div>
 
           <button
-            aria-label={atSliderEnd ? 'Open calendar for more dates' : 'Show later dates'}
+            aria-label={publicLabel(
+              locale,
+              atSliderEnd ? 'Open calendar for more dates' : 'Show later dates'
+            )}
             className={cn(
               'brand-travel-date-nav',
               atSliderEnd && 'brand-travel-date-nav--calendar'
@@ -234,6 +242,7 @@ export function TravelDatePicker({
   startLabel = 'Start of the journey:',
   variant = 'default'
 }: TravelDatePickerProps) {
+  const locale = usePublicLocale();
   const earliestDate = React.useMemo(() => addDays(startOfDay(new Date()), 1), []);
   const latestDate = React.useMemo(() => addDays(startOfDay(new Date()), 730), []);
   const endMinDate = startDate ? parseIsoDate(startDate) : earliestDate;
@@ -274,11 +283,13 @@ export function TravelDatePicker({
         />
       ) : (
         <p className='brand-travel-date-helper'>
-          Select a start date to choose when your journey ends.
+          {publicLabel(locale, 'Select a start date to choose when your journey ends.')}
         </p>
       )}
 
-      <p className='brand-travel-date-flex-note'>+/- 3 days flexibility is okay.</p>
+      <p className='brand-travel-date-flex-note'>
+        {publicLabel(locale, '+/- 3 days flexibility is okay.')}
+      </p>
     </div>
   );
 }

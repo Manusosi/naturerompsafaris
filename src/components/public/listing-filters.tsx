@@ -1,5 +1,7 @@
 'use client';
+import { usePublicLocale } from '@/lib/i18n/use-public-locale';
 
+import { publicLabel } from '@/lib/i18n/public-label';
 import * as React from 'react';
 import Link from 'next/link';
 
@@ -88,6 +90,7 @@ export function ListingFilters({
   onClear,
   title = 'Filter'
 }: ListingFiltersProps) {
+  const locale = usePublicLocale();
   const showClear = activeCount > 0 && (onClear || clearHref);
   // Collapsed by default on mobile so results are reachable without scrolling
   // past the full filter stack. Always expanded from lg up (see public.css).
@@ -128,7 +131,7 @@ export function ListingFilters({
       </div>
       {activeCount > 0 ? (
         <p className='brand-listing-filters__active'>
-          {activeCount} active {activeCount === 1 ? 'filter' : 'filters'}
+          {activeCount} {publicLabel(locale, 'active')} {activeCount === 1 ? 'filter' : 'filters'}
         </p>
       ) : null}
       <div
@@ -322,6 +325,7 @@ export function ListingFilterRange({
   title,
   value
 }: ListingFilterRangeProps) {
+  const locale = usePublicLocale();
   const commitTimerRef = React.useRef<number | null>(null);
 
   const formatValue = (amount: number) => {
@@ -378,11 +382,11 @@ export function ListingFilterRange({
         />
         <div className='brand-listing-filters__range-values'>
           <span>
-            <span className='brand-listing-filters__range-label'>Min</span>
+            <span className='brand-listing-filters__range-label'>{publicLabel(locale, 'Min')}</span>
             <strong>{formatValue(value[0])}</strong>
           </span>
           <span className='text-right'>
-            <span className='brand-listing-filters__range-label'>Max</span>
+            <span className='brand-listing-filters__range-label'>{publicLabel(locale, 'Max')}</span>
             <strong>{formatValue(value[1])}</strong>
           </span>
         </div>

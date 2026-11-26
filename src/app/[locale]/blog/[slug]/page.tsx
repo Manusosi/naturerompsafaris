@@ -1,3 +1,4 @@
+import { publicLabel } from '@/lib/i18n/public-label';
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -211,7 +212,9 @@ export default async function BlogPostPage(props: BlogPageProps) {
               {minutes ? (
                 <>
                   <span aria-hidden>·</span>
-                  <span>{minutes} min read</span>
+                  <span>
+                    {minutes} {publicLabel(locale, 'min read')}
+                  </span>
                 </>
               ) : null}
               {category ? (
@@ -271,7 +274,10 @@ export default async function BlogPostPage(props: BlogPageProps) {
 
               {/* Previous / Next navigation */}
               {neighbors.previous || neighbors.next ? (
-                <nav aria-label='More articles' className='mt-8 grid gap-4 sm:grid-cols-2'>
+                <nav
+                  aria-label={publicLabel(locale, 'More articles')}
+                  className='mt-8 grid gap-4 sm:grid-cols-2'
+                >
                   {neighbors.previous ? (
                     <Link
                       className='group flex flex-col gap-1 rounded-[var(--brand-radius)] border border-[var(--brand-line)] bg-white p-5 transition-colors hover:border-[var(--brand-primary)]'
@@ -279,7 +285,7 @@ export default async function BlogPostPage(props: BlogPageProps) {
                     >
                       <span className='inline-flex items-center gap-1 text-xs font-semibold uppercase tracking-wide text-[var(--brand-muted)]'>
                         <Icons.chevronLeft className='size-3.5' />
-                        Previous
+                        {publicLabel(locale, 'Previous')}
                       </span>
                       <span className='font-display text-lg leading-snug text-[var(--brand-ink)] group-hover:text-[var(--brand-primary)]'>
                         {neighbors.previous.title}
@@ -294,7 +300,7 @@ export default async function BlogPostPage(props: BlogPageProps) {
                       href={neighbors.next.href}
                     >
                       <span className='inline-flex items-center gap-1 text-xs font-semibold uppercase tracking-wide text-[var(--brand-muted)]'>
-                        Next
+                        {publicLabel(locale, 'Next')}
                         <Icons.chevronRight className='size-3.5' />
                       </span>
                       <span className='font-display text-lg leading-snug text-[var(--brand-ink)] group-hover:text-[var(--brand-primary)]'>

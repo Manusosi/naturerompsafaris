@@ -1,5 +1,7 @@
 'use client';
+import { usePublicLocale } from '@/lib/i18n/use-public-locale';
 
+import { publicLabel } from '@/lib/i18n/public-label';
 import * as React from 'react';
 
 import {
@@ -87,6 +89,7 @@ export const EMPTY_TOUR_FILTERS: TourCatalogActive = {
 };
 
 export function TourCatalogFilters({ active, facets, onChange }: TourCatalogFiltersProps) {
+  const locale = usePublicLocale();
   const normalizedActive = {
     ...active,
     destination: active.destination ?? [],
@@ -155,14 +158,14 @@ export function TourCatalogFilters({ active, facets, onChange }: TourCatalogFilt
         setPriceRange([priceMin, priceMax]);
         update(EMPTY_TOUR_FILTERS);
       }}
-      title='Safari tours'
+      title={publicLabel(locale, 'Safari tours')}
     >
       {collections.length ? (
-        <ListingFilterGroup title='Safari type'>
+        <ListingFilterGroup title={publicLabel(locale, 'Safari type')}>
           <ListingFilterOption
             checked={!normalizedActive.collection}
             id='tour-collection-all'
-            label='All safari types'
+            label={publicLabel(locale, 'All safari types')}
             name='tour-collection'
             type='radio'
             onChange={() => update({ collection: undefined })}
@@ -181,11 +184,11 @@ export function TourCatalogFilters({ active, facets, onChange }: TourCatalogFilt
         </ListingFilterGroup>
       ) : null}
 
-      <ListingFilterGroup title='Country'>
+      <ListingFilterGroup title={publicLabel(locale, 'Country')}>
         <ListingFilterOption
           checked={!normalizedActive.country}
           id='tour-country-all'
-          label='All countries'
+          label={publicLabel(locale, 'All countries')}
           name='tour-country'
           type='radio'
           onChange={() => update({ country: undefined })}
@@ -206,7 +209,7 @@ export function TourCatalogFilters({ active, facets, onChange }: TourCatalogFilt
       {facets.destinationLabels.length ? (
         <ListingFilterDropdown
           selectedCount={destination.length}
-          title='Destinations'
+          title={publicLabel(locale, 'Destinations')}
           triggerLabel='Select destinations'
         >
           {facets.destinationLabels.map((label) => (
@@ -228,7 +231,7 @@ export function TourCatalogFilters({ active, facets, onChange }: TourCatalogFilt
       {facets.parkOptions.length ? (
         <ListingFilterDropdown
           selectedCount={park.length}
-          title='National parks'
+          title={publicLabel(locale, 'National parks')}
           triggerLabel='Select parks'
         >
           {facets.parkOptions.map((item) => (
@@ -248,7 +251,7 @@ export function TourCatalogFilters({ active, facets, onChange }: TourCatalogFilt
       {facets.experienceLabels.length ? (
         <ListingFilterDropdown
           selectedCount={experience.length}
-          title='Safari adventures'
+          title={publicLabel(locale, 'Safari adventures')}
           triggerLabel='Select adventures'
         >
           {facets.experienceLabels.map((label) => (
@@ -268,7 +271,7 @@ export function TourCatalogFilters({ active, facets, onChange }: TourCatalogFilt
       ) : null}
 
       {visibleTiers.length ? (
-        <ListingFilterGroup title='Comfort tier'>
+        <ListingFilterGroup title={publicLabel(locale, 'Comfort tier')}>
           {visibleTiers.map((tier) => (
             <ListingFilterOption
               checked={pricingTiers.includes(tier.value)}
@@ -293,7 +296,7 @@ export function TourCatalogFilters({ active, facets, onChange }: TourCatalogFilt
         min={durationMin}
         step={1}
         suffix='days'
-        title='Duration'
+        title={publicLabel(locale, 'Duration')}
         value={durationRange}
         onValueChange={setDurationRange}
         onCommit={(value) =>
@@ -309,7 +312,7 @@ export function TourCatalogFilters({ active, facets, onChange }: TourCatalogFilt
         min={priceMin}
         step={50}
         suffix='USD'
-        title='Price from'
+        title={publicLabel(locale, 'Price from')}
         value={priceRange}
         onValueChange={setPriceRange}
         onCommit={(value) =>

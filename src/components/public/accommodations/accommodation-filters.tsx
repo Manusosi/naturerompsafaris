@@ -1,5 +1,6 @@
 'use client';
 
+import { publicLabel } from '@/lib/i18n/public-label';
 import * as React from 'react';
 import { useRouter } from 'next/navigation';
 
@@ -174,9 +175,9 @@ export function AccommodationFilters({
         setPriceRange([sliderMin, sliderMax]);
         commit(EMPTY_FILTERS);
       }}
-      title='Accommodations'
+      title={publicLabel(locale, 'Accommodations')}
     >
-      <ListingFilterGroup title='Country'>
+      <ListingFilterGroup title={publicLabel(locale, 'Country')}>
         {countries.map((country) => {
           const checked = draft.countries.some((value) => normalizeCountryValue(value) === country);
           return (
@@ -200,7 +201,7 @@ export function AccommodationFilters({
             : 'Showing all destinations. Select a country to narrow the list.'
         }
         selectedCount={draft.destinations.length}
-        title='Destination'
+        title={publicLabel(locale, 'Destination')}
         triggerLabel='Select destinations'
       >
         {destinations.length ? (
@@ -226,7 +227,7 @@ export function AccommodationFilters({
         )}
       </ListingFilterDropdown>
 
-      <ListingFilterGroup title='Property type'>
+      <ListingFilterGroup title={publicLabel(locale, 'Property type')}>
         {propertyTypes.map((type) => (
           <ListingFilterOption
             key={type}
@@ -242,7 +243,7 @@ export function AccommodationFilters({
         ))}
       </ListingFilterGroup>
 
-      <ListingFilterGroup title='Comfort level'>
+      <ListingFilterGroup title={publicLabel(locale, 'Comfort level')}>
         {comfortLevels.map((level) => (
           <ListingFilterOption
             key={level}
@@ -261,7 +262,7 @@ export function AccommodationFilters({
       {facets.regions.length ? (
         <ListingFilterDropdown
           selectedCount={draft.regions.length}
-          title='Location'
+          title={publicLabel(locale, 'Location')}
           triggerLabel='Select locations'
         >
           {facets.regions.map((region) => (
@@ -283,7 +284,7 @@ export function AccommodationFilters({
         min={sliderMin}
         step={25}
         suffix='USD'
-        title='Price per night'
+        title={publicLabel(locale, 'Price per night')}
         value={priceRange}
         onValueChange={setPriceRange}
         onCommit={(value) =>

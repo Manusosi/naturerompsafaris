@@ -1,3 +1,4 @@
+import { publicLabel } from '@/lib/i18n/public-label';
 import type { Metadata } from 'next';
 
 import { NationalParkFilters } from '@/components/public/national-parks/national-park-filters';
@@ -8,7 +9,8 @@ import { BRAND_PUBLIC_HERO_IMAGES } from '@/config/brand';
 import { localePath } from '@/lib/public/locale-path';
 import { getParkFilterFacets, listPublishedParks } from '@/lib/public/national-parks';
 import { getPageHero } from '@/lib/public/site-data';
-import { absoluteUrl } from '@/lib/seo';
+import { buildListingPageMetadata, hasSearchParams } from '@/lib/seo/listing-metadata';
+import { getSectionSitemapUrls } from '@/lib/seo/sitemap-data';
 
 type NationalParksPageProps = {
   params: Promise<{ locale: string }>;
@@ -31,21 +33,21 @@ function parseFilterList(value?: string) {
     .filter(Boolean);
 }
 
-export async function generateMetadata({ params }: NationalParksPageProps): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+  searchParams
+}: NationalParksPageProps): Promise<Metadata> {
   const { locale } = await params;
-  const canonical = absoluteUrl(`/${locale}/national-parks`);
+  const [query, pages] = await Promise.all([searchParams, getSectionSitemapUrls('national-parks')]);
 
-  return {
-    title: 'National Parks & Safari Reserves | Nature Romp Safaris',
-    description: nationalParksDescription,
-    alternates: { canonical },
-    openGraph: {
-      title: 'National Parks & Safari Reserves | Nature Romp Safaris',
-      description: nationalParksDescription,
-      type: 'website',
-      url: canonical
-    }
-  };
+  return buildListingPageMetadata({
+    canonicalPath: `/${locale}/national-parks`,
+    defaultDescription: nationalParksDescription,
+    defaultTitle: 'National Parks & Safari Reserves',
+    hasFilters:
+      hasSearchParams(query) || !pages.some((page) => page.path.startsWith(`/${locale}/`)),
+    locale
+  });
 }
 
 export default async function NationalParksPage({ params, searchParams }: NationalParksPageProps) {
@@ -77,7 +79,7 @@ export default async function NationalParksPage({ params, searchParams }: Nation
       <PublicPageHero
         breadcrumbs={[{ href: localePath(locale), label: 'Home' }, { label: 'National Parks' }]}
         description={nationalParksDescription}
-        eyebrow='Safari Parks'
+        eyebrow={publicLabel(locale, 'Safari Parks')}
         hero={pageHero}
         imageAlt={hero.imageAlt}
         imageUrl={hero.imageUrl}

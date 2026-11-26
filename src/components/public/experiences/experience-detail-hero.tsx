@@ -1,5 +1,6 @@
 'use client';
 
+import { publicLabel } from '@/lib/i18n/public-label';
 import { useRef } from 'react';
 import Image from 'next/image';
 import gsap from 'gsap';
@@ -92,15 +93,15 @@ export function ExperienceDetailHero({
       <div className='relative z-10 flex min-h-[min(78vh,720px)] items-center'>
         <div className='brand-container w-full py-28 md:py-32'>
           <nav
-            aria-label='Breadcrumb'
+            aria-label={publicLabel(locale, 'Breadcrumb')}
             className='mb-8 flex flex-wrap justify-center gap-2 text-sm text-white/75'
           >
             <a className='hover:text-white' href={localePath(locale)}>
-              Home
+              {publicLabel(locale, 'Home')}
             </a>
             <span>/</span>
             <a className='hover:text-white' href={localePath(locale, '/experiences')}>
-              Experiences
+              {publicLabel(locale, 'Experiences')}
             </a>
             <span>/</span>
             <span className='text-white'>{title}</span>
@@ -129,7 +130,7 @@ export function ExperienceDetailHero({
                 href={localePath(locale, '/tours')}
                 variant='gold-outline'
               >
-                View Tours
+                {publicLabel(locale, 'View Tours')}
                 <Icons.arrowRight className='h-4 w-4 opacity-0 transition-all duration-200 group-hover:translate-x-1 group-hover:opacity-100' />
               </BrandButton>
             </BrandButtonGroup>

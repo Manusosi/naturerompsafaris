@@ -1,5 +1,7 @@
 'use client';
+import { usePublicLocale } from '@/lib/i18n/use-public-locale';
 
+import { publicLabel } from '@/lib/i18n/public-label';
 import { useRef } from 'react';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
@@ -29,6 +31,7 @@ export function AboutHero({
   hero,
   title
 }: AboutHeroProps) {
+  const locale = usePublicLocale();
   const contentRef = useRef<HTMLDivElement>(null);
   const hasMedia = heroHasMedia(hero);
   const overlayAlpha = hero ? hero.overlayOpacity : 0.62;
@@ -72,7 +75,7 @@ export function AboutHero({
         <div className='brand-container'>
           {breadcrumbs?.length ? (
             <nav
-              aria-label='Breadcrumb'
+              aria-label={publicLabel(locale, 'Breadcrumb')}
               className='mb-10 flex flex-wrap items-center justify-center gap-2 text-sm text-white/70'
             >
               {breadcrumbs.map((crumb, index) => (
@@ -80,10 +83,12 @@ export function AboutHero({
                   {index > 0 ? <span aria-hidden>|</span> : null}
                   {crumb.href ? (
                     <a className='hover:text-white' href={crumb.href}>
-                      {crumb.label}
+                      {publicLabel(locale, crumb.label)}
                     </a>
                   ) : (
-                    <span className='brand-breadcrumb-current'>{crumb.label}</span>
+                    <span className='brand-breadcrumb-current'>
+                      {publicLabel(locale, crumb.label)}
+                    </span>
                   )}
                 </span>
               ))}
@@ -93,7 +98,7 @@ export function AboutHero({
           <div className='mx-auto max-w-3xl text-center' ref={contentRef}>
             {effectiveEyebrow ? (
               <p className='text-xs font-bold uppercase tracking-[0.18em] text-white/70'>
-                {effectiveEyebrow}
+                {publicLabel(locale, effectiveEyebrow)}
               </p>
             ) : null}
             <h1
@@ -102,12 +107,12 @@ export function AboutHero({
                 effectiveEyebrow ? 'mt-4' : 'mt-0'
               )}
             >
-              {effectiveTitle}
+              {publicLabel(locale, effectiveTitle)}
             </h1>
             <span aria-hidden className='brand-gold-line brand-gold-line--brand mt-5' />
             {effectiveDescription ? (
               <p className='mx-auto mt-6 max-w-2xl text-lg leading-8 text-white/85'>
-                {effectiveDescription}
+                {publicLabel(locale, effectiveDescription)}
               </p>
             ) : null}
           </div>

@@ -1,3 +1,4 @@
+import { publicLabel } from '@/lib/i18n/public-label';
 import { Icons } from '@/components/icons';
 import {
   AccommodationBackLink,
@@ -59,18 +60,18 @@ export function AccommodationDetailShell({
       <section className='border-b border-[var(--brand-line)] bg-white'>
         <div className='brand-container py-6 md:py-8'>
           <nav
-            aria-label='Breadcrumb'
+            aria-label={publicLabel(locale, 'Breadcrumb')}
             className='mb-6 flex flex-wrap gap-2 text-sm text-[var(--brand-muted)]'
           >
             <a className='hover:text-[var(--brand-primary)]' href={localePath(locale)}>
-              Home
+              {publicLabel(locale, 'Home')}
             </a>
             <span>/</span>
             <a
               className='hover:text-[var(--brand-primary)]'
               href={localePath(locale, '/accommodations')}
             >
-              Accommodations
+              {publicLabel(locale, 'Accommodations')}
             </a>
             <span>/</span>
             <span className='text-[var(--brand-ink)]'>{accommodation.name}</span>
@@ -120,7 +121,9 @@ export function AccommodationDetailShell({
               </div>
 
               <section className='mt-10'>
-                <h2 className='brand-heading font-display text-2xl'>About this property</h2>
+                <h2 className='brand-heading font-display text-2xl'>
+                  {publicLabel(locale, 'About this property')}
+                </h2>
                 {accommodation.descriptionHtml ? (
                   <div
                     className='brand-legal-prose mt-4'
@@ -133,7 +136,9 @@ export function AccommodationDetailShell({
 
               {accommodation.amenities.length ? (
                 <section className='mt-10'>
-                  <h2 className='brand-heading font-display text-2xl'>Amenities</h2>
+                  <h2 className='brand-heading font-display text-2xl'>
+                    {publicLabel(locale, 'Amenities')}
+                  </h2>
                   <ul className='mt-4 grid gap-3 sm:grid-cols-2'>
                     {accommodation.amenities.map((amenity) => (
                       <li
@@ -172,13 +177,15 @@ export function AccommodationDetailShell({
       {relatedAccommodations.length ? (
         <section className='border-t border-[var(--brand-line)]'>
           <div className='brand-container py-10 md:py-12'>
-            <p className='brand-eyebrow'>More Places To Stay</p>
+            <p className='brand-eyebrow'>{publicLabel(locale, 'More Places To Stay')}</p>
             <h2 className='brand-heading mt-3 font-display text-[clamp(1.75rem,3.5vw,2.25rem)] leading-tight'>
-              More accommodations in {relatedAreaLabel}
+              {publicLabel(locale, 'More accommodations in')} {relatedAreaLabel}
             </h2>
             <p className='brand-body mt-3 max-w-2xl text-base leading-7'>
-              Other lodges and camps in the same area, so you can compare comfort, location, and
-              availability before you enquire.
+              {publicLabel(
+                locale,
+                'Other lodges and camps in the same area, so you can compare comfort, location, and availability before you enquire.'
+              )}
             </p>
             <div className='mt-8 grid gap-6 md:grid-cols-2 xl:grid-cols-3'>
               {relatedAccommodations.map((item) => (

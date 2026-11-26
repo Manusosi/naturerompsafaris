@@ -35,7 +35,8 @@ export async function generateMetadata(props: TourPageProps): Promise<Metadata> 
     .eq('slug', slug)
     .eq('tour.status', 'published')
     .not('published_at', 'is', null)
-    .maybeSingle();
+    .maybeSingle()
+    .throwOnError();
 
   if (!tour) notFound();
 

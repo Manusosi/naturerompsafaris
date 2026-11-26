@@ -1,3 +1,4 @@
+import { publicLabel } from '@/lib/i18n/public-label';
 import Image from 'next/image';
 
 import { BRAND_CONTACT_RESPONSE, BRAND_GOOGLE_REVIEWS, BRAND_TRIPADVISOR } from '@/config/brand';
@@ -10,7 +11,7 @@ const TRUST_TITLE = 'brand-heading mt-5 font-display text-lg';
 
 const TRUST_DESC = 'mt-3 max-w-xs text-sm leading-7 text-[var(--brand-muted)]';
 
-export function ContactTrustStrip() {
+export function ContactTrustStrip({ locale = 'en' }: { locale?: string }) {
   return (
     <section className='border-t border-[var(--brand-line)] bg-white'>
       <div className='brand-container py-14 md:py-16'>
@@ -18,17 +19,19 @@ export function ContactTrustStrip() {
           <div className={TRUST_COLUMN}>
             <div className={TRUST_IMAGE_ZONE}>
               <Image
-                alt={BRAND_CONTACT_RESPONSE.alt}
+                alt={publicLabel(locale, BRAND_CONTACT_RESPONSE.alt)}
                 className='brand-contact-trust-image brand-contact-trust-image--response'
                 height={BRAND_CONTACT_RESPONSE.imageHeight}
                 src={BRAND_CONTACT_RESPONSE.imagePath}
                 width={BRAND_CONTACT_RESPONSE.imageWidth}
               />
             </div>
-            <h3 className={TRUST_TITLE}>24-Hour Response</h3>
+            <h3 className={TRUST_TITLE}>{publicLabel(locale, '24-Hour Response')}</h3>
             <p className={TRUST_DESC}>
-              Safari quote requests are reviewed by our planning team and answered within one
-              business day.
+              {publicLabel(
+                locale,
+                'Safari quote requests are reviewed by our planning team and answered within one business day.'
+              )}
             </p>
           </div>
 
@@ -52,9 +55,10 @@ export function ContactTrustStrip() {
                   width={BRAND_GOOGLE_REVIEWS.logoWidth}
                 />
               </div>
-              <p className={TRUST_TITLE}>Google Reviews</p>
+              <p className={TRUST_TITLE}>{publicLabel(locale, 'Google Reviews')}</p>
               <p className={TRUST_DESC}>
-                {BRAND_GOOGLE_REVIEWS.rating} average star rating on Google.
+                {BRAND_GOOGLE_REVIEWS.rating}{' '}
+                {publicLabel(locale, 'average star rating on Google.')}
               </p>
             </a>
           </div>
@@ -76,9 +80,12 @@ export function ContactTrustStrip() {
                   width={BRAND_TRIPADVISOR.logoWidth}
                 />
               </div>
-              <p className={TRUST_TITLE}>Tripadvisor</p>
+              <p className={TRUST_TITLE}>{publicLabel(locale, 'Tripadvisor')}</p>
               <p className={TRUST_DESC}>
-                Traveller reviews from guests who planned their safari with our team.
+                {publicLabel(
+                  locale,
+                  'Traveller reviews from guests who planned their safari with our team.'
+                )}
               </p>
             </a>
           </div>

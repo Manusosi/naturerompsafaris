@@ -1,3 +1,4 @@
+import { publicLabel } from '@/lib/i18n/public-label';
 import type { Metadata } from 'next';
 
 import { BlogList } from '@/components/public/blog/blog-list';
@@ -33,10 +34,13 @@ export default async function BlogPage({ params }: BlogPageProps) {
     <>
       <ContactHero
         breadcrumbs={[{ href: localePath(locale), label: 'Home' }, { label: 'Blog' }]}
-        description='Safari travel insights, destination guides, and planning tips from the Nature Romp Safaris team.'
-        eyebrow='Blog'
+        description={publicLabel(
+          locale,
+          'Safari travel insights, destination guides, and planning tips from the Nature Romp Safaris team.'
+        )}
+        eyebrow={publicLabel(locale, 'Blog')}
         hero={pageHero}
-        title='Safari Travel Insights'
+        title={publicLabel(locale, 'Safari Travel Insights')}
       />
       <BlogList contactHref={localePath(locale, '/contact')} posts={posts} />
     </>

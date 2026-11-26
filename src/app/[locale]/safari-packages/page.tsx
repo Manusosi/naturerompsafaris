@@ -1,3 +1,5 @@
+import { getSectionSitemapUrls } from '@/lib/seo/sitemap-data';
+import { publicLabel } from '@/lib/i18n/public-label';
 import type { Metadata } from 'next';
 
 import { PackageCard } from '@/components/public/cards/content-cards';
@@ -14,12 +16,14 @@ type SafariPackagesPageProps = {
 
 export async function generateMetadata({ params }: SafariPackagesPageProps): Promise<Metadata> {
   const { locale } = await params;
+  const pages = await getSectionSitemapUrls('safari-packages');
   return buildListingPageMetadata({
     canonicalPath: `/${locale}/safari-packages`,
     defaultDescription:
       'Compare comfort-level packages linked to Nature Romp safari routes, then choose the budget, mid-range, or luxury style that fits your trip.',
     defaultTitle: 'Safari Packages',
     heroKey: 'packages',
+    hasFilters: !pages.some((page) => page.path.startsWith(`/${locale}/`)),
     locale
   });
 }
@@ -36,19 +40,25 @@ export default async function SafariPackagesPage({ params }: SafariPackagesPageP
     <>
       <PublicPageHero
         breadcrumbs={[{ href: localePath(locale), label: 'Home' }, { label: 'Safari Packages' }]}
-        description='Compare comfort-level packages linked to Nature Romp safari routes, then choose the budget, mid-range, or luxury style that fits your trip.'
-        eyebrow='Safari Packages'
+        description={publicLabel(
+          locale,
+          'Compare comfort-level packages linked to Nature Romp safari routes, then choose the budget, mid-range, or luxury style that fits your trip.'
+        )}
+        eyebrow={publicLabel(locale, 'Safari Packages')}
         hero={pageHero}
         imageAlt={hero.imageAlt}
         imageUrl={hero.imageUrl}
         overlayTone='black'
-        title='Safari Packages'
+        title={publicLabel(locale, 'Safari Packages')}
       />
       <ListingShell>
         <div className='mb-6 flex items-baseline justify-between gap-3'>
-          <h2 className='brand-heading font-display text-2xl'>Available Safari Packages</h2>
+          <h2 className='brand-heading font-display text-2xl'>
+            {publicLabel(locale, 'Available Safari Packages')}
+          </h2>
           <span className='text-sm text-[var(--brand-muted)]'>
-            {packages.length} {packages.length === 1 ? 'package' : 'packages'} found
+            {packages.length} {packages.length === 1 ? 'package' : 'packages'}{' '}
+            {publicLabel(locale, 'found')}
           </span>
         </div>
         {packages.length ? (
@@ -62,7 +72,7 @@ export default async function SafariPackagesPage({ params }: SafariPackagesPageP
             actionHref={localePath(locale, '/contact')}
             actionLabel='Request Package Options'
             message='Published safari packages will appear here once they are added through the Nature Romp CMS.'
-            title='No safari packages published yet'
+            title={publicLabel(locale, 'No safari packages published yet')}
           />
         )}
       </ListingShell>

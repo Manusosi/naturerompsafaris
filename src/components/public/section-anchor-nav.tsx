@@ -1,5 +1,7 @@
 'use client';
+import { usePublicLocale } from '@/lib/i18n/use-public-locale';
 
+import { publicLabel } from '@/lib/i18n/public-label';
 import * as React from 'react';
 
 import { cn } from '@/lib/utils';
@@ -15,6 +17,7 @@ type SectionAnchorNavProps = {
 };
 
 export function SectionAnchorNav({ className, items }: SectionAnchorNavProps) {
+  const locale = usePublicLocale();
   const [activeHref, setActiveHref] = React.useState(items[0]?.href ?? '');
 
   React.useEffect(() => {
@@ -46,7 +49,7 @@ export function SectionAnchorNav({ className, items }: SectionAnchorNavProps) {
 
   return (
     <nav
-      aria-label='Page sections'
+      aria-label={publicLabel(locale, 'Page sections')}
       className={cn(
         'sticky top-[var(--brand-sticky-offset)] z-40 border-b border-[var(--brand-line)] bg-white',
         className

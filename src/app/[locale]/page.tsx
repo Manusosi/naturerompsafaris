@@ -1,3 +1,4 @@
+import { publicLabel } from '@/lib/i18n/public-label';
 import type { Metadata } from 'next';
 import dynamic from 'next/dynamic';
 import { Suspense } from 'react';
@@ -113,7 +114,7 @@ export default async function HomePage({ params }: HomePageProps) {
       <HomeHero hero={homeHero} locale={locale} slides={heroSlides} />
       <Suspense fallback={null}>
         <HomeWhyChooseUs locale={locale} />
-        <HomePartners />
+        <HomePartners locale={locale} />
         <HomeDestinationsMap locale={locale} showCountryTiles />
         <HomeExperiencesGrid experiences={experiences} locale={locale} />
         <HomeFeaturedTours locale={locale} tours={tours} />
@@ -121,11 +122,14 @@ export default async function HomePage({ params }: HomePageProps) {
         <HomeArticles locale={locale} posts={blogPosts} />
       </Suspense>
       <FaqSection
-        description='Straight answers from Nature Romp Safaris before you send dates or pay a deposit. If something is missing, write to us and we reply.'
-        eyebrow='Before you book'
+        description={publicLabel(
+          locale,
+          'Straight answers from Nature Romp Safaris before you send dates or pay a deposit. If something is missing, write to us and we reply.'
+        )}
+        eyebrow={publicLabel(locale, 'Before you book')}
         faqs={HOME_FAQS}
         headingId='home-faq-heading'
-        title='Safari questions, answered'
+        title={publicLabel(locale, 'Safari questions, answered')}
       />
       <Suspense fallback={null}>
         <BookingAdvantagesCta locale={locale} />

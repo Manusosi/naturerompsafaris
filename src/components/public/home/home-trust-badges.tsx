@@ -1,5 +1,7 @@
 'use client';
+import { usePublicLocale } from '@/lib/i18n/use-public-locale';
 
+import { publicLabel } from '@/lib/i18n/public-label';
 import { Icons } from '@/components/icons';
 import { ContourBackground } from '@/components/public/contour-background';
 import { ScrollReveal } from '@/components/public/ui/scroll-reveal';
@@ -30,13 +32,17 @@ const PILLARS = [
 ];
 
 export function HomeTrustBadges() {
+  const locale = usePublicLocale();
   return (
     <section className='relative overflow-hidden border-b border-[var(--brand-line)] bg-white'>
       <ContourBackground opacity={0.08} />
       <div className='brand-container relative py-14 md:py-16'>
         <SectionHeader
-          description='Nearly three decades of safaris, the right credentials, and a team that treats your trip as if it were our own.'
-          title='Booked With Confidence, Guided With Care'
+          description={publicLabel(
+            locale,
+            'Nearly three decades of safaris, the right credentials, and a team that treats your trip as if it were our own.'
+          )}
+          title={publicLabel(locale, 'Booked With Confidence, Guided With Care')}
         />
 
         <ScrollReveal className='mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4' stagger>

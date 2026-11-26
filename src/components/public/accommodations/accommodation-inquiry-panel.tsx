@@ -1,5 +1,6 @@
 'use client';
 
+import { publicLabel } from '@/lib/i18n/public-label';
 import * as React from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
@@ -184,7 +185,7 @@ function AccommodationInquiryForm({
           <div className='grid gap-4 sm:grid-cols-2'>
             <form.AppField name='name'>
               {(field) => (
-                <FormField label='Full name *'>
+                <FormField label={publicLabel(locale, 'Full name *')}>
                   <input
                     className={fieldClassName}
                     name={field.name}
@@ -200,7 +201,7 @@ function AccommodationInquiryForm({
 
             <form.AppField name='email'>
               {(field) => (
-                <FormField label='Email *'>
+                <FormField label={publicLabel(locale, 'Email *')}>
                   <input
                     className={fieldClassName}
                     name={field.name}
@@ -218,13 +219,13 @@ function AccommodationInquiryForm({
 
           <form.AppField name='phone'>
             {(field) => (
-              <FormField label='Phone (optional)'>
+              <FormField label={publicLabel(locale, 'Phone (optional)')}>
                 <input
                   className={fieldClassName}
                   name={field.name}
                   onBlur={field.handleBlur}
                   onChange={(event) => field.handleChange(event.target.value)}
-                  placeholder='+254 712 345 678 (include country code)'
+                  placeholder={publicLabel(locale, '+254 712 345 678 (include country code)')}
                   type='tel'
                   value={field.state.value}
                 />
@@ -234,7 +235,7 @@ function AccommodationInquiryForm({
           </form.AppField>
 
           <div>
-            <span className={labelClassName}>Travel dates *</span>
+            <span className={labelClassName}>{publicLabel(locale, 'Travel dates *')}</span>
             <form.AppField name='travelStartDate'>
               {(startField) => (
                 <form.AppField name='travelEndDate'>
@@ -269,7 +270,7 @@ function AccommodationInquiryForm({
               {(field) => (
                 <>
                   <GuestStepper
-                    label='Guests *'
+                    label={publicLabel(locale, 'Guests *')}
                     min={1}
                     onBlur={field.handleBlur}
                     onChange={field.handleChange}
@@ -284,7 +285,7 @@ function AccommodationInquiryForm({
               {(field) => (
                 <>
                   <GuestStepper
-                    label='Rooms *'
+                    label={publicLabel(locale, 'Rooms *')}
                     min={1}
                     onBlur={field.handleBlur}
                     onChange={field.handleChange}
@@ -298,13 +299,16 @@ function AccommodationInquiryForm({
 
           <form.AppField name='message'>
             {(field) => (
-              <FormField label='Notes (optional)'>
+              <FormField label={publicLabel(locale, 'Notes (optional)')}>
                 <textarea
                   className={cn(fieldClassName, 'min-h-24 resize-y')}
                   name={field.name}
                   onBlur={field.handleBlur}
                   onChange={(event) => field.handleChange(event.target.value)}
-                  placeholder='Special requests, dietary needs, or questions about this property.'
+                  placeholder={publicLabel(
+                    locale,
+                    'Special requests, dietary needs, or questions about this property.'
+                  )}
                   value={field.state.value}
                 />
               </FormField>
@@ -326,7 +330,10 @@ function AccommodationInquiryForm({
             {mutation.isPending ? 'Sending...' : 'Send Enquiry'}
           </form.SubmitButton>
           <p className='text-xs text-[var(--brand-muted)]'>
-            No payment is collected here. We aim to respond within 24 hours.
+            {publicLabel(
+              locale,
+              'No payment is collected here. We aim to respond within 24 hours.'
+            )}
           </p>
           {submitStatus === 'error' ? (
             <p className='text-sm text-red-700'>
@@ -369,18 +376,25 @@ export function AccommodationInquiryPanel({
         {price ? (
           <div>
             <p className='text-xs font-semibold uppercase tracking-wide text-[var(--brand-muted)]'>
-              From
+              {publicLabel(locale, 'From')}
             </p>
             <p className='mt-1 font-price text-3xl text-[var(--brand-brown)]'>{price}</p>
-            <p className='text-sm text-[var(--brand-muted)]'>per night (USD)</p>
+            <p className='text-sm text-[var(--brand-muted)]'>
+              {publicLabel(locale, 'per night (USD)')}
+            </p>
           </div>
         ) : (
-          <p className='font-display text-2xl text-[var(--brand-brown)]'>Price on request</p>
+          <p className='font-display text-2xl text-[var(--brand-brown)]'>
+            {publicLabel(locale, 'Price on request')}
+          </p>
         )}
 
         <p className='mt-4 text-sm font-semibold text-[var(--brand-ink)]'>{availabilityLabel}</p>
         <p className='mt-2 text-sm leading-6 text-[var(--brand-muted)]'>
-          No payment is taken here. Our team will confirm availability and rates for your dates.
+          {publicLabel(
+            locale,
+            'No payment is taken here. Our team will confirm availability and rates for your dates.'
+          )}
         </p>
 
         <div className='mt-6'>
@@ -395,7 +409,7 @@ export function AccommodationInquiryPanel({
             onClick={handleToggleForm}
             type='button'
           >
-            Inquire Availability
+            {publicLabel(locale, 'Inquire Availability')}
             <Icons.chevronDown
               className={cn('size-4 transition-transform', showForm && 'rotate-180')}
             />
@@ -405,9 +419,12 @@ export function AccommodationInquiryPanel({
 
       {showForm ? (
         <div className='brand-contact-credentials-box' ref={formRef}>
-          <h2 className='brand-heading font-display text-lg'>Check availability</h2>
+          <h2 className='brand-heading font-display text-lg'>
+            {publicLabel(locale, 'Check availability')}
+          </h2>
           <p className='mt-1 text-sm text-[var(--brand-muted)]'>
-            Enquiring about <strong className='text-[var(--brand-ink)]'>{accommodationName}</strong>
+            {publicLabel(locale, 'Enquiring about')}{' '}
+            <strong className='text-[var(--brand-ink)]'>{accommodationName}</strong>
           </p>
           <div className='mt-5'>
             <AccommodationInquiryForm

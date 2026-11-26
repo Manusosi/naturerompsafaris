@@ -1,5 +1,7 @@
 'use client';
+import { catalogImageUrl } from '@/lib/public/catalog-image';
 
+import { publicLabel } from '@/lib/i18n/public-label';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -91,9 +93,12 @@ export function HomeExperiencesGrid({ experiences, locale }: HomeExperiencesGrid
     <section className='brand-section bg-white'>
       <div className='brand-container'>
         <SectionHeader
-          description='Migration weeks in the Mara and Serengeti, Big Five game drives, a beach after the bush, Kilimanjaro or Mount Kenya, family pacing, or a trip written from scratch. Nature Romp still builds each one around your dates and how you like to travel.'
-          eyebrow='Top experiences'
-          title='The safari styles guests ask us to plan'
+          description={publicLabel(
+            locale,
+            'Migration weeks in the Mara and Serengeti, Big Five game drives, a beach after the bush, Kilimanjaro or Mount Kenya, family pacing, or a trip written from scratch. Nature Romp still builds each one around your dates and how you like to travel.'
+          )}
+          eyebrow={publicLabel(locale, 'Top experiences')}
+          title={publicLabel(locale, 'The safari styles guests ask us to plan')}
         />
 
         <ScrollReveal className='mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3' stagger>
@@ -111,7 +116,7 @@ export function HomeExperiencesGrid({ experiences, locale }: HomeExperiencesGrid
                     className='object-cover transition-transform duration-500 group-hover:scale-105'
                     fill
                     sizes='(max-width:640px) 100vw, (max-width:1024px) 50vw, 33vw'
-                    src={item.imageUrl}
+                    src={catalogImageUrl(item.imageUrl)}
                   />
                 ) : (
                   <span aria-hidden className='absolute inset-0 bg-[var(--brand-primary-light)]' />
@@ -128,7 +133,7 @@ export function HomeExperiencesGrid({ experiences, locale }: HomeExperiencesGrid
                     <span className='mt-2 block text-sm leading-6 text-white/88'>{item.blurb}</span>
                   ) : null}
                   <span className='mt-4 inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wide text-[var(--brand-gold)]'>
-                    View details
+                    {publicLabel(locale, 'View details')}
                     <Icons.arrowRight className='h-3 w-3 transition-transform group-hover:translate-x-1' />
                   </span>
                 </span>
@@ -139,19 +144,24 @@ export function HomeExperiencesGrid({ experiences, locale }: HomeExperiencesGrid
 
         <div className='mx-auto mt-16 max-w-2xl text-center'>
           <p className='brand-heading font-display text-2xl leading-tight md:text-[1.75rem]'>
-            Most Kenya and Tanzania safari adventures start as a conversation
+            {publicLabel(
+              locale,
+              'Most Kenya and Tanzania safari adventures start as a conversation'
+            )}
           </p>
           <p className='brand-body mx-auto mt-3 max-w-xl text-base leading-7'>
-            Tell us who is travelling, your dates, and whether you want Kenya, Tanzania, or both. We
-            send a private itinerary with the price and what is included, usually within 24 hours.
+            {publicLabel(
+              locale,
+              'Tell us who is travelling, your dates, and whether you want Kenya, Tanzania, or both. We send a private itinerary with the price and what is included, usually within 24 hours.'
+            )}
           </p>
           <BrandButtonGroup align='center' className='mt-6'>
             <BrandButton href={localePath(locale, '/contact')} variant='primary'>
-              Plan My Safari
+              {publicLabel(locale, 'Plan My Safari')}
               <Icons.arrowRight className='h-4 w-4' />
             </BrandButton>
             <BrandButton href={localePath(locale, '/tours')} variant='accent-outline'>
-              Browse all tours
+              {publicLabel(locale, 'Browse all tours')}
             </BrandButton>
           </BrandButtonGroup>
         </div>

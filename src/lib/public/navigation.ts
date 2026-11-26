@@ -182,7 +182,14 @@ function buildExperienceMenuTabs(
 function collectionLinks(locale: string, menu: 'kenya' | 'tanzania' | 'combined'): PublicNavItem[] {
   return publicTourCollectionsForMenu(menu).map((item) => ({
     label: item.label,
-    href: lp(locale, 'navPath' in item ? item.navPath : `/tours?collection=${item.id}`)
+    href: lp(
+      locale,
+      item.id === 'combined'
+        ? '/safaris/kenya-tanzania'
+        : 'navPath' in item
+          ? item.navPath
+          : `/tours?collection=${item.id}`
+    )
   }));
 }
 
@@ -191,23 +198,23 @@ export function safariTourNavItems(locale: string): PublicNavItem[] {
   return [
     {
       label: 'Kenya',
-      href: path('/tours?country=kenya'),
+      href: path('/safaris/kenya'),
       items: [
-        { label: 'All Kenya safaris', href: path('/tours?country=kenya') },
+        { label: 'All Kenya safaris', href: path('/safaris/kenya') },
         ...collectionLinks(locale, 'kenya')
       ]
     },
     {
       label: 'Tanzania',
-      href: path('/tours?country=tanzania'),
+      href: path('/safaris/tanzania'),
       items: [
-        { label: 'All Tanzania safaris', href: path('/tours?country=tanzania') },
+        { label: 'All Tanzania safaris', href: path('/safaris/tanzania') },
         ...collectionLinks(locale, 'tanzania')
       ]
     },
     {
       label: 'Kenya & Tanzania',
-      href: path('/tours?collection=combined'),
+      href: path('/safaris/kenya-tanzania'),
       items: collectionLinks(locale, 'combined')
     }
   ];

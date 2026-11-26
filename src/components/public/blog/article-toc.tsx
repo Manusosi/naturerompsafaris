@@ -1,5 +1,7 @@
 'use client';
+import { usePublicLocale } from '@/lib/i18n/use-public-locale';
 
+import { publicLabel } from '@/lib/i18n/public-label';
 import * as React from 'react';
 
 import { Icons } from '@/components/icons';
@@ -11,6 +13,7 @@ const SCROLL_OFFSET = 110;
 /** Sticky, card-style table of contents with scroll-spy, a reading-progress
  *  bar, a docs-style active rail, and a back-to-top action. */
 export function ArticleToc({ items }: { items: TocItem[] }) {
+  const locale = usePublicLocale();
   const [active, setActive] = React.useState(items[0]?.id ?? '');
   const [progress, setProgress] = React.useState(0);
 
@@ -52,13 +55,13 @@ export function ArticleToc({ items }: { items: TocItem[] }) {
 
   return (
     <nav
-      aria-label='Table of contents'
+      aria-label={publicLabel(locale, 'Table of contents')}
       className='overflow-hidden rounded-[var(--brand-radius)] border border-[var(--brand-line)] bg-white shadow-sm'
     >
       <div className='flex items-center justify-between gap-2 border-b border-[var(--brand-line)] bg-[var(--brand-ivory)] px-4 py-3'>
         <p className='inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.12em] text-[var(--brand-ink)]'>
           <Icons.listBullet className='size-4 text-[var(--brand-primary)]' />
-          On this page
+          {publicLabel(locale, 'On this page')}
         </p>
         <span className='text-[10px] font-semibold tabular-nums text-[var(--brand-muted)]'>
           {Math.round(progress * 100)}%
@@ -99,7 +102,7 @@ export function ArticleToc({ items }: { items: TocItem[] }) {
           type='button'
         >
           <Icons.chevronUp className='size-3.5' />
-          Back to top
+          {publicLabel(locale, 'Back to top')}
         </button>
       </div>
     </nav>

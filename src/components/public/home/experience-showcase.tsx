@@ -1,5 +1,6 @@
 'use client';
 
+import { publicLabel } from '@/lib/i18n/public-label';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useCallback, useRef, useState } from 'react';
@@ -76,14 +77,18 @@ export function ExperienceShowcase({ items, locale }: ExperienceShowcaseProps) {
       <div className='brand-container'>
         <div className='flex flex-col gap-4 text-white md:flex-row md:items-end md:justify-between'>
           <div>
-            <p className='brand-eyebrow text-[var(--brand-gold)]'>Signature Experiences</p>
+            <p className='brand-eyebrow text-[var(--brand-gold)]'>
+              {publicLabel(locale, 'Signature Experiences')}
+            </p>
             <h2 className='mt-3 max-w-2xl font-display text-[clamp(1.875rem,4vw,3rem)] leading-[1.1]'>
-              The Safaris We Are Known For
+              {publicLabel(locale, 'The Safaris We Are Known For')}
             </h2>
           </div>
           <p className='max-w-md text-sm leading-7 text-white/70'>
-            Twenty five years of fieldwork distilled into the experiences travelers ask us for again
-            and again. Every one is fully tailorable to your dates and pace.
+            {publicLabel(
+              locale,
+              'Twenty five years of fieldwork distilled into the experiences travelers ask us for again and again. Every one is fully tailorable to your dates and pace.'
+            )}
           </p>
         </div>
 
@@ -155,7 +160,7 @@ export function ExperienceShowcase({ items, locale }: ExperienceShowcaseProps) {
                     className='brand-fill-hover mt-7 inline-flex items-center gap-2 rounded-[var(--brand-button-radius)] bg-[var(--brand-lime)] px-6 py-3 text-sm font-bold uppercase tracking-[0.08em] text-white transition-colors [--brand-fill:var(--brand-primary)]'
                     href={localePath(locale, items[activeIndex].href)}
                   >
-                    Explore This Safari
+                    {publicLabel(locale, 'Explore This Safari')}
                     <Icons.arrowRight className='h-4 w-4' />
                   </Link>
                 </div>

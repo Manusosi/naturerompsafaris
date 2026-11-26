@@ -1,4 +1,4 @@
-import { revalidatePath } from 'next/cache';
+import { revalidatePath, revalidateTag } from 'next/cache';
 
 import { isPublicLocale, SUPPORTED_LOCALES } from '@/lib/i18n';
 
@@ -51,6 +51,9 @@ export function notifyPublishedContent({
     revalidatePath(path);
   }
   revalidatePath('/sitemap.xml');
+  revalidateTag(`sitemap-${pathPrefix}`, 'max');
+  revalidatePath('/sitemaps/pages.xml');
+  revalidatePath(`/sitemaps/${pathPrefix}.xml`);
   revalidatePath(sitemapFilePath('pages'));
   revalidatePath(sitemapFilePath(pathPrefix));
 

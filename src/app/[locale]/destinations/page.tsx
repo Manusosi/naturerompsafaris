@@ -1,3 +1,4 @@
+import { publicLabel } from '@/lib/i18n/public-label';
 import type { Metadata } from 'next';
 
 import { DestinationCard } from '@/components/public/cards/content-cards';
@@ -82,12 +83,15 @@ export default async function DestinationsPage({ params, searchParams }: Destina
     <>
       <PublicPageHero
         breadcrumbs={[{ href: localePath(locale), label: 'Home' }, { label: 'Destinations' }]}
-        description='Destination guides for Kenya, Tanzania, national parks, wildlife seasons, and linked safari routes.'
-        eyebrow='Destinations'
+        description={publicLabel(
+          locale,
+          'Destination guides for Kenya, Tanzania, national parks, wildlife seasons, and linked safari routes.'
+        )}
+        eyebrow={publicLabel(locale, 'Destinations')}
         hero={pageHero}
         imageAlt={hero.imageAlt}
         imageUrl={hero.imageUrl}
-        title='East Africa Safari Destinations'
+        title={publicLabel(locale, 'East Africa Safari Destinations')}
       />
       <ListingShell
         filters={

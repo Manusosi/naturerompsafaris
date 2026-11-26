@@ -1,3 +1,4 @@
+import { publicLabel } from '@/lib/i18n/public-label';
 import type { Metadata } from 'next';
 
 import { AccommodationFilters } from '@/components/public/accommodations/accommodation-filters';
@@ -93,14 +94,14 @@ export default async function AccommodationsPage({
         breadcrumbStyle='pipe-uppercase'
         breadcrumbs={[{ href: localePath(locale), label: 'Home' }, { label: 'Accommodations' }]}
         description={accommodationsDescription}
-        eyebrow='Where You Will Stay'
+        eyebrow={publicLabel(locale, 'Where You Will Stay')}
         eyebrowTone='white'
         hero={pageHero}
         imageAlt={hero.imageAlt}
         imageUrl={hero.imageUrl}
         overlayTone='black'
         showGoldLine={false}
-        title='Accommodations'
+        title={publicLabel(locale, 'Accommodations')}
         titleTone='white'
       />
       <ListingShell

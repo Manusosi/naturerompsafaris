@@ -1,3 +1,4 @@
+import { publicLabel } from '@/lib/i18n/public-label';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import type { SupabaseClient } from '@supabase/supabase-js';
@@ -48,7 +49,7 @@ export default async function NewsletterUnsubscribePage({
           href={localePath(locale)}
           className='mt-8 inline-flex min-h-11 items-center justify-center rounded-[var(--brand-button-radius)] bg-[var(--brand-lime)] px-6 text-sm font-bold uppercase tracking-[0.06em] text-[var(--brand-primary-dark)] transition-colors hover:bg-[var(--brand-lime-hover)]'
         >
-          Back to homepage
+          {publicLabel(locale, 'Back to homepage')}
         </Link>
       </div>
     </main>

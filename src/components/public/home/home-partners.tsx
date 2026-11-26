@@ -1,3 +1,4 @@
+import { publicLabel } from '@/lib/i18n/public-label';
 import { SectionHeader } from '@/components/public/ui/section-header';
 import { BRAND_KPSGA, BRAND_MAGICAL_KENYA, BRAND_TRA } from '@/config/brand';
 
@@ -34,7 +35,7 @@ function TrustedLogo({
   );
 }
 
-export function HomePartners() {
+export function HomePartners({ locale = 'en' }: { locale?: string }) {
   return (
     <section
       aria-labelledby='trusted-by-heading'
@@ -42,8 +43,11 @@ export function HomePartners() {
     >
       <div className='brand-container pt-14 md:pt-16'>
         <SectionHeader
-          description='Nature Romp Safaris works with the authorities and associations that license and recognise travel in Kenya.'
-          title='Trusted & Recognised'
+          description={publicLabel(
+            locale,
+            'Nature Romp Safaris works with the authorities and associations that license and recognise travel in Kenya.'
+          )}
+          title={publicLabel(locale, 'Trusted & Recognised')}
           titleId='trusted-by-heading'
         />
       </div>

@@ -47,7 +47,7 @@ export default async function ContactPage({ params }: ContactPageProps) {
         </div>
       </section>
 
-      <ContactTrustStrip />
+      <ContactTrustStrip locale={locale} />
     </>
   );
 }

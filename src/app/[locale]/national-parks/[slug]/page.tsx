@@ -1,3 +1,4 @@
+import { publicLabel } from '@/lib/i18n/public-label';
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
@@ -108,13 +109,16 @@ export default async function NationalParkDetailPage(props: ParkPageProps) {
           className='absolute inset-0 bg-gradient-to-t from-black/85 via-black/45 to-black/20'
         />
         <div className='brand-container relative z-10 py-10 md:py-14'>
-          <nav aria-label='Breadcrumb' className='mb-4 flex flex-wrap gap-2 text-sm text-white/75'>
+          <nav
+            aria-label={publicLabel(locale, 'Breadcrumb')}
+            className='mb-4 flex flex-wrap gap-2 text-sm text-white/75'
+          >
             <a className='hover:text-white' href={localePath(locale)}>
-              Home
+              {publicLabel(locale, 'Home')}
             </a>
             <span>/</span>
             <a className='hover:text-white' href={localePath(locale, '/national-parks')}>
-              National Parks
+              {publicLabel(locale, 'National Parks')}
             </a>
             {park.parentDestination ? (
               <>
@@ -129,7 +133,7 @@ export default async function NationalParkDetailPage(props: ParkPageProps) {
           </nav>
           {park.parentDestination ? (
             <p className='mb-3 text-sm text-white/80'>
-              Part of{' '}
+              {publicLabel(locale, 'Part of')}{' '}
               <a
                 className='font-semibold text-white underline-offset-2 hover:underline'
                 href={park.parentDestination.href}
@@ -139,7 +143,7 @@ export default async function NationalParkDetailPage(props: ParkPageProps) {
             </p>
           ) : null}
           <p className='text-xs font-bold uppercase tracking-[0.18em] text-[var(--brand-lime)]'>
-            National Park
+            {publicLabel(locale, 'National Park')}
           </p>
           <h1 className='mt-3 max-w-3xl font-display text-[clamp(2rem,5vw,3.5rem)] leading-[1.08]'>
             {park.name}
@@ -168,9 +172,9 @@ export default async function NationalParkDetailPage(props: ParkPageProps) {
       {/* Why Visit */}
       <section className={`${SECTION_OFFSET} brand-section bg-white`} id='why-visit'>
         <div className='brand-container'>
-          <p className='brand-eyebrow'>Overview</p>
+          <p className='brand-eyebrow'>{publicLabel(locale, 'Overview')}</p>
           <h2 className='brand-heading mt-3 font-display text-[clamp(1.75rem,3.5vw,2.5rem)] leading-tight'>
-            Why Visit {park.name}
+            {publicLabel(locale, 'Why Visit')} {park.name}
           </h2>
 
           {park.descriptionHtml ? (
@@ -184,7 +188,9 @@ export default async function NationalParkDetailPage(props: ParkPageProps) {
 
           {park.wildlife.length ? (
             <div className='mt-10'>
-              <h3 className='brand-heading font-display text-xl'>Wildlife to spot</h3>
+              <h3 className='brand-heading font-display text-xl'>
+                {publicLabel(locale, 'Wildlife to spot')}
+              </h3>
               <ul className='mt-4 flex flex-wrap gap-2'>
                 {park.wildlife.map((animal) => (
                   <li
@@ -201,7 +207,9 @@ export default async function NationalParkDetailPage(props: ParkPageProps) {
 
           {park.activities.length ? (
             <div className='mt-8'>
-              <h3 className='brand-heading font-display text-xl'>Things to do</h3>
+              <h3 className='brand-heading font-display text-xl'>
+                {publicLabel(locale, 'Things to do')}
+              </h3>
               <ul className='mt-4 flex flex-wrap gap-2'>
                 {park.activities.map((activity) => (
                   <li
@@ -221,8 +229,11 @@ export default async function NationalParkDetailPage(props: ParkPageProps) {
           !park.wildlife.length &&
           !park.activities.length ? (
             <p className='brand-body mt-6 max-w-2xl text-base leading-8 text-[var(--brand-muted)]'>
-              An overview of {park.name} — wildlife, scenery and things to do — will appear here
-              once it is added in the portal.
+              {publicLabel(locale, 'An overview of')} {park.name}{' '}
+              {publicLabel(
+                locale,
+                '— wildlife, scenery and things to do — will appear here once it is added in the portal.'
+              )}
             </p>
           ) : null}
         </div>
@@ -234,9 +245,9 @@ export default async function NationalParkDetailPage(props: ParkPageProps) {
         id='when-to-go'
       >
         <div className='brand-container'>
-          <p className='brand-eyebrow'>When to Go</p>
+          <p className='brand-eyebrow'>{publicLabel(locale, 'When to Go')}</p>
           <h2 className='brand-heading mt-3 font-display text-[clamp(1.75rem,3.5vw,2.5rem)] leading-tight'>
-            The Best Time to Visit {park.name}
+            {publicLabel(locale, 'The Best Time to Visit')} {park.name}
           </h2>
           <div className='mt-6'>
             <ParkWhenToGo bestTimeSummary={park.bestTimeSummary} parkName={park.name} />
@@ -249,9 +260,9 @@ export default async function NationalParkDetailPage(props: ParkPageProps) {
         <div className='brand-container'>
           <div className='flex flex-wrap items-end justify-between gap-4'>
             <div>
-              <p className='brand-eyebrow'>Safaris</p>
+              <p className='brand-eyebrow'>{publicLabel(locale, 'Safaris')}</p>
               <h2 className='brand-heading mt-3 font-display text-[clamp(1.75rem,3.5vw,2.5rem)] leading-tight'>
-                Safaris That Visit {park.name}
+                {publicLabel(locale, 'Safaris That Visit')} {park.name}
               </h2>
             </div>
             {tours.length ? (
@@ -260,7 +271,7 @@ export default async function NationalParkDetailPage(props: ParkPageProps) {
                 size='sm'
                 variant='accent-outline'
               >
-                Browse All Safaris
+                {publicLabel(locale, 'Browse All Safaris')}
                 <Icons.arrowRight className='h-3.5 w-3.5' />
               </BrandButton>
             ) : null}
@@ -274,15 +285,18 @@ export default async function NationalParkDetailPage(props: ParkPageProps) {
           ) : (
             <div className='mt-8 rounded-[var(--brand-radius)] border border-dashed border-[var(--brand-line)] bg-[var(--brand-ivory)] px-8 py-14 text-center'>
               <h3 className='brand-heading font-display text-2xl'>
-                Safaris to {park.name} coming soon
+                {publicLabel(locale, 'Safaris to')} {park.name} {publicLabel(locale, 'coming soon')}
               </h3>
               <p className='brand-body mx-auto mt-3 max-w-xl'>
-                We are building itineraries that include {park.name}. Our team can also craft a
-                custom safari around this park for you.
+                {publicLabel(locale, 'We are building itineraries that include')} {park.name}
+                {publicLabel(
+                  locale,
+                  '. Our team can also craft a custom safari around this park for you.'
+                )}
               </p>
               <div className='mt-6'>
                 <BrandButton href={localePath(locale, '/contact')}>
-                  Plan a Custom Safari
+                  {publicLabel(locale, 'Plan a Custom Safari')}
                 </BrandButton>
               </div>
             </div>
@@ -296,9 +310,9 @@ export default async function NationalParkDetailPage(props: ParkPageProps) {
         id='accommodation'
       >
         <div className='brand-container'>
-          <p className='brand-eyebrow'>Accommodation</p>
+          <p className='brand-eyebrow'>{publicLabel(locale, 'Accommodation')}</p>
           <h2 className='brand-heading mt-3 font-display text-[clamp(1.75rem,3.5vw,2.5rem)] leading-tight'>
-            Where to Stay {park.country ? `in ${park.country}` : ''}
+            {publicLabel(locale, 'Where to Stay')} {park.country ? `in ${park.country}` : ''}
           </h2>
           {nearbyStays.length ? (
             <div className='mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-3'>
@@ -312,12 +326,12 @@ export default async function NationalParkDetailPage(props: ParkPageProps) {
                 Lodges &amp; camps coming soon
               </h3>
               <p className='brand-body mx-auto mt-3 max-w-xl'>
-                Hand-picked lodges and tented camps near {park.name} will appear here. Ask our team
-                for current recommendations.
+                {publicLabel(locale, 'Hand-picked lodges and tented camps near')} {park.name}{' '}
+                {publicLabel(locale, 'will appear here. Ask our team for current recommendations.')}
               </p>
               <div className='mt-6'>
                 <BrandButton href={localePath(locale, '/accommodations')} variant='accent-outline'>
-                  Browse Accommodations
+                  {publicLabel(locale, 'Browse Accommodations')}
                 </BrandButton>
               </div>
             </div>

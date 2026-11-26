@@ -1,5 +1,6 @@
 'use client';
 
+import { publicLabel } from '@/lib/i18n/public-label';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 
@@ -55,7 +56,7 @@ export function FleetGallery({ images, locale }: FleetGalleryProps) {
         actionHref={localePath(locale, '/contact')}
         actionLabel='Ask about our vehicles'
         message='Fleet photos will appear here once they are uploaded and saved in the Nature Romp portal under Our Fleet.'
-        title='Fleet gallery coming soon'
+        title={publicLabel(locale, 'Fleet gallery coming soon')}
       />
     );
   }
@@ -117,7 +118,7 @@ export function FleetGallery({ images, locale }: FleetGalleryProps) {
             '[&>button]:right-4 [&>button]:top-4 [&>button]:text-white [&>button]:hover:opacity-100'
           )}
         >
-          <DialogTitle className='sr-only'>Fleet photo viewer</DialogTitle>
+          <DialogTitle className='sr-only'>{publicLabel(locale, 'Fleet photo viewer')}</DialogTitle>
           <div
             className='relative flex h-full w-full items-center justify-center px-4 py-16 sm:px-16'
             onTouchEnd={hasMultiple ? handleTouchEnd : undefined}
@@ -140,7 +141,7 @@ export function FleetGallery({ images, locale }: FleetGalleryProps) {
             {hasMultiple ? (
               <>
                 <button
-                  aria-label='Previous vehicle photo'
+                  aria-label={publicLabel(locale, 'Previous vehicle photo')}
                   className='absolute left-3 top-1/2 z-10 flex size-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20 sm:left-6'
                   onClick={showPrevious}
                   type='button'
@@ -148,7 +149,7 @@ export function FleetGallery({ images, locale }: FleetGalleryProps) {
                   <Icons.chevronLeft className='size-6' />
                 </button>
                 <button
-                  aria-label='Next vehicle photo'
+                  aria-label={publicLabel(locale, 'Next vehicle photo')}
                   className='absolute right-3 top-1/2 z-10 flex size-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20 sm:right-6'
                   onClick={showNext}
                   type='button'

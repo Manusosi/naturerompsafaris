@@ -1,5 +1,6 @@
 'use client';
 
+import { publicLabel } from '@/lib/i18n/public-label';
 import { useEffect, useMemo, useState, useTransition } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 
@@ -72,7 +73,9 @@ export function ExperiencesListingSection({
       >
         {legacyCategory && categoryBlurb ? (
           <div className='mb-8 border-b border-[var(--brand-line)] pb-8'>
-            <p className='brand-eyebrow'>{legacyCategory} Safaris</p>
+            <p className='brand-eyebrow'>
+              {legacyCategory} {publicLabel(locale, 'Safaris')}
+            </p>
             <p className='mt-3 text-[15px] leading-7 text-[var(--brand-ink)]'>{categoryBlurb}</p>
           </div>
         ) : null}

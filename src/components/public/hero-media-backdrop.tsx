@@ -1,5 +1,7 @@
 'use client';
+import { usePublicLocale } from '@/lib/i18n/use-public-locale';
 
+import { publicLabel } from '@/lib/i18n/public-label';
 import { useEffect, useState } from 'react';
 
 import { youtubeVideoId } from '@/lib/public/page-heroes';
@@ -13,6 +15,7 @@ const HERO_SLIDE_INTERVAL = 6500;
  * Renders nothing when the hero has no media — the host keeps its own backdrop.
  */
 export function HeroMediaBackdrop({ hero }: { hero: PageHero }) {
+  const locale = usePublicLocale();
   const videoId = hero.type === 'youtube' ? youtubeVideoId(hero.youtubeUrl) : null;
   const images =
     hero.type === 'slider' || hero.type === 'image'
@@ -49,7 +52,7 @@ export function HeroMediaBackdrop({ hero }: { hero: PageHero }) {
           aria-hidden
           className='pointer-events-none absolute left-1/2 top-1/2 h-[56.25vw] min-h-full w-[177.78vh] min-w-full -translate-x-1/2 -translate-y-1/2'
           src={`https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&controls=0&loop=1&playlist=${videoId}&playsinline=1&rel=0&modestbranding=1&showinfo=0`}
-          title='Background video'
+          title={publicLabel(locale, 'Background video')}
         />
       </>
     );

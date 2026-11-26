@@ -1,5 +1,7 @@
 'use client';
+import { usePublicLocale } from '@/lib/i18n/use-public-locale';
 
+import { publicLabel } from '@/lib/i18n/public-label';
 import { useEffect, useRef, useState } from 'react';
 
 import { ABOUT_TAB_CONFIG } from '@/lib/public/about-content';
@@ -12,6 +14,7 @@ type AboutTabBarProps = {
 };
 
 export function AboutTabBar({ activeTab, onTabChange }: AboutTabBarProps) {
+  const locale = usePublicLocale();
   const sentinelRef = useRef<HTMLDivElement>(null);
   const [isStuck, setIsStuck] = useState(false);
 
@@ -40,7 +43,7 @@ export function AboutTabBar({ activeTab, onTabChange }: AboutTabBarProps) {
       >
         <div className='brand-container py-3 sm:py-4'>
           <div
-            aria-label='About page sections'
+            aria-label={publicLabel(locale, 'About page sections')}
             className='mx-auto grid w-full max-w-4xl grid-cols-2 gap-1 rounded-[var(--brand-radius)] border border-[var(--brand-line)] bg-[var(--brand-surface-muted)] p-1 sm:grid-cols-4 sm:gap-1.5 sm:p-1.5'
             role='tablist'
           >

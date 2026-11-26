@@ -1,11 +1,14 @@
 'use client';
+import { usePublicLocale } from '@/lib/i18n/use-public-locale';
 
+import { publicLabel } from '@/lib/i18n/public-label';
 import Image from 'next/image';
 
 import { useSitePhoto } from '@/components/public/site-photos-provider';
 import { ABOUT_VISION_MISSION, ABOUT_WHY_TRAVEL } from '@/lib/public/about-content';
 
 export function AboutMissionCommitment() {
+  const locale = usePublicLocale();
   const missionImageUrl = useSitePhoto('about-mission');
   return (
     <section className='grid lg:grid-cols-2 lg:items-stretch'>
@@ -22,10 +25,10 @@ export function AboutMissionCommitment() {
         <div className='relative grid gap-10 md:grid-cols-2 md:gap-8 lg:gap-12'>
           <div>
             <p className='font-display text-[clamp(1.5rem,3vw,2rem)] italic leading-none text-[var(--brand-lime)]/75'>
-              Our
+              {publicLabel(locale, 'Our')}
             </p>
             <h2 className='font-display text-[clamp(2rem,4vw,2.75rem)] font-bold leading-tight text-white'>
-              Mission
+              {publicLabel(locale, 'Mission')}
             </h2>
             <span aria-hidden className='brand-gold-line brand-gold-line--left mt-5 opacity-80' />
             <p className='mt-6 text-base leading-8 text-white/90'>

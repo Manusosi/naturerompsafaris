@@ -1,3 +1,4 @@
+import { publicLabel } from '@/lib/i18n/public-label';
 import type { Metadata } from 'next';
 
 import { ContactHero } from '@/components/public/contact/contact-hero';
@@ -60,9 +61,9 @@ export default async function FleetPage({ params }: FleetPageProps) {
       <section className='bg-white'>
         <div className='brand-container py-12 md:py-16'>
           <div className='mx-auto max-w-3xl text-center'>
-            <p className='brand-eyebrow'>Our Vehicles</p>
+            <p className='brand-eyebrow'>{publicLabel(locale, 'Our Vehicles')}</p>
             <h2 className='brand-heading mt-3 font-display text-[clamp(1.75rem,3vw,2.35rem)] leading-tight'>
-              Safari Fleet Gallery
+              {publicLabel(locale, 'Safari Fleet Gallery')}
             </h2>
             <span aria-hidden className='brand-gold-line mt-5' />
           </div>
@@ -75,11 +76,14 @@ export default async function FleetPage({ params }: FleetPageProps) {
       <FleetFeatures locale={locale} />
 
       <FaqSection
-        description='Practical answers about the vehicles and guides you travel with on a Nature Romp safari.'
-        eyebrow='Fleet FAQ'
+        description={publicLabel(
+          locale,
+          'Practical answers about the vehicles and guides you travel with on a Nature Romp safari.'
+        )}
+        eyebrow={publicLabel(locale, 'Fleet FAQ')}
         faqs={FLEET_FAQS}
         headingId='fleet-faq-heading'
-        title='Common fleet questions'
+        title={publicLabel(locale, 'Common fleet questions')}
       />
     </>
   );

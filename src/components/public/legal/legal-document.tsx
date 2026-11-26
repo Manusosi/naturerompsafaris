@@ -1,3 +1,4 @@
+import { publicLabel } from '@/lib/i18n/public-label';
 import Link from 'next/link';
 import { Fragment, type ReactNode } from 'react';
 
@@ -82,7 +83,8 @@ function LegalIntro({ intro, locale }: { intro: string | string[]; locale: strin
 }
 
 export function LegalDocument({ locale, page }: LegalDocumentProps) {
-  const formattedDate = new Intl.DateTimeFormat('en-GB', {
+  const formattedDate = new Intl.DateTimeFormat(locale === 'en' ? 'en-GB' : locale, {
+    timeZone: 'UTC',
     day: 'numeric',
     month: 'long',
     year: 'numeric'
@@ -100,11 +102,13 @@ export function LegalDocument({ locale, page }: LegalDocumentProps) {
         <div className='brand-container'>
           <div className='grid gap-8 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-10'>
             <aside className='min-w-0'>
-              <LegalDocumentToc sections={page.sections} />
+              <LegalDocumentToc locale={locale} sections={page.sections} />
             </aside>
 
             <div className='min-w-0'>
-              <p className='brand-body text-sm'>Last updated: {formattedDate}</p>
+              <p className='brand-body text-sm'>
+                {publicLabel(locale, 'Last updated')}: {formattedDate}
+              </p>
 
               {page.intro ? <LegalIntro intro={page.intro} locale={locale} /> : null}
 
@@ -119,13 +123,13 @@ export function LegalDocument({ locale, page }: LegalDocumentProps) {
 
               <div className='mt-12 border-t border-[var(--brand-line)] pt-8'>
                 <p className='brand-body text-sm'>
-                  Related policies:{' '}
+                  {publicLabel(locale, 'Related policies')}:{' '}
                   {page.slug !== 'privacy-policy' ? (
                     <Link
                       className='text-[var(--brand-primary)] hover:underline'
                       href={localePath(locale, '/privacy-policy')}
                     >
-                      Privacy Policy
+                      {publicLabel(locale, 'Privacy Policy')}
                     </Link>
                   ) : null}
                   {page.slug !== 'cookie-policy' ? (
@@ -135,7 +139,7 @@ export function LegalDocument({ locale, page }: LegalDocumentProps) {
                         className='text-[var(--brand-primary)] hover:underline'
                         href={localePath(locale, '/cookie-policy')}
                       >
-                        Cookie Policy
+                        {publicLabel(locale, 'Cookie Policy')}
                       </Link>
                     </>
                   ) : null}
@@ -146,7 +150,7 @@ export function LegalDocument({ locale, page }: LegalDocumentProps) {
                         className='text-[var(--brand-primary)] hover:underline'
                         href={localePath(locale, '/terms-conditions')}
                       >
-                        Terms &amp; Conditions
+                        {publicLabel(locale, 'Terms & Conditions')}
                       </Link>
                     </>
                   ) : null}
@@ -157,7 +161,7 @@ export function LegalDocument({ locale, page }: LegalDocumentProps) {
                         className='text-[var(--brand-primary)] hover:underline'
                         href={localePath(locale, '/payment-terms')}
                       >
-                        Payment Terms
+                        {publicLabel(locale, 'Payment Terms')}
                       </Link>
                     </>
                   ) : null}
@@ -168,7 +172,7 @@ export function LegalDocument({ locale, page }: LegalDocumentProps) {
                         className='text-[var(--brand-primary)] hover:underline'
                         href={localePath(locale, '/service-level-agreement')}
                       >
-                        Service Level Agreement
+                        {publicLabel(locale, 'Service Level Agreement')}
                       </Link>
                     </>
                   ) : null}

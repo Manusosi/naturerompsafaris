@@ -1,3 +1,4 @@
+import { unstable_cache } from 'next/cache';
 import { localePath } from '@/lib/public/locale-path';
 import { createEnquiryPublicClient } from '@/lib/supabase/service-role';
 
@@ -171,9 +172,6 @@ async function fetchPublishedRows(locale: string) {
       slug,
       name,
       summary,
-      description,
-      seo_title,
-      seo_description,
       accommodation:accommodations!inner(
         id,
         status,
@@ -185,8 +183,6 @@ async function fetchPublishedRows(locale: string) {
         price_per_night,
         availability,
         gallery,
-        amenities,
-        map_query,
         deleted_at
       ),
       og_image:media_assets!accommodation_translations_og_image_id_fkey(url, alt)
@@ -195,7 +191,9 @@ async function fetchPublishedRows(locale: string) {
     .eq('locale', locale)
     .eq('accommodation.status', 'published')
     .is('accommodation.deleted_at', null)
-    .order('name');
+    .not('published_at', 'is', null)
+    .order('name')
+    .throwOnError();
 
   return (data ?? []) as AccommodationTranslationRow[];
 }
@@ -287,36 +285,42 @@ function matchesFilters(
   return true;
 }
 
-export async function listPublishedAccommodations(
-  filters: AccommodationListFilters
-): Promise<PublicAccommodation[]> {
-  const rows = await fetchPublishedRows(filters.locale);
-  const galleryIds = rows.flatMap((row) =>
-    parseGalleryIds(unwrapRelation(row.accommodation)?.gallery)
-  );
-  const destinationIds = rows.flatMap((row) => {
-    const destinationId = unwrapRelation(row.accommodation)?.destination_id;
-    return destinationId ? [destinationId] : [];
-  });
-  const [mediaById, destinationsById] = await Promise.all([
-    resolveMediaByIds(galleryIds),
-    resolveDestinationsByIds(destinationIds, filters.locale)
-  ]);
-
-  return rows
-    .map((row) => mapListingRow(row, filters.locale, mediaById, destinationsById))
-    .filter((item): item is PublicAccommodation => item !== null)
-    .filter((item) =>
-      matchesFilters(item, {
-        comfortLevels: filters.comfortLevels,
-        countries: filters.countries,
-        destinationSlugs: filters.destinationSlugs,
-        maxPrice: filters.maxPrice,
-        minPrice: filters.minPrice,
-        propertyTypes: filters.propertyTypes,
-        regions: filters.regions
-      })
+const getAccommodationCards = unstable_cache(
+  async (locale: string) => {
+    const rows = await fetchPublishedRows(locale);
+    const galleryIds = rows.flatMap((row) =>
+      parseGalleryIds(unwrapRelation(row.accommodation)?.gallery)
     );
+    const destinationIds = rows.flatMap((row) => {
+      const destinationId = unwrapRelation(row.accommodation)?.destination_id;
+      return destinationId ? [destinationId] : [];
+    });
+    const [mediaById, destinationsById] = await Promise.all([
+      resolveMediaByIds(galleryIds),
+      resolveDestinationsByIds(destinationIds, locale)
+    ]);
+
+    return rows
+      .map((row) => mapListingRow(row, locale, mediaById, destinationsById))
+      .filter((item): item is PublicAccommodation => item !== null);
+  },
+  ['public-accommodation-cards-v1'],
+  { revalidate: 300, tags: ['accommodations'] }
+);
+
+export async function listPublishedAccommodations(filters: AccommodationListFilters) {
+  const items = await getAccommodationCards(filters.locale);
+  return items.filter((item) =>
+    matchesFilters(item, {
+      comfortLevels: filters.comfortLevels,
+      countries: filters.countries,
+      destinationSlugs: filters.destinationSlugs,
+      maxPrice: filters.maxPrice,
+      minPrice: filters.minPrice,
+      propertyTypes: filters.propertyTypes,
+      regions: filters.regions
+    })
+  );
 }
 
 export async function getRelatedAccommodationsInRegion(

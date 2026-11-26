@@ -1,5 +1,9 @@
 'use client';
+import { catalogImageUrl } from '@/lib/public/catalog-image';
 
+import { usePublicLocale } from '@/lib/i18n/use-public-locale';
+
+import { publicLabel } from '@/lib/i18n/public-label';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 
@@ -33,7 +37,7 @@ function GalleryImageTile({
           className='object-cover'
           fill
           sizes='(max-width:768px) 100vw, 33vw'
-          src={image.url}
+          src={catalogImageUrl(image.url)}
         />
       ) : null}
     </div>
@@ -51,6 +55,7 @@ function ExperienceGalleryGrid({ images, title }: ExperienceGalleryProps) {
 }
 
 function ExperienceGalleryCarousel({ images, title }: ExperienceGalleryProps) {
+  const locale = usePublicLocale();
   const trackRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(images.length > 3);
@@ -95,7 +100,7 @@ function ExperienceGalleryCarousel({ images, title }: ExperienceGalleryProps) {
     <div className='relative'>
       {canScrollLeft ? (
         <button
-          aria-label='Show previous gallery images'
+          aria-label={publicLabel(locale, 'Show previous gallery images')}
           className='absolute top-1/2 left-0 z-10 flex h-10 w-10 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-[var(--brand-radius)] border border-[var(--brand-line)] bg-white text-[var(--brand-primary)] shadow-md transition-colors hover:bg-[var(--brand-primary)] hover:text-white md:-translate-x-0'
           onClick={() => scrollByStep('left')}
           type='button'
@@ -120,7 +125,7 @@ function ExperienceGalleryCarousel({ images, title }: ExperienceGalleryProps) {
 
       {canScrollRight ? (
         <button
-          aria-label='Show more gallery images'
+          aria-label={publicLabel(locale, 'Show more gallery images')}
           className='absolute top-1/2 right-0 z-10 flex h-10 w-10 translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-[var(--brand-radius)] border border-[var(--brand-line)] bg-white text-[var(--brand-primary)] shadow-md transition-colors hover:bg-[var(--brand-primary)] hover:text-white md:translate-x-0'
           onClick={() => scrollByStep('right')}
           type='button'

@@ -1,5 +1,6 @@
 'use client';
 
+import { publicLabel } from '@/lib/i18n/public-label';
 import { useState, useTransition } from 'react';
 import { usePathname } from 'next/navigation';
 
@@ -42,7 +43,7 @@ export function FooterNewsletter({ compact = false, locale = 'en' }: FooterNewsl
   return (
     <div className={compact ? 'nr-footer__newsletter' : undefined}>
       <h3 className={compact ? undefined : 'brand-footer-heading'}>
-        {compact ? 'Newsletter' : 'Safari Inspiration'}
+        {publicLabel(locale, compact ? 'Newsletter' : 'Safari Inspiration')}
       </h3>
       <p
         className={
@@ -50,7 +51,7 @@ export function FooterNewsletter({ compact = false, locale = 'en' }: FooterNewsl
         }
       >
         {compact
-          ? 'Safari deals, seasons, and travel tips.'
+          ? publicLabel(locale, 'Safari deals, seasons, and travel tips.')
           : 'Join our newsletter for safari deals, travel tips, and the best times to visit East Africa.'}
       </p>
 
@@ -63,7 +64,7 @@ export function FooterNewsletter({ compact = false, locale = 'en' }: FooterNewsl
           }
         >
           <Icons.circleCheck className='h-4 w-4 text-[var(--brand-lime)]' />
-          Thank you. Safari inspiration is on its way.
+          {publicLabel(locale, 'Thank you. Safari inspiration is on its way.')}
         </p>
       ) : (
         <form
@@ -73,19 +74,19 @@ export function FooterNewsletter({ compact = false, locale = 'en' }: FooterNewsl
           {compact ? null : (
             <>
               <label className='sr-only' htmlFor='footer-newsletter-name'>
-                Your name
+                {publicLabel(locale, 'Your name')}
               </label>
               <input
                 className='min-h-11 rounded-[var(--brand-radius)] border border-white/30 bg-white px-4 text-sm text-[var(--brand-primary-dark)] placeholder:text-[var(--brand-primary-dark)]/45 focus:border-[var(--brand-lime)] focus:outline-none'
                 id='footer-newsletter-name'
                 name='name'
-                placeholder='Your name'
+                placeholder={publicLabel(locale, 'Your name')}
                 type='text'
               />
             </>
           )}
           <label className='sr-only' htmlFor='footer-newsletter-email'>
-            Email address
+            {publicLabel(locale, 'Email address')}
           </label>
           <div
             className={compact ? 'nr-footer__newsletter-row' : 'flex flex-col gap-3 sm:flex-row'}
@@ -98,7 +99,7 @@ export function FooterNewsletter({ compact = false, locale = 'en' }: FooterNewsl
               }
               id='footer-newsletter-email'
               name='email'
-              placeholder='Your email address'
+              placeholder={publicLabel(locale, 'Your email address')}
               required
               type='email'
             />
@@ -111,7 +112,7 @@ export function FooterNewsletter({ compact = false, locale = 'en' }: FooterNewsl
               disabled={isPending}
               type='submit'
             >
-              {isPending ? 'Subscribing…' : 'Subscribe'}
+              {publicLabel(locale, isPending ? 'Subscribing…' : 'Subscribe')}
               {compact ? null : <Icons.arrowRight className='h-4 w-4' />}
             </button>
           </div>

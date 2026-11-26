@@ -1,5 +1,7 @@
 'use client';
+import { usePublicLocale } from '@/lib/i18n/use-public-locale';
 
+import { publicLabel } from '@/lib/i18n/public-label';
 import * as React from 'react';
 import Image from 'next/image';
 
@@ -20,6 +22,7 @@ type ContactReferralStepProps = {
 };
 
 export function ContactReferralStep({ onChange, value }: ContactReferralStepProps) {
+  const locale = usePublicLocale();
   const [isDismissed, setIsDismissed] = React.useState(false);
 
   React.useEffect(() => {
@@ -47,12 +50,14 @@ export function ContactReferralStep({ onChange, value }: ContactReferralStepProp
         <span aria-hidden className='brand-contact-step-number'>
           9
         </span>
-        <h3 className='brand-contact-step-title'>How did you hear about Nature Romp Safaris?</h3>
+        <h3 className='brand-contact-step-title'>
+          {publicLabel(locale, 'How did you hear about Nature Romp Safaris?')}
+        </h3>
       </div>
 
       <div className='brand-referral-step'>
         <button
-          aria-label='Dismiss referral question'
+          aria-label={publicLabel(locale, 'Dismiss referral question')}
           className='brand-referral-step-close'
           onClick={handleDismiss}
           type='button'
@@ -74,7 +79,7 @@ export function ContactReferralStep({ onChange, value }: ContactReferralStepProp
 
           <div className='brand-referral-step-content'>
             <fieldset className='brand-contact-radio-list brand-contact-radio-list--inline'>
-              <legend className='sr-only'>Referral source</legend>
+              <legend className='sr-only'>{publicLabel(locale, 'Referral source')}</legend>
               {REFERRAL_SOURCE_OPTIONS.map((option) => (
                 <label className='brand-contact-radio-option' key={option.value}>
                   <input
@@ -85,7 +90,7 @@ export function ContactReferralStep({ onChange, value }: ContactReferralStepProp
                     type='radio'
                     value={option.value}
                   />
-                  <span>{option.label}</span>
+                  <span>{publicLabel(locale, option.label)}</span>
                 </label>
               ))}
             </fieldset>

@@ -1,6 +1,6 @@
 'use server';
 
-import { revalidatePath } from 'next/cache';
+import { revalidatePath, revalidateTag } from 'next/cache';
 
 import type { SupabaseClient } from '@supabase/supabase-js';
 
@@ -218,6 +218,8 @@ export async function trashAccommodations(ids: string[]): Promise<void> {
     .update({ deleted_at: new Date().toISOString(), status: 'trash' })
     .in('id', ids);
   if (error) throw new Error(error.message);
+  revalidateTag('accommodations', 'max');
+  revalidateTag('sitemap-accommodations', 'max');
   revalidatePath('/portal/accommodations');
 }
 
@@ -254,6 +256,8 @@ export async function restoreAccommodations(ids: string[]): Promise<void> {
     if (error) throw new Error(error.message);
   }
 
+  revalidateTag('accommodations', 'max');
+  revalidateTag('sitemap-accommodations', 'max');
   revalidatePath('/portal/accommodations');
 }
 
@@ -266,6 +270,8 @@ export async function deleteAccommodationsPermanently(ids: string[]): Promise<vo
   const { error } = await supabase.from('accommodations').delete().in('id', ids);
   if (error) throw new Error(error.message);
 
+  revalidateTag('accommodations', 'max');
+  revalidateTag('sitemap-accommodations', 'max');
   revalidatePath('/portal/accommodations');
 }
 

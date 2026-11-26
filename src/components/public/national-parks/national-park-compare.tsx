@@ -1,5 +1,6 @@
 'use client';
 
+import { publicLabel } from '@/lib/i18n/public-label';
 import Link from 'next/link';
 
 import { Icons } from '@/components/icons';
@@ -67,16 +68,19 @@ function TagList({ items, shared }: { items: string[]; shared?: string[] }) {
 function CompareColumn({ locale, park }: { locale: string; park: ParkListItem }) {
   return (
     <div className='rounded-[var(--brand-radius)] border border-[var(--brand-line)] bg-white p-5'>
-      <p className='brand-eyebrow'>Compare</p>
+      <p className='brand-eyebrow'>{publicLabel(locale, 'Compare')}</p>
       <h3 className='brand-heading mt-2 font-display text-xl leading-tight'>{park.name}</h3>
       <p className='mt-2 text-sm text-[var(--brand-muted)]'>
         {[park.region, park.country].filter(Boolean).join(', ') || '—'}
       </p>
       <div className='mt-5 space-y-4'>
-        <CompareRow label='Best time' value={park.bestTimeSummary || '—'} />
-        <CompareRow label='Size' value={formatSize(park.parkSizeKm2)} />
-        <CompareRow label='Established' value={formatEstablished(park.establishedYear)} />
-        <CompareRow label='Safaris' value={formatSafariStats(park)} />
+        <CompareRow label={publicLabel(locale, 'Best time')} value={park.bestTimeSummary || '—'} />
+        <CompareRow label={publicLabel(locale, 'Size')} value={formatSize(park.parkSizeKm2)} />
+        <CompareRow
+          label={publicLabel(locale, 'Established')}
+          value={formatEstablished(park.establishedYear)}
+        />
+        <CompareRow label={publicLabel(locale, 'Safaris')} value={formatSafariStats(park)} />
       </div>
       <BrandButtonGroup className='mt-5'>
         <BrandButton
@@ -84,14 +88,14 @@ function CompareColumn({ locale, park }: { locale: string; park: ParkListItem })
           size='sm'
           variant='accent-outline'
         >
-          Explore Park
+          {publicLabel(locale, 'Explore Park')}
         </BrandButton>
         <BrandButton
           href={localePath(locale, `/tours?park=${encodeURIComponent(park.slug)}`)}
           size='sm'
           variant={park.tourCount ? 'accent' : 'accent-outline'}
         >
-          View Safaris
+          {publicLabel(locale, 'View Safaris')}
         </BrandButton>
       </BrandButtonGroup>
     </div>
@@ -119,13 +123,15 @@ export function NationalParkCompare({ locale, onClear, parks }: NationalParkComp
     <section className='mb-8 rounded-[var(--brand-radius)] border border-[var(--brand-line)] bg-[var(--brand-ivory)] p-5 md:p-6'>
       <div className='flex flex-wrap items-start justify-between gap-4'>
         <div>
-          <p className='brand-eyebrow'>Compare Parks</p>
+          <p className='brand-eyebrow'>{publicLabel(locale, 'Compare Parks')}</p>
           <h2 className='brand-heading mt-2 font-display text-2xl leading-tight'>
-            {left.name} vs {right.name}
+            {left.name} {publicLabel(locale, 'vs')} {right.name}
           </h2>
           <p className='mt-2 max-w-2xl text-sm leading-7 text-[var(--brand-muted)]'>
-            Compare wildlife, activities, seasonality, and published safari availability side by
-            side.
+            {publicLabel(
+              locale,
+              'Compare wildlife, activities, seasonality, and published safari availability side by side.'
+            )}
           </p>
         </div>
         <button
@@ -134,7 +140,7 @@ export function NationalParkCompare({ locale, onClear, parks }: NationalParkComp
           type='button'
         >
           <Icons.close className='size-4' />
-          Clear comparison
+          {publicLabel(locale, 'Clear comparison')}
         </button>
       </div>
 
@@ -146,11 +152,11 @@ export function NationalParkCompare({ locale, onClear, parks }: NationalParkComp
       <div className='mt-6 grid gap-6 lg:grid-cols-2'>
         <div className='rounded-[var(--brand-radius)] border border-[var(--brand-line)] bg-white p-5'>
           <p className='text-xs font-bold uppercase tracking-[0.12em] text-[var(--brand-muted)]'>
-            Wildlife
+            {publicLabel(locale, 'Wildlife')}
           </p>
           {sharedWildlife.length ? (
             <p className='mt-2 text-sm text-[var(--brand-primary-dark)]'>
-              Shared highlights: {sharedWildlife.join(', ')}
+              {publicLabel(locale, 'Shared highlights:')} {sharedWildlife.join(', ')}
             </p>
           ) : null}
           <div className='mt-4 grid gap-4 md:grid-cols-2'>
@@ -171,7 +177,7 @@ export function NationalParkCompare({ locale, onClear, parks }: NationalParkComp
 
         <div className='rounded-[var(--brand-radius)] border border-[var(--brand-line)] bg-white p-5'>
           <p className='text-xs font-bold uppercase tracking-[0.12em] text-[var(--brand-muted)]'>
-            Activities
+            {publicLabel(locale, 'Activities')}
           </p>
           <div className='mt-4 grid gap-4 md:grid-cols-2'>
             <div>
@@ -191,14 +197,14 @@ export function NationalParkCompare({ locale, onClear, parks }: NationalParkComp
       </div>
 
       <p className='mt-5 text-sm text-[var(--brand-muted)]'>
-        Ready to book?{' '}
+        {publicLabel(locale, 'Ready to book?')}{' '}
         <Link
           className='font-semibold text-[var(--brand-primary)] hover:underline'
           href={localePath(locale, '/contact')}
         >
-          Ask a safari planner
+          {publicLabel(locale, 'Ask a safari planner')}
         </Link>{' '}
-        to connect the right parks with your dates and lodge tier.
+        {publicLabel(locale, 'to connect the right parks with your dates and lodge tier.')}
       </p>
     </section>
   );

@@ -1,5 +1,6 @@
 'use client';
 
+import { publicLabel } from '@/lib/i18n/public-label';
 import { geoMercator, geoPath } from 'd3-geo';
 import Link from 'next/link';
 import { useMemo, useState } from 'react';
@@ -14,13 +15,13 @@ const DESTINATIONS = {
   Kenya: {
     color: '#5d2411',
     copy: 'Maasai Mara big cats, Amboseli elephants under Kilimanjaro, Tsavo, and the migration on the Kenyan side of the river.',
-    href: '/tours?country=kenya',
+    href: '/safaris/kenya',
     cta: 'View Kenya safaris'
   },
   Tanzania: {
     color: '#c78a2b',
     copy: 'Serengeti plains, Ngorongoro Crater, Kilimanjaro, and a northern circuit paced so you are not rushing between parks.',
-    href: '/tours?country=tanzania',
+    href: '/safaris/tanzania',
     cta: 'View Tanzania safaris'
   }
 } as const;
@@ -79,7 +80,7 @@ export function HomeEastAfricaMap({ kenyaCopy, locale, tanzaniaCopy }: HomeEastA
   return (
     <div className='mt-16'>
       <div
-        aria-label='Destination focus'
+        aria-label={publicLabel(locale, 'Destination focus')}
         className='mx-auto flex w-fit overflow-hidden rounded-[var(--brand-radius)] border border-[var(--brand-line)] bg-white'
         role='tablist'
       >
@@ -103,9 +104,9 @@ export function HomeEastAfricaMap({ kenyaCopy, locale, tanzaniaCopy }: HomeEastA
       </div>
 
       <div className='mt-10 grid items-center gap-10 lg:grid-cols-[minmax(0,34rem)_minmax(16rem,22rem)] lg:justify-center lg:gap-16'>
-        <div aria-label='Map of Kenya and Tanzania'>
+        <div aria-label={publicLabel(locale, 'Map of Kenya and Tanzania')}>
           <svg className='block h-auto w-full' role='img' viewBox={`0 0 ${MAP_SIZE} ${MAP_SIZE}`}>
-            <title>Kenya and Tanzania safari map</title>
+            <title>{publicLabel(locale, 'Kenya and Tanzania safari map')}</title>
             <g>
               {map.countryFeatures.map((feature) => {
                 const name = destinationName(feature);
@@ -151,7 +152,7 @@ export function HomeEastAfricaMap({ kenyaCopy, locale, tanzaniaCopy }: HomeEastA
               x='328'
               y='118'
             >
-              Kenya
+              {publicLabel(locale, 'Kenya')}
             </text>
             <text
               className='pointer-events-none'
@@ -162,7 +163,7 @@ export function HomeEastAfricaMap({ kenyaCopy, locale, tanzaniaCopy }: HomeEastA
               x='220'
               y='355'
             >
-              Tanzania
+              {publicLabel(locale, 'Tanzania')}
             </text>
             <line
               className='pointer-events-none'
@@ -181,7 +182,7 @@ export function HomeEastAfricaMap({ kenyaCopy, locale, tanzaniaCopy }: HomeEastA
               x='396'
               y='352'
             >
-              Zanzibar
+              {publicLabel(locale, 'Zanzibar')}
             </text>
           </svg>
         </div>
@@ -191,15 +192,18 @@ export function HomeEastAfricaMap({ kenyaCopy, locale, tanzaniaCopy }: HomeEastA
             {active}
           </h3>
           <p className='brand-body mt-4 text-[15px] leading-7'>
-            {active === 'Kenya'
-              ? (kenyaCopy ?? DESTINATIONS.Kenya.copy)
-              : (tanzaniaCopy ?? DESTINATIONS.Tanzania.copy)}
+            {publicLabel(
+              locale,
+              active === 'Kenya'
+                ? (kenyaCopy ?? DESTINATIONS.Kenya.copy)
+                : (tanzaniaCopy ?? DESTINATIONS.Tanzania.copy)
+            )}
           </p>
           <Link
             className='mt-6 inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wide text-[var(--brand-gold)] transition-colors hover:text-[var(--brand-gold-hover)]'
             href={localePath(locale, DESTINATIONS[active].href)}
           >
-            {DESTINATIONS[active].cta}
+            {publicLabel(locale, DESTINATIONS[active].cta)}
             <Icons.arrowRight className='h-3 w-3' />
           </Link>
         </div>

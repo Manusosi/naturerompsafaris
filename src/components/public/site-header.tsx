@@ -1,5 +1,6 @@
 'use client';
 
+import { publicLabel } from '@/lib/i18n/public-label';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -124,7 +125,7 @@ export function SiteHeader({ locale, navItems, siteSettings }: SiteHeaderProps) 
       rel='noopener noreferrer'
       target='_blank'
     >
-      <span className='nr-header-cta__label'>{HEADER_CTA_LABEL}</span>
+      <span className='nr-header-cta__label'>{publicLabel(locale, HEADER_CTA_LABEL)}</span>
       <Icons.whatsapp aria-hidden className='nr-header-cta__icon' />
     </a>
   );
@@ -140,7 +141,10 @@ export function SiteHeader({ locale, navItems, siteSettings }: SiteHeaderProps) 
     >
       <div className='nr-topbar'>
         <div className='nr-topbar__inner'>
-          <div aria-label='Contact Nature Romp Safaris' className='nr-topbar__contact'>
+          <div
+            aria-label={publicLabel(locale, 'Contact Nature Romp Safaris')}
+            className='nr-topbar__contact'
+          >
             <a className='nr-topbar__link' href={`mailto:${siteSettings.email}`}>
               <Icons.mail className='nr-topbar__icon' />
               <span>{siteSettings.email}</span>
@@ -194,7 +198,7 @@ export function SiteHeader({ locale, navItems, siteSettings }: SiteHeaderProps) 
 
           <button
             aria-expanded={mobileOpen}
-            aria-label='Toggle navigation'
+            aria-label={publicLabel(locale, 'Toggle navigation')}
             className='nr-menu-toggle'
             onClick={() => setMobileOpen((value) => !value)}
             type='button'
@@ -203,7 +207,7 @@ export function SiteHeader({ locale, navItems, siteSettings }: SiteHeaderProps) 
           </button>
 
           <nav
-            aria-label='Primary navigation'
+            aria-label={publicLabel(locale, 'Primary navigation')}
             className={cn('nr-mainnav', mobileOpen && 'nr-mainnav--open')}
           >
             {navItems.map((item) => {
@@ -215,7 +219,7 @@ export function SiteHeader({ locale, navItems, siteSettings }: SiteHeaderProps) 
               if (!children) {
                 return (
                   <Link href={item.href} key={item.label} onClick={closeNav}>
-                    {item.label}
+                    {publicLabel(locale, item.label)}
                   </Link>
                 );
               }
@@ -253,7 +257,7 @@ export function SiteHeader({ locale, navItems, siteSettings }: SiteHeaderProps) 
                         closeNav();
                       }}
                     >
-                      {item.label}
+                      {publicLabel(locale, item.label)}
                     </Link>
                     <button
                       aria-expanded={isOpen}
@@ -300,7 +304,7 @@ export function SiteHeader({ locale, navItems, siteSettings }: SiteHeaderProps) 
                                             </span>
                                           ) : null}
                                           <span className='nr-submenu-mega__tab-text'>
-                                            {child.label}
+                                            {publicLabel(locale, child.label)}
                                           </span>
                                         </span>
                                         {count > 0 ? (
@@ -317,7 +321,7 @@ export function SiteHeader({ locale, navItems, siteSettings }: SiteHeaderProps) 
                             {activeChild ? (
                               <div className='nr-submenu-mega__heading'>
                                 <Link href={activeChild.href} onClick={closeNav}>
-                                  <span>{activeChild.label}</span>
+                                  <span>{publicLabel(locale, activeChild.label)}</span>
                                   <Icons.chevronRight />
                                 </Link>
                                 {previewCount > 0 ? (
@@ -340,7 +344,7 @@ export function SiteHeader({ locale, navItems, siteSettings }: SiteHeaderProps) 
                                       {column.map((row) => (
                                         <li key={row.href}>
                                           <Link href={row.href} onClick={closeNav}>
-                                            {row.label}
+                                            {publicLabel(locale, row.label)}
                                           </Link>
                                         </li>
                                       ))}
@@ -350,16 +354,17 @@ export function SiteHeader({ locale, navItems, siteSettings }: SiteHeaderProps) 
                               </div>
                             ) : (
                               <p className='nr-submenu-preview__empty'>
-                                No published {item.label.toLowerCase()} for {activeChild?.label}{' '}
-                                yet.
+                                {publicLabel(locale, 'No published')} {item.label.toLowerCase()}{' '}
+                                {publicLabel(locale, 'for')} {activeChild?.label}{' '}
+                                {publicLabel(locale, 'yet.')}
                               </p>
                             )}
                             <div className='nr-submenu-mega__footer'>
                               <Link href={item.href} onClick={closeNav}>
-                                {viewAllLabel(item.label)}
+                                {publicLabel(locale, viewAllLabel(item.label))}
                               </Link>
                               <Link href={localePath(locale, '/contact')} onClick={closeNav}>
-                                Plan my safari
+                                {publicLabel(locale, 'Plan my safari')}
                               </Link>
                             </div>
                           </div>
@@ -384,14 +389,16 @@ export function SiteHeader({ locale, navItems, siteSettings }: SiteHeaderProps) 
                               className={cn('nr-submenu-col', split && 'nr-submenu-col--split')}
                               key={`${item.label}-${column.href}`}
                             >
-                              <p className='nr-submenu-col__heading'>{column.label}</p>
+                              <p className='nr-submenu-col__heading'>
+                                {publicLabel(locale, column.label)}
+                              </p>
                               <div className={cn(split && 'nr-submenu-col__split')}>
                                 {chunks.map((chunk, index) => (
                                   <ul key={`${column.href}-${index}`}>
                                     {chunk.map((row) => (
                                       <li key={row.href}>
                                         <Link href={row.href} onClick={closeNav} prefetch>
-                                          {row.label}
+                                          {publicLabel(locale, row.label)}
                                         </Link>
                                       </li>
                                     ))}
@@ -406,7 +413,7 @@ export function SiteHeader({ locale, navItems, siteSettings }: SiteHeaderProps) 
                       <div className='nr-submenu'>
                         <div className='nr-submenu__links'>
                           <Link href={item.href} onClick={closeNav}>
-                            <span>{viewAllLabel(item.label)}</span>
+                            <span>{publicLabel(locale, viewAllLabel(item.label))}</span>
                           </Link>
                           {tabs.map((child) => (
                             <Link
@@ -414,7 +421,7 @@ export function SiteHeader({ locale, navItems, siteSettings }: SiteHeaderProps) 
                               key={`${item.label}-${child.href}`}
                               onClick={closeNav}
                             >
-                              <span>{child.label}</span>
+                              <span>{publicLabel(locale, child.label)}</span>
                             </Link>
                           ))}
                         </div>
@@ -448,7 +455,7 @@ export function SiteHeader({ locale, navItems, siteSettings }: SiteHeaderProps) 
         </div>
         {mobileOpen ? (
           <button
-            aria-label='Close navigation'
+            aria-label={publicLabel(locale, 'Close navigation')}
             className='nr-nav-backdrop'
             onClick={closeNav}
             type='button'
@@ -474,8 +481,8 @@ function LanguageSelector({
 
   if (variant === 'sheet') {
     return (
-      <nav aria-label='Language' className='nr-lang-sheet'>
-        <p className='nr-lang-sheet__label'>Language</p>
+      <nav aria-label={publicLabel(locale, 'Language')} className='nr-lang-sheet'>
+        <p className='nr-lang-sheet__label'>{publicLabel(locale, 'Language')}</p>
         <ul>
           {PUBLIC_LOCALES.map((code) => (
             <li key={code}>

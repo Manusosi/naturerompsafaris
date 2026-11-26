@@ -1,7 +1,6 @@
 import { after } from 'next/server';
 
 import { absoluteUrl } from './absolute-url';
-import { submitGoogleIndexing } from './google-indexing';
 
 const INDEXNOW_ENDPOINTS = ['https://api.indexnow.org/indexnow', 'https://www.bing.com/indexnow'];
 
@@ -59,7 +58,6 @@ async function submitIndexNow(urls: string[]) {
 /**
  * Notify search engines that URLs were published or updated.
  * - IndexNow → Bing / Yandex partners
- * - Google Indexing API → Search Console (when service account is configured)
  * Fire-and-forget from CMS server actions — errors are swallowed.
  */
 export async function notifySearchEngines(pathsOrUrls: string[]) {
@@ -67,7 +65,7 @@ export async function notifySearchEngines(pathsOrUrls: string[]) {
   if (!urls.length) return;
 
   try {
-    await Promise.allSettled([submitIndexNow(urls), submitGoogleIndexing(urls)]);
+    await submitIndexNow(urls);
   } catch {
     // Non-blocking: indexing must never break CMS publish flows.
   }

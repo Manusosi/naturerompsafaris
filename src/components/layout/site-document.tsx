@@ -13,7 +13,7 @@ import { buildFaviconMetadataIcons } from '@/lib/site-favicon';
 import { normalizeSiteVerificationToken } from '@/lib/site-verification';
 import type { Metadata, Viewport } from 'next';
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
-import '../styles/globals.css';
+import '@/styles/globals.css';
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getPublicSiteSettings();
@@ -59,9 +59,15 @@ const THEME_PROVIDER_PROPS = {
   storage: 'local' as const
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function SiteDocument({
+  children,
+  locale = 'en'
+}: {
+  children: React.ReactNode;
+  locale?: string;
+}) {
   return (
-    <html lang='en' suppressHydrationWarning data-theme={DEFAULT_THEME}>
+    <html lang={locale} suppressHydrationWarning data-theme={DEFAULT_THEME}>
       <body
         className={cn(
           'bg-background overflow-x-clip overscroll-none font-sans antialiased',
@@ -81,4 +87,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </body>
     </html>
   );
+}
+
+export function DefaultDocument({ children }: { children: React.ReactNode }) {
+  return <SiteDocument>{children}</SiteDocument>;
 }

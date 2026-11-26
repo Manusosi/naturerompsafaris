@@ -1,4 +1,7 @@
 'use client';
+import { usePublicLocale } from '@/lib/i18n/use-public-locale';
+
+import { publicLabel } from '@/lib/i18n/public-label';
 
 import * as React from 'react';
 import { useMutation } from '@tanstack/react-query';
@@ -93,43 +96,53 @@ function formatUsdBudget(amount: string) {
   return `USD ${Number(amount).toLocaleString('en-US')}`;
 }
 
-const safariQuoteSchema = z.object({
-  adults: z
-    .number({ message: 'Number of adults is required' })
-    .int()
-    .min(1, 'At least one adult is required'),
-  budget: z.string().min(1, 'Budget amount is required').regex(/^\d+$/, 'Enter numbers only'),
-  budgetTier: z.string().min(1, 'Select a budget preference'),
-  children: z.number().int().min(0),
-  country: z.string().min(2, 'Country is required'),
-  destinations: z.string().min(2, 'Select Kenya, Tanzania, or Kenya & Tanzania'),
-  email: z.email('Enter a valid email'),
-  infants: z.number().int().min(0),
-  message: z.string().optional(),
-  name: z.string().min(2, 'Name is required'),
-  phone: z.string().optional(),
-  referralSource: z.string().optional(),
-  travelEndDate: z.string().min(1, 'Select an end date'),
-  travelPlanningStage: z.string().min(1, 'Select your travel planning stage'),
-  travelStartDate: z.string().min(1, 'Select a start date'),
-  tripType: z.string().min(1, 'Select a trip type')
-});
+const safariQuoteSchema = (locale: string) =>
+  z.object({
+    adults: z
+      .number({ message: publicLabel(locale, 'Number of adults is required') })
+      .int()
+      .min(1, publicLabel(locale, 'At least one adult is required')),
+    budget: z
+      .string()
+      .min(1, publicLabel(locale, 'Budget amount is required'))
+      .regex(/^\d+$/, publicLabel(locale, 'Enter numbers only')),
+    budgetTier: z.string().min(1, publicLabel(locale, 'Select a budget preference')),
+    children: z.number().int().min(0),
+    country: z.string().min(2, publicLabel(locale, 'Country is required')),
+    destinations: z
+      .string()
+      .min(2, publicLabel(locale, 'Select Kenya, Tanzania, or Kenya & Tanzania')),
+    email: z.email(publicLabel(locale, 'Enter a valid email')),
+    infants: z.number().int().min(0),
+    message: z.string().optional(),
+    name: z.string().min(2, publicLabel(locale, 'Name is required')),
+    phone: z.string().optional(),
+    referralSource: z.string().optional(),
+    travelEndDate: z.string().min(1, publicLabel(locale, 'Select an end date')),
+    travelPlanningStage: z
+      .string()
+      .min(1, publicLabel(locale, 'Select your travel planning stage')),
+    travelStartDate: z.string().min(1, publicLabel(locale, 'Select a start date')),
+    tripType: z.string().min(1, publicLabel(locale, 'Select a trip type'))
+  });
 
-const generalSchema = z.object({
-  email: z.email('Enter a valid email'),
-  message: z.string().min(10, 'Message must be at least 10 characters'),
-  name: z.string().min(2, 'Name is required'),
-  phone: z.string().optional(),
-  topic: z.string().min(1, 'Select a topic')
-});
+const generalSchema = (locale: string) =>
+  z.object({
+    email: z.email(publicLabel(locale, 'Enter a valid email')),
+    message: z.string().min(10, publicLabel(locale, 'Message must be at least 10 characters')),
+    name: z.string().min(2, publicLabel(locale, 'Name is required')),
+    phone: z.string().optional(),
+    topic: z.string().min(1, publicLabel(locale, 'Select a topic'))
+  });
 
-const otherSchema = z.object({
-  bookingReference: z.string().optional(),
-  email: z.email('Enter a valid email'),
-  message: z.string().min(10, 'Message must be at least 10 characters'),
-  name: z.string().min(2, 'Name is required'),
-  phone: z.string().optional()
-});
+const otherSchema = (locale: string) =>
+  z.object({
+    bookingReference: z.string().optional(),
+    email: z.email(publicLabel(locale, 'Enter a valid email')),
+    message: z.string().min(10, publicLabel(locale, 'Message must be at least 10 characters')),
+    name: z.string().min(2, publicLabel(locale, 'Name is required')),
+    phone: z.string().optional()
+  });
 
 /** Phone is optional; a value that is only the auto-filled dial code counts as empty. */
 function submittedPhone(phone?: string, country?: string) {
@@ -193,10 +206,11 @@ function CounterStepper({
   onChange: (value: number) => void;
   value: number;
 }) {
+  const locale = usePublicLocale();
   return (
     <div className='brand-traveler-stepper'>
       <button
-        aria-label='Decrease'
+        aria-label={publicLabel(locale, 'Decrease')}
         className='brand-traveler-stepper-btn'
         disabled={value <= min}
         onBlur={onBlur}
@@ -209,7 +223,7 @@ function CounterStepper({
         {value}
       </span>
       <button
-        aria-label='Increase'
+        aria-label={publicLabel(locale, 'Increase')}
         className='brand-traveler-stepper-btn'
         onBlur={onBlur}
         onClick={() => onChange(value + 1)}
@@ -251,12 +265,14 @@ function TravelerCategoryCard({
 }
 
 function RadioOptionList({
+  locale,
   name,
   onBlur,
   onChange,
   options,
   value
 }: {
+  locale: string;
   name: string;
   onBlur?: () => void;
   onChange: (value: string) => void;
@@ -277,7 +293,7 @@ function RadioOptionList({
             type='radio'
             value={option.value}
           />
-          <span>{option.label}</span>
+          <span>{publicLabel(locale, option.label)}</span>
         </label>
       ))}
     </fieldset>
@@ -296,7 +312,7 @@ export function ContactForm({ locale, sidebar, sourcePath }: ContactFormProps) {
         <div className='brand-contact-tabs'>
           <div className='border-b border-[var(--brand-line)] pb-1'>
             <div
-              aria-label='Enquiry type'
+              aria-label={publicLabel(locale, 'Enquiry type')}
               className='flex flex-nowrap gap-1.5 sm:gap-2'
               role='tablist'
             >
@@ -317,7 +333,7 @@ export function ContactForm({ locale, sidebar, sourcePath }: ContactFormProps) {
                   role='tab'
                   type='button'
                 >
-                  {tab.label}
+                  {publicLabel(locale, tab.label)}
                 </button>
               ))}
             </div>
@@ -325,7 +341,9 @@ export function ContactForm({ locale, sidebar, sourcePath }: ContactFormProps) {
         </div>
 
         <div className='brand-contact-main'>
-          <p className='text-sm leading-7 text-[var(--brand-muted)]'>{activeTab.description}</p>
+          <p className='text-sm leading-7 text-[var(--brand-muted)]'>
+            {publicLabel(locale, activeTab.description)}
+          </p>
 
           <ContactFormBody
             activeType={activeType}
@@ -393,10 +411,10 @@ function ContactFormBody({
     },
     validators: {
       onSubmit: (activeType === 'safari-quote'
-        ? safariQuoteSchema
+        ? safariQuoteSchema(locale)
         : activeType === 'general'
-          ? generalSchema
-          : otherSchema) as any
+          ? generalSchema(locale)
+          : otherSchema(locale)) as any
     },
     onSubmit: ({ value }) => {
       onSubmitStatusChange('idle');
@@ -456,11 +474,11 @@ function ContactFormBody({
         <form.Form className='mx-0 mt-8 gap-0 p-0'>
           {activeType === 'safari-quote' ? (
             <>
-              <FormStep step={1} title='Tell us about yourself'>
+              <FormStep step={1} title={publicLabel(locale, 'Tell us about yourself')}>
                 <div className='grid gap-5 md:grid-cols-2'>
                   <form.AppField name='name'>
                     {(field) => (
-                      <FormField label='Full name:'>
+                      <FormField label={publicLabel(locale, 'Full name:')}>
                         <input
                           className={fieldClassName}
                           name={field.name}
@@ -476,7 +494,7 @@ function ContactFormBody({
 
                   <form.AppField name='email'>
                     {(field) => (
-                      <FormField label='Email:'>
+                      <FormField label={publicLabel(locale, 'Email:')}>
                         <input
                           className={fieldClassName}
                           name={field.name}
@@ -493,7 +511,7 @@ function ContactFormBody({
 
                   <form.AppField name='country'>
                     {(field) => (
-                      <FormField label='Nationality / Country of residence:'>
+                      <FormField label={publicLabel(locale, 'Nationality / Country of residence:')}>
                         <CountryCombobox
                           onBlur={field.handleBlur}
                           onChange={(country) => {
@@ -514,20 +532,27 @@ function ContactFormBody({
                     {(country) => (
                       <form.AppField name='phone'>
                         {(field) => (
-                          <FormField label='Phone:'>
+                          <FormField label={publicLabel(locale, 'Phone:')}>
                             <input
                               className={fieldClassName}
                               disabled={!country}
                               name={field.name}
                               onBlur={field.handleBlur}
                               onChange={(event) => field.handleChange(event.target.value)}
-                              placeholder={country ? '712 345 678' : 'Select nationality first'}
+                              placeholder={
+                                country
+                                  ? '712 345 678'
+                                  : publicLabel(locale, 'Select nationality first')
+                              }
                               type='tel'
                               value={field.state.value}
                             />
                             {!country ? (
                               <p className='mt-1.5 text-xs font-normal text-[var(--brand-muted)]'>
-                                Select your nationality above to enter your phone number.
+                                {publicLabel(
+                                  locale,
+                                  'Select your nationality above to enter your phone number.'
+                                )}
                               </p>
                             ) : null}
                             <field.FieldError />
@@ -539,10 +564,10 @@ function ContactFormBody({
                 </div>
               </FormStep>
 
-              <FormStep step={2} title='Choose destination'>
+              <FormStep step={2} title={publicLabel(locale, 'Choose destination')}>
                 <form.AppField name='destinations'>
                   {(field) => (
-                    <FormField label='Countries we offer:'>
+                    <FormField label={publicLabel(locale, 'Countries we offer:')}>
                       <DestinationsMultiSelect
                         onChange={field.handleChange}
                         value={field.state.value}
@@ -553,7 +578,7 @@ function ContactFormBody({
                 </form.AppField>
               </FormStep>
 
-              <FormStep step={3} title='Dates'>
+              <FormStep step={3} title={publicLabel(locale, 'Dates')}>
                 <form.AppField name='travelStartDate'>
                   {(startField) => (
                     <form.AppField name='travelEndDate'>
@@ -580,14 +605,14 @@ function ContactFormBody({
                 </form.AppField>
               </FormStep>
 
-              <FormStep step={4} title='Traveler details'>
+              <FormStep step={4} title={publicLabel(locale, 'Traveler details')}>
                 <div className='grid gap-4 sm:grid-cols-3'>
                   <form.AppField name='adults'>
                     {(field) => (
                       <TravelerCategoryCard
-                        ageRange='18+ years'
+                        ageRange={publicLabel(locale, '18+ years')}
                         icon={Icons.userPlus}
-                        label='Adults'
+                        label={publicLabel(locale, 'Adults')}
                         min={1}
                         onBlur={field.handleBlur}
                         onChange={field.handleChange}
@@ -599,9 +624,9 @@ function ContactFormBody({
                   <form.AppField name='children'>
                     {(field) => (
                       <TravelerCategoryCard
-                        ageRange='13–17 years'
+                        ageRange={publicLabel(locale, '13–17 years')}
                         icon={Icons.moodKid}
-                        label='Children'
+                        label={publicLabel(locale, 'Children')}
                         onBlur={field.handleBlur}
                         onChange={field.handleChange}
                         value={field.state.value}
@@ -612,9 +637,9 @@ function ContactFormBody({
                   <form.AppField name='infants'>
                     {(field) => (
                       <TravelerCategoryCard
-                        ageRange='3–12 years'
+                        ageRange={publicLabel(locale, '3–12 years')}
                         icon={Icons.babyCarriage}
-                        label='Infants'
+                        label={publicLabel(locale, 'Infants')}
                         onBlur={field.handleBlur}
                         onChange={field.handleChange}
                         value={field.state.value}
@@ -625,13 +650,13 @@ function ContactFormBody({
                 <form.AppField name='adults'>{(field) => <field.FieldError />}</form.AppField>
               </FormStep>
 
-              <FormStep step={5} title='Safari budget preference'>
+              <FormStep step={5} title={publicLabel(locale, 'Safari budget preference')}>
                 <form.Subscribe selector={(state) => state.values.budgetTier}>
                   {(budgetTier) => (
                     <div className={cn('grid gap-4', budgetTier && 'md:grid-cols-2')}>
                       <form.AppField name='budgetTier'>
                         {(field) => (
-                          <FormField label='Tier:'>
+                          <FormField label={publicLabel(locale, 'Tier:')}>
                             <select
                               className={cn(fieldClassName, 'cursor-pointer')}
                               name={field.name}
@@ -641,11 +666,11 @@ function ContactFormBody({
                               value={field.state.value}
                             >
                               <option disabled value=''>
-                                Select budget tier
+                                {publicLabel(locale, 'Select budget tier')}
                               </option>
                               {BUDGET_TIER_OPTIONS.map((option) => (
                                 <option key={option.value} value={option.value}>
-                                  {option.label}
+                                  {publicLabel(locale, option.label)}
                                 </option>
                               ))}
                             </select>
@@ -657,7 +682,7 @@ function ContactFormBody({
                       {budgetTier ? (
                         <form.AppField name='budget'>
                           {(field) => (
-                            <FormField label='Tour Budget per person (USD):'>
+                            <FormField label={publicLabel(locale, 'Tour Budget per person (USD):')}>
                               <input
                                 className={fieldClassName}
                                 inputMode='numeric'
@@ -667,7 +692,7 @@ function ContactFormBody({
                                   field.handleChange(stripNonDigits(event.target.value))
                                 }
                                 pattern='[0-9]*'
-                                placeholder='e.g. 3500'
+                                placeholder={publicLabel(locale, 'e.g. 3500')}
                                 required
                                 type='text'
                                 value={field.state.value}
@@ -682,11 +707,15 @@ function ContactFormBody({
                 </form.Subscribe>
               </FormStep>
 
-              <FormStep step={6} title='Where are you in your Travel Planning?'>
+              <FormStep
+                step={6}
+                title={publicLabel(locale, 'Where are you in your Travel Planning?')}
+              >
                 <form.AppField name='travelPlanningStage'>
                   {(field) => (
                     <>
                       <RadioOptionList
+                        locale={locale}
                         name='travelPlanningStage'
                         onBlur={field.handleBlur}
                         onChange={field.handleChange}
@@ -699,11 +728,15 @@ function ContactFormBody({
                 </form.AppField>
               </FormStep>
 
-              <FormStep step={7} title='What kind of trip would you like to Book?'>
+              <FormStep
+                step={7}
+                title={publicLabel(locale, 'What kind of trip would you like to Book?')}
+              >
                 <form.AppField name='tripType'>
                   {(field) => (
                     <>
                       <RadioOptionList
+                        locale={locale}
                         name='tripType'
                         onBlur={field.handleBlur}
                         onChange={field.handleChange}
@@ -716,7 +749,7 @@ function ContactFormBody({
                 </form.AppField>
               </FormStep>
 
-              <FormStep step={8} title='Additional comments'>
+              <FormStep step={8} title={publicLabel(locale, 'Additional comments')}>
                 <form.AppField name='message'>
                   {(field) => (
                     <textarea
@@ -724,7 +757,10 @@ function ContactFormBody({
                       name={field.name}
                       onBlur={field.handleBlur}
                       onChange={(event) => field.handleChange(event.target.value)}
-                      placeholder='Tell us about your travel style, accommodation preferences, must-see wildlife, or any special requests.'
+                      placeholder={publicLabel(
+                        locale,
+                        'Tell us about your travel style, accommodation preferences, must-see wildlife, or any special requests.'
+                      )}
                       value={field.state.value}
                     />
                   )}
@@ -739,11 +775,11 @@ function ContactFormBody({
             </>
           ) : (
             <>
-              <FormStep step={1} title='Tell us about yourself'>
+              <FormStep step={1} title={publicLabel(locale, 'Tell us about yourself')}>
                 <div className='grid gap-5 md:grid-cols-2'>
                   <form.AppField name='name'>
                     {(field) => (
-                      <FormField label='Full name:'>
+                      <FormField label={publicLabel(locale, 'Full name:')}>
                         <input
                           className={fieldClassName}
                           name={field.name}
@@ -759,7 +795,7 @@ function ContactFormBody({
 
                   <form.AppField name='email'>
                     {(field) => (
-                      <FormField label='Email:'>
+                      <FormField label={publicLabel(locale, 'Email:')}>
                         <input
                           className={fieldClassName}
                           name={field.name}
@@ -776,13 +812,16 @@ function ContactFormBody({
 
                   <form.AppField name='phone'>
                     {(field) => (
-                      <FormField label='Phone:'>
+                      <FormField label={publicLabel(locale, 'Phone:')}>
                         <input
                           className={fieldClassName}
                           name={field.name}
                           onBlur={field.handleBlur}
                           onChange={(event) => field.handleChange(event.target.value)}
-                          placeholder='+254 712 345 678 (include country code)'
+                          placeholder={publicLabel(
+                            locale,
+                            '+254 712 345 678 (include country code)'
+                          )}
                           type='tel'
                           value={field.state.value}
                         />
@@ -794,7 +833,7 @@ function ContactFormBody({
                   {activeType === 'general' ? (
                     <form.AppField name='topic'>
                       {(field) => (
-                        <FormField label='Topic *'>
+                        <FormField label={publicLabel(locale, 'Topic *')}>
                           <select
                             className={cn(fieldClassName, 'cursor-pointer')}
                             name={field.name}
@@ -804,11 +843,11 @@ function ContactFormBody({
                             value={field.state.value}
                           >
                             <option disabled value=''>
-                              Select a topic
+                              {publicLabel(locale, 'Select a topic')}
                             </option>
                             {GENERAL_TOPICS.map((topic) => (
                               <option key={topic} value={topic}>
-                                {topic}
+                                {publicLabel(locale, topic)}
                               </option>
                             ))}
                           </select>
@@ -821,13 +860,13 @@ function ContactFormBody({
                   {activeType === 'other' ? (
                     <form.AppField name='bookingReference'>
                       {(field) => (
-                        <FormField label='Booking Reference'>
+                        <FormField label={publicLabel(locale, 'Booking Reference')}>
                           <input
                             className={fieldClassName}
                             name={field.name}
                             onBlur={field.handleBlur}
                             onChange={(event) => field.handleChange(event.target.value)}
-                            placeholder='If you have one'
+                            placeholder={publicLabel(locale, 'If you have one')}
                             value={field.state.value}
                           />
                         </FormField>
@@ -837,16 +876,16 @@ function ContactFormBody({
                 </div>
               </FormStep>
 
-              <FormStep step={2} title='Your message'>
+              <FormStep step={2} title={publicLabel(locale, 'Your message')}>
                 <form.AppField name='message'>
                   {(field) => (
-                    <FormField label='Message *'>
+                    <FormField label={publicLabel(locale, 'Message *')}>
                       <textarea
                         className={cn(fieldClassName, 'min-h-32 resize-y')}
                         name={field.name}
                         onBlur={field.handleBlur}
                         onChange={(event) => field.handleChange(event.target.value)}
-                        placeholder='How can we help you today?'
+                        placeholder={publicLabel(locale, 'How can we help you today?')}
                         required
                         value={field.state.value}
                       />
@@ -870,24 +909,27 @@ function ContactFormBody({
               onMouseLeave={() => setSubmitHovered(false)}
             >
               {mutation.isPending ? (
-                'Sending...'
+                publicLabel(locale, 'Sending...')
               ) : showSubmitHover ? (
                 <span className='inline-flex items-center gap-2'>
-                  Submit Request
+                  {publicLabel(locale, 'Submit Request')}
                   <Icons.arrowRight className='h-5 w-5' />
                 </span>
               ) : (
-                submitLabel
+                publicLabel(locale, submitLabel)
               )}
             </form.SubmitButton>
             <p className='text-xs text-[var(--brand-muted)]'>
-              No payment is collected on this website. We aim to respond within 24 hours.
+              {publicLabel(
+                locale,
+                'No payment is collected on this website. We aim to respond within 24 hours.'
+              )}
             </p>
             {submitStatus === 'error' ? (
               <p className='text-sm text-red-700'>
                 {mutation.error instanceof Error
                   ? mutation.error.message
-                  : 'Something went wrong. Please try again.'}
+                  : publicLabel(locale, 'Something went wrong. Please try again.')}
               </p>
             ) : null}
           </div>

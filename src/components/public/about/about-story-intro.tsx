@@ -1,4 +1,5 @@
 'use client';
+import { publicLabel } from '@/lib/i18n/public-label';
 
 import Image from 'next/image';
 
@@ -21,7 +22,7 @@ export function AboutStoryIntro({ locale }: { locale: string }) {
         <div className='grid items-start gap-10 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:gap-x-16'>
           <ScrollReveal className='lg:pt-2' from='left'>
             <h2 className='brand-heading font-display text-[clamp(2rem,4vw,3rem)] leading-[1.08]'>
-              {ABOUT_STORY.title}
+              {publicLabel(locale, ABOUT_STORY.title)}
             </h2>
             <span className='brand-gold-line brand-gold-line--left' />
             <div className='mt-7 max-w-xl space-y-5'>
@@ -30,13 +31,13 @@ export function AboutStoryIntro({ locale }: { locale: string }) {
                   className='brand-body text-base leading-8 md:text-[1.05rem]'
                   key={paragraph.slice(0, 40)}
                 >
-                  {paragraph}
+                  {publicLabel(locale, paragraph)}
                 </p>
               ))}
             </div>
             <div className='mt-8'>
               <BrandButton href={localePath(locale, '/tours')} variant='primary'>
-                {ABOUT_STORY.ctaLabel}
+                {publicLabel(locale, ABOUT_STORY.ctaLabel)}
                 <Icons.arrowRight className='h-4 w-4' />
               </BrandButton>
             </div>

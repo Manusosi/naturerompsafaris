@@ -1,5 +1,7 @@
 'use client';
+import { usePublicLocale } from '@/lib/i18n/use-public-locale';
 
+import { publicLabel } from '@/lib/i18n/public-label';
 import { useEffect, useRef, useState } from 'react';
 
 import { isTurnstileSiteKeyConfigured } from '@/lib/security/turnstile-config';
@@ -63,6 +65,7 @@ function loadTurnstileScript() {
 }
 
 export function TurnstileField({ onTokenChange, resetSignal = 0 }: TurnstileFieldProps) {
+  const locale = usePublicLocale();
   const containerRef = useRef<HTMLDivElement>(null);
   const widgetIdRef = useRef<string | null>(null);
   const [loadError, setLoadError] = useState(false);
@@ -118,7 +121,10 @@ export function TurnstileField({ onTokenChange, resetSignal = 0 }: TurnstileFiel
   if (loadError) {
     return (
       <p className='text-sm text-red-700'>
-        Security check failed to load. Please refresh the page and try again.
+        {publicLabel(
+          locale,
+          'Security check failed to load. Please refresh the page and try again.'
+        )}
       </p>
     );
   }

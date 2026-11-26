@@ -1,5 +1,7 @@
 'use client';
+import { usePublicLocale } from '@/lib/i18n/use-public-locale';
 
+import { publicLabel } from '@/lib/i18n/public-label';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { Icons } from '@/components/icons';
@@ -22,6 +24,7 @@ export function Slider({
   showArrows = true,
   showDots = true
 }: SliderProps) {
+  const locale = usePublicLocale();
   const trackRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const count = children.length;
@@ -76,7 +79,7 @@ export function Slider({
         <div className='mt-6 flex items-center justify-center gap-6'>
           {showArrows ? (
             <button
-              aria-label='Previous slide'
+              aria-label={publicLabel(locale, 'Previous slide')}
               className='flex h-10 w-10 shrink-0 items-center justify-center rounded-[var(--brand-radius)] border border-[var(--brand-line)] text-[var(--brand-primary)] transition-colors hover:bg-[var(--brand-primary)] hover:text-white'
               onClick={() => goTo(activeIndex - 1)}
               type='button'
@@ -106,7 +109,7 @@ export function Slider({
 
           {showArrows ? (
             <button
-              aria-label='Next slide'
+              aria-label={publicLabel(locale, 'Next slide')}
               className='flex h-10 w-10 shrink-0 items-center justify-center rounded-[var(--brand-radius)] border border-[var(--brand-line)] text-[var(--brand-primary)] transition-colors hover:bg-[var(--brand-primary)] hover:text-white'
               onClick={() => goTo(activeIndex + 1)}
               type='button'

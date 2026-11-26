@@ -1,5 +1,7 @@
 'use client';
+import { usePublicLocale } from '@/lib/i18n/use-public-locale';
 
+import { publicLabel } from '@/lib/i18n/public-label';
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import Image from 'next/image';
 import gsap from 'gsap';
@@ -159,6 +161,7 @@ function CountryInfoCard({
   onClose: () => void;
   cardRef: React.RefObject<HTMLDivElement | null>;
 }) {
+  const locale = usePublicLocale();
   const country = getCountryById(countryId);
   const contentRef = useRef<HTMLDivElement>(null);
 
@@ -182,7 +185,7 @@ function CountryInfoCard({
       ref={cardRef}
     >
       <button
-        aria-label='Close country details'
+        aria-label={publicLabel(locale, 'Close country details')}
         className='absolute right-3 top-3 z-20 inline-flex h-8 w-8 items-center justify-center rounded-full border border-[var(--brand-line)] bg-white text-[var(--brand-muted)] transition-colors hover:border-[var(--brand-primary)] hover:text-[var(--brand-primary)]'
         onClick={onClose}
         type='button'

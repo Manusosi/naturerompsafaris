@@ -1,3 +1,5 @@
+import SiteDocument from '@/components/layout/site-document';
+export { generateMetadata, generateViewport } from '@/components/layout/site-document';
 import { notFound } from 'next/navigation';
 
 import { PublicShell } from '@/components/public/public-shell';
@@ -27,7 +29,7 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
   const settings = await getPublicSiteSettings();
 
   return (
-    <>
+    <SiteDocument locale={locale}>
       <script
         type='application/ld+json'
         dangerouslySetInnerHTML={{ __html: JSON.stringify(buildTravelAgencyJsonLd()) }}
@@ -35,6 +37,6 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
       <SiteAnalytics analytics={settings.analytics} />
       <PublicShell locale={locale}>{children}</PublicShell>
       <TawkChat />
-    </>
+    </SiteDocument>
   );
 }

@@ -9,7 +9,8 @@ import { translateHtml, translateText } from '@/lib/i18n/google-translate';
 import {
   parseRichTextHtml,
   translateDirectAnswers,
-  translateKeywords
+  translateKeywords,
+  translateTourDetails
 } from '@/lib/i18n/translate-json-fields';
 import { createServiceRoleClient } from '@/lib/supabase/service-role';
 
@@ -107,6 +108,13 @@ async function translateTourRow(
   const tourId = String(row.tour_id);
   const slug = String(row.slug);
   const title = String(row.title);
+  const { data: tour, error } = await supabase
+    .from('tours')
+    .select('itinerary_days,inclusions,exclusions,important_notice')
+    .eq('id', tourId)
+    .single();
+  if (error) throw new Error(error.message);
+  const tourDetails = await translateTourDetails(tour, locale);
   const overviewHtml = parseRichTextHtml(row.overview);
 
   const [translatedTitle, excerpt, overview, seoTitle, seoDescription, faqs] = await Promise.all([
@@ -128,7 +136,7 @@ async function translateTourRow(
       slug,
       title: translatedTitle,
       excerpt,
-      overview: overview ? { html: overview } : null,
+      overview: { html: overview, tourDetails },
       seo_title: seoTitle || translatedTitle,
       seo_description: seoDescription,
       faqs,
@@ -562,13 +570,14 @@ export async function autoTranslateBlogPostById(postId: string): Promise<void> {
   if (!isAutoTranslateEnabled()) return;
 
   const supabase = createServiceRoleClient();
-  const { data: row } = await supabase
+  const { data: row, error } = await supabase
     .from('blog_translations')
     .select('*')
     .eq('post_id', postId)
     .eq('locale', 'en')
     .maybeSingle();
 
+  if (error) throw new Error(error.message);
   if (!row?.published_at) return;
 
   const client = supabase as unknown as GenericClient;

@@ -1,3 +1,4 @@
+import { publicLabel } from '@/lib/i18n/public-label';
 import Image from 'next/image';
 import Link from 'next/link';
 import type { ReactNode } from 'react';
@@ -124,13 +125,13 @@ export function TourDetailShell({
             <article className='min-w-0'>
               <section className='scroll-mt-36' id='description'>
                 <h2 className='brand-heading font-display text-[clamp(1.9rem,3vw,2.55rem)] leading-tight'>
-                  Trip Overview
+                  {publicLabel(locale, 'Trip Overview')}
                 </h2>
                 {routeLabel ? (
                   <p className='mt-3 flex flex-wrap items-center gap-2 text-base text-[var(--brand-muted)]'>
                     <Icons.mapPin className='size-4 text-[var(--brand-primary)]' />
                     <span>
-                      Starts {tour.startLocation}
+                      {publicLabel(locale, 'Starts')} {tour.startLocation}
                       {tour.endLocation ? ` - Ends ${tour.endLocation}` : ''}
                     </span>
                   </p>
@@ -174,7 +175,7 @@ export function TourDetailShell({
               {tour.importantNotice ? (
                 <details className='mt-8 rounded-[var(--brand-radius)] border border-[var(--brand-line)] bg-[var(--brand-ivory)] p-5'>
                   <summary className='cursor-pointer font-display text-lg font-bold text-[var(--brand-heading)]'>
-                    Important Notice
+                    {publicLabel(locale, 'Important Notice')}
                   </summary>
                   <p className='brand-body mt-3 text-sm leading-7'>{tour.importantNotice}</p>
                 </details>
@@ -199,7 +200,7 @@ export function TourDetailShell({
                   <div className='flex flex-wrap items-end justify-between gap-4'>
                     <div>
                       <h2 className='brand-heading font-display text-[clamp(1.9rem,3vw,2.55rem)] leading-tight'>
-                        Route Map
+                        {publicLabel(locale, 'Route Map')}
                       </h2>
                       <span aria-hidden className='brand-gold-line brand-gold-line--left mt-3' />
                     </div>
@@ -223,13 +224,17 @@ export function TourDetailShell({
                 </h2>
                 {isMountainLayout ? (
                   <p className='brand-body mt-3 max-w-2xl text-base leading-7'>
-                    Camping and hut prices for this climbing route, per person.
+                    {publicLabel(
+                      locale,
+                      'Camping and hut prices for this climbing route, per person.'
+                    )}
                   </p>
                 ) : (
                   <p className='brand-body mt-3 max-w-2xl text-base leading-7'>
-                    Each table belongs to this itinerary. The comfort tiers show how the same trip
-                    can be sold as budget, mid-range, or luxury, while the columns compare the
-                    per-person cost by group size.
+                    {publicLabel(
+                      locale,
+                      'Each table belongs to this itinerary. The comfort tiers show how the same trip can be sold as budget, mid-range, or luxury, while the columns compare the per-person cost by group size.'
+                    )}
                   </p>
                 )}
                 <div className='mt-6'>
@@ -285,25 +290,42 @@ export function TourDetailShell({
               />
               <div className='brand-contact-advantages-block'>
                 <h3 className='brand-contact-sidebar-heading brand-contact-sidebar-heading--sm'>
-                  Trip Facts
+                  {publicLabel(locale, 'Trip Facts')}
                 </h3>
                 <div className='brand-contact-credentials-box'>
                   <dl className='space-y-3 text-sm'>
                     {tour.startLocation ? (
-                      <FactRow label='Starts in' value={tour.startLocation} />
+                      <FactRow
+                        label={publicLabel(locale, 'Starts in')}
+                        value={tour.startLocation}
+                      />
                     ) : null}
-                    {tour.endLocation ? <FactRow label='Ends in' value={tour.endLocation} /> : null}
+                    {tour.endLocation ? (
+                      <FactRow label={publicLabel(locale, 'Ends in')} value={tour.endLocation} />
+                    ) : null}
                     {tour.destinationLabels?.length ? (
-                      <FactRow label='Destinations' value={tour.destinationLabels.join(', ')} />
+                      <FactRow
+                        label={publicLabel(locale, 'Destinations')}
+                        value={tour.destinationLabels.join(', ')}
+                      />
                     ) : null}
                     {tour.parkLabels?.length ? (
-                      <FactRow label='Parks' value={tour.parkLabels.join(', ')} />
+                      <FactRow
+                        label={publicLabel(locale, 'Parks')}
+                        value={tour.parkLabels.join(', ')}
+                      />
                     ) : null}
                     {tour.countryLabels?.length ? (
-                      <FactRow label='Country' value={tour.countryLabels.join(', ')} />
+                      <FactRow
+                        label={publicLabel(locale, 'Country')}
+                        value={tour.countryLabels.join(', ')}
+                      />
                     ) : null}
                     {tour.experienceLabels?.length ? (
-                      <FactRow label='Experience' value={tour.experienceLabels.join(', ')} />
+                      <FactRow
+                        label={publicLabel(locale, 'Experience')}
+                        value={tour.experienceLabels.join(', ')}
+                      />
                     ) : null}
                   </dl>
                 </div>
@@ -311,7 +333,7 @@ export function TourDetailShell({
               <ContactScrollReveal>
                 <div className='brand-contact-advantages-block'>
                   <h3 className='brand-contact-sidebar-heading brand-contact-sidebar-heading--sm'>
-                    Advantages of Booking with Nature Romp Safaris
+                    {publicLabel(locale, 'Advantages of Booking with Nature Romp Safaris')}
                   </h3>
                   <div className='brand-contact-credentials-box'>
                     <ContactAdvantagesList />
@@ -327,7 +349,7 @@ export function TourDetailShell({
         <DestinationTripsSection
           description={`Other published safaris that visit ${primaryDestination ?? 'the same destination'}. Compare duration, route, and price before you enquire.`}
           destinationName={primaryDestination ?? 'this destination'}
-          eyebrow='More Safaris'
+          eyebrow={publicLabel(locale, 'More Safaris')}
           id='similar-tours'
           locale={locale}
           title={`Similar Safaris to ${primaryDestination ?? 'this destination'}`}
@@ -428,11 +450,11 @@ function TourHero({
       <div className='brand-container flex min-h-[500px] items-center justify-center py-16 text-center md:min-h-[560px] md:py-20'>
         <div className='mx-auto w-full max-w-5xl'>
           <nav
-            aria-label='Breadcrumb'
+            aria-label={publicLabel(locale, 'Breadcrumb')}
             className='flex flex-wrap items-center justify-center gap-2 text-sm font-bold text-white/80'
           >
             <Link className='transition hover:text-white' href={localePath(locale, '/')}>
-              Home
+              {publicLabel(locale, 'Home')}
             </Link>
             <Icons.chevronRight className='h-4 w-4 text-white/55' />
             <Link className='transition hover:text-white' href={parent.href}>

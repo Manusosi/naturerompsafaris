@@ -1,3 +1,4 @@
+import { publicLabel } from '@/lib/i18n/public-label';
 import type { Metadata } from 'next';
 import { Suspense } from 'react';
 
@@ -84,22 +85,22 @@ export default async function ExperiencesPage({ params, searchParams }: Experien
       <PublicPageHero
         breadcrumbStyle='pipe-uppercase'
         breadcrumbs={[{ href: localePath(locale), label: 'Home' }, { label: 'Safari Experiences' }]}
-        eyebrow='Unforgettable Wildlife Encounters'
+        eyebrow={publicLabel(locale, 'Unforgettable Wildlife Encounters')}
         eyebrowTone='white'
         hero={pageHero}
         imageAlt={hero.imageAlt}
         imageUrl={hero.imageUrl}
         overlayTone='black'
         showGoldLine={false}
-        title='Safari Experiences'
+        title={publicLabel(locale, 'Safari Experiences')}
         titleTone='white'
       >
         <BrandButtonGroup align='center' className='mt-8'>
           <BrandButton href={localePath(locale, '/contact')} variant='gold'>
-            Help Me Plan
+            {publicLabel(locale, 'Help Me Plan')}
           </BrandButton>
           <BrandButton href='#experiences-list' variant='gold-outline'>
-            View Experiences
+            {publicLabel(locale, 'View Experiences')}
           </BrandButton>
         </BrandButtonGroup>
       </PublicPageHero>

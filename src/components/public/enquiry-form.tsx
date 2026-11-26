@@ -1,5 +1,6 @@
 'use client';
 
+import { publicLabel } from '@/lib/i18n/public-label';
 import { useState } from 'react';
 
 type EnquiryFormProps = {
@@ -46,7 +47,7 @@ export function EnquiryForm({ locale, sourcePath }: EnquiryFormProps) {
     <form className='space-y-4' onSubmit={onSubmit}>
       <div className='grid gap-4 md:grid-cols-2'>
         <label className='brand-heading block text-sm font-medium'>
-          Full Name
+          {publicLabel(locale, 'Full Name')}
           <input
             className='mt-1.5 w-full rounded-[var(--brand-radius)] border border-[var(--brand-line)] bg-white px-3 py-2.5 outline-none focus:border-[var(--brand-primary)]'
             name='name'
@@ -54,7 +55,7 @@ export function EnquiryForm({ locale, sourcePath }: EnquiryFormProps) {
           />
         </label>
         <label className='brand-heading block text-sm font-medium'>
-          Email
+          {publicLabel(locale, 'Email')}
           <input
             className='mt-1.5 w-full rounded-[var(--brand-radius)] border border-[var(--brand-line)] bg-white px-3 py-2.5 outline-none focus:border-[var(--brand-primary)]'
             name='email'
@@ -63,7 +64,7 @@ export function EnquiryForm({ locale, sourcePath }: EnquiryFormProps) {
           />
         </label>
         <label className='brand-heading block text-sm font-medium'>
-          Phone
+          {publicLabel(locale, 'Phone')}
           <input
             className='mt-1.5 w-full rounded-[var(--brand-radius)] border border-[var(--brand-line)] bg-white px-3 py-2.5 outline-none focus:border-[var(--brand-primary)]'
             name='phone'
@@ -71,7 +72,7 @@ export function EnquiryForm({ locale, sourcePath }: EnquiryFormProps) {
           />
         </label>
         <label className='brand-heading block text-sm font-medium'>
-          Travelers
+          {publicLabel(locale, 'Travelers')}
           <input
             className='mt-1.5 w-full rounded-[var(--brand-radius)] border border-[var(--brand-line)] bg-white px-3 py-2.5 outline-none focus:border-[var(--brand-primary)]'
             min={1}
@@ -80,28 +81,31 @@ export function EnquiryForm({ locale, sourcePath }: EnquiryFormProps) {
           />
         </label>
         <label className='brand-heading block text-sm font-medium'>
-          Preferred Dates
+          {publicLabel(locale, 'Preferred Dates')}
           <input
             className='mt-1.5 w-full rounded-[var(--brand-radius)] border border-[var(--brand-line)] bg-white px-3 py-2.5 outline-none focus:border-[var(--brand-primary)]'
             name='preferredDates'
-            placeholder='e.g. July 2026'
+            placeholder={publicLabel(locale, 'e.g. July 2026')}
           />
         </label>
         <label className='brand-heading block text-sm font-medium'>
-          Budget (optional)
+          {publicLabel(locale, 'Budget (optional)')}
           <input
             className='mt-1.5 w-full rounded-[var(--brand-radius)] border border-[var(--brand-line)] bg-white px-3 py-2.5 outline-none focus:border-[var(--brand-primary)]'
             name='budget'
-            placeholder='e.g. USD 4,000 per person'
+            placeholder={publicLabel(locale, 'e.g. USD 4,000 per person')}
           />
         </label>
       </div>
       <label className='brand-heading block text-sm font-medium'>
-        Message
+        {publicLabel(locale, 'Message')}
         <textarea
           className='mt-1.5 min-h-32 w-full rounded-[var(--brand-radius)] border border-[var(--brand-line)] bg-white px-3 py-2.5 outline-none focus:border-[var(--brand-primary)]'
           name='message'
-          placeholder='Tell us where you want to go, how many days, and any special interests.'
+          placeholder={publicLabel(
+            locale,
+            'Tell us where you want to go, how many days, and any special interests.'
+          )}
           required
         />
       </label>
@@ -114,12 +118,12 @@ export function EnquiryForm({ locale, sourcePath }: EnquiryFormProps) {
       </button>
       {status === 'success' ? (
         <p className='text-sm text-[var(--brand-primary)]'>
-          Thank you — your enquiry has been sent.
+          {publicLabel(locale, 'Thank you — your enquiry has been sent.')}
         </p>
       ) : null}
       {status === 'error' ? (
         <p className='text-sm text-red-700'>
-          Something went wrong. Please try again or call us directly.
+          {publicLabel(locale, 'Something went wrong. Please try again or call us directly.')}
         </p>
       ) : null}
     </form>

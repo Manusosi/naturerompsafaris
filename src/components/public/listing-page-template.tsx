@@ -1,3 +1,4 @@
+import { publicLabel } from '@/lib/i18n/public-label';
 import { EmptyState, PageHero } from '@/components/public/page-shell';
 import { localePath } from '@/lib/public/locale-path';
 import { getPageHero } from '@/lib/public/site-data';
@@ -40,7 +41,7 @@ export function createListingPage({
               actionHref={localePath(locale, '/contact')}
               actionLabel='Contact Our Team'
               message='Published CMS content for this section will appear here automatically once added in the admin.'
-              title='Content coming soon'
+              title={publicLabel(locale, 'Content coming soon')}
             />
           </div>
         </section>

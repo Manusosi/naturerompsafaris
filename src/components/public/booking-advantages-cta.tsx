@@ -1,3 +1,4 @@
+import { publicLabel } from '@/lib/i18n/public-label';
 import Image from 'next/image';
 
 import { Icons } from '@/components/icons';
@@ -15,7 +16,7 @@ export function BookingAdvantagesCta({ locale }: BookingAdvantagesCtaProps) {
     <section className='brand-section bg-white'>
       <div className='brand-container'>
         <h2 className='brand-heading mx-auto max-w-3xl text-center font-display text-[clamp(1.75rem,3.5vw,2.5rem)] leading-[1.2]'>
-          {ABOUT_WHY_TRAVEL.title}
+          {publicLabel(locale, ABOUT_WHY_TRAVEL.title)}
         </h2>
         <span aria-hidden className='brand-gold-line mt-5' />
 
@@ -31,10 +32,10 @@ export function BookingAdvantagesCta({ locale }: BookingAdvantagesCtaProps) {
                 width={52}
               />
               <p className='mt-4 font-display text-lg leading-snug text-[var(--brand-heading)]'>
-                {item.title}
+                {publicLabel(locale, item.title)}
               </p>
               <p className='mx-auto mt-2 max-w-[16.5rem] text-[15px] leading-6 text-[var(--brand-muted)]'>
-                {item.text}
+                {publicLabel(locale, item.text)}
               </p>
             </li>
           ))}
@@ -42,11 +43,11 @@ export function BookingAdvantagesCta({ locale }: BookingAdvantagesCtaProps) {
 
         <BrandButtonGroup align='center' className='mt-12 md:mt-14'>
           <BrandButton href={localePath(locale, '/contact')} variant='gold'>
-            {ABOUT_WHY_TRAVEL.ctaLabel}
+            {publicLabel(locale, ABOUT_WHY_TRAVEL.ctaLabel)}
             <Icons.mail className='h-4 w-4' />
           </BrandButton>
           <BrandButton href={localePath(locale, '/tours')} variant='accent-outline'>
-            {ABOUT_WHY_TRAVEL.secondaryCtaLabel}
+            {publicLabel(locale, ABOUT_WHY_TRAVEL.secondaryCtaLabel)}
             <Icons.arrowRight className='h-4 w-4' />
           </BrandButton>
         </BrandButtonGroup>

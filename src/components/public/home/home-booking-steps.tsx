@@ -1,5 +1,6 @@
 'use client';
 
+import { publicLabel } from '@/lib/i18n/public-label';
 import { useEffect, useRef } from 'react';
 
 import { Icons } from '@/components/icons';
@@ -87,8 +88,11 @@ export function HomeBookingSteps({ locale }: { locale: string }) {
     <section className='brand-section bg-[var(--brand-ivory)]' ref={sectionRef}>
       <div className='brand-container'>
         <SectionHeader
-          description='From your first message to your last game drive, booking a Nature Romp safari is simple and personal.'
-          title='How to Book a Safari With Us'
+          description={publicLabel(
+            locale,
+            'From your first message to your last game drive, booking a Nature Romp safari is simple and personal.'
+          )}
+          title={publicLabel(locale, 'How to Book a Safari With Us')}
         />
 
         <div className='relative mt-14'>
@@ -128,7 +132,7 @@ export function HomeBookingSteps({ locale }: { locale: string }) {
         <div className='mt-12 flex justify-center'>
           <BrandButton href={localePath(locale, '/contact')} variant='accent'>
             <Icons.send className='h-4 w-4' />
-            Start Planning My Safari
+            {publicLabel(locale, 'Start Planning My Safari')}
           </BrandButton>
         </div>
       </div>

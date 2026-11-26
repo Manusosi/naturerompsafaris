@@ -1,5 +1,8 @@
 'use client';
 
+import { usePublicLocale } from '@/lib/i18n/use-public-locale';
+import { publicLabel } from '@/lib/i18n/public-label';
+
 import * as React from 'react';
 
 import { Icons } from '@/components/icons';
@@ -17,7 +20,7 @@ import {
 } from '@/lib/travel-date-utils';
 import { cn } from '@/lib/utils';
 
-const WEEKDAY_LABELS = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'] as const;
+const WEEKDAYS = [0, 1, 2, 3, 4, 5, 6];
 
 export type TravelDateCalendarProps = {
   className?: string;
@@ -59,6 +62,7 @@ export function TravelDateCalendar({
   onSelect,
   selected
 }: TravelDateCalendarProps) {
+  const locale = usePublicLocale();
   const [viewMonth, setViewMonth] = React.useState(() => startOfMonth(defaultMonth));
   const today = React.useMemo(() => startOfDay(new Date()), []);
 
@@ -86,7 +90,7 @@ export function TravelDateCalendar({
     <div className={cn('brand-travel-date-calendar-ui', className)}>
       <div className='brand-travel-date-calendar-header'>
         <button
-          aria-label='Previous month'
+          aria-label={publicLabel(locale, 'Previous month')}
           className='brand-travel-date-calendar-nav'
           disabled={!canGoPrevious}
           onClick={goToPreviousMonth}
@@ -96,11 +100,11 @@ export function TravelDateCalendar({
         </button>
 
         <p className='brand-travel-date-calendar-title'>
-          {viewMonth.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
+          {viewMonth.toLocaleDateString(locale, { month: 'long', year: 'numeric' })}
         </p>
 
         <button
-          aria-label='Next month'
+          aria-label={publicLabel(locale, 'Next month')}
           className='brand-travel-date-calendar-nav'
           disabled={!canGoNext}
           onClick={goToNextMonth}
@@ -111,7 +115,9 @@ export function TravelDateCalendar({
       </div>
 
       <div className='brand-travel-date-calendar-weekdays' role='row'>
-        {WEEKDAY_LABELS.map((label) => (
+        {WEEKDAYS.map((weekday) =>
+          new Date(2023, 0, 1 + weekday).toLocaleDateString(locale, { weekday: 'short' })
+        ).map((label) => (
           <span className='brand-travel-date-calendar-weekday' key={label} role='columnheader'>
             {label}
           </span>
@@ -139,7 +145,7 @@ export function TravelDateCalendar({
 
           return (
             <button
-              aria-label={date.toLocaleDateString('en-US', {
+              aria-label={date.toLocaleDateString(locale, {
                 day: 'numeric',
                 month: 'long',
                 weekday: 'long',

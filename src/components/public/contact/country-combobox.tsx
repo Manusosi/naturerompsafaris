@@ -1,5 +1,7 @@
 'use client';
+import { usePublicLocale } from '@/lib/i18n/use-public-locale';
 
+import { publicLabel } from '@/lib/i18n/public-label';
 import * as React from 'react';
 
 import { Icons } from '@/components/icons';
@@ -24,6 +26,7 @@ type CountryComboboxProps = {
 };
 
 export function CountryCombobox({ className, id, onBlur, onChange, value }: CountryComboboxProps) {
+  const locale = usePublicLocale();
   const [open, setOpen] = React.useState(false);
   const [search, setSearch] = React.useState('');
   const searchInputRef = React.useRef<HTMLInputElement>(null);
@@ -31,8 +34,12 @@ export function CountryCombobox({ className, id, onBlur, onChange, value }: Coun
   const filteredCountries = React.useMemo(() => {
     const query = search.trim().toLowerCase();
     if (!query) return WORLD_COUNTRIES;
-    return WORLD_COUNTRIES.filter((country) => country.toLowerCase().includes(query));
-  }, [search]);
+    return WORLD_COUNTRIES.filter(
+      (country) =>
+        publicLabel(locale, country).toLocaleLowerCase(locale).includes(query) ||
+        country.toLowerCase().includes(query)
+    );
+  }, [locale, search]);
 
   React.useEffect(() => {
     if (!open) {
@@ -64,7 +71,7 @@ export function CountryCombobox({ className, id, onBlur, onChange, value }: Coun
           type='button'
           variant='ghost'
         >
-          {value || 'Start typing your country...'}
+          {publicLabel(locale, value || 'Start typing your country...')}
           <Icons.chevronsUpDown className='ml-2 h-4 w-4 shrink-0 opacity-50' />
         </Button>
       </PopoverTrigger>
@@ -82,10 +89,10 @@ export function CountryCombobox({ className, id, onBlur, onChange, value }: Coun
           <div className='brand-country-combobox-search'>
             <Icons.search aria-hidden className='brand-country-combobox-search-icon' />
             <input
-              aria-label='Search countries'
+              aria-label={publicLabel(locale, 'Search countries')}
               className='brand-country-combobox-search-input'
               onChange={(event) => setSearch(event.target.value)}
-              placeholder='Search countries...'
+              placeholder={publicLabel(locale, 'Search countries...')}
               ref={searchInputRef}
               type='search'
               value={search}
@@ -94,7 +101,7 @@ export function CountryCombobox({ className, id, onBlur, onChange, value }: Coun
 
           <CommandList className='brand-country-combobox-list' id='country-listbox'>
             <CommandEmpty className='px-3 py-6 text-sm text-[#5c665f]'>
-              No country found.
+              {publicLabel(locale, 'No country found.')}
             </CommandEmpty>
             <CommandGroup>
               {filteredCountries.map((country) => (
@@ -110,7 +117,7 @@ export function CountryCombobox({ className, id, onBlur, onChange, value }: Coun
                   <Icons.check
                     className={cn('mr-2 h-4 w-4', value === country ? 'opacity-100' : 'opacity-0')}
                   />
-                  {country}
+                  {publicLabel(locale, country)}
                 </CommandItem>
               ))}
             </CommandGroup>

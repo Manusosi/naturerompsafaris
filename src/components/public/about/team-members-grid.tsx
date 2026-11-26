@@ -1,5 +1,7 @@
 'use client';
+import { usePublicLocale } from '@/lib/i18n/use-public-locale';
 
+import { publicLabel } from '@/lib/i18n/public-label';
 import * as React from 'react';
 import Image from 'next/image';
 
@@ -28,6 +30,7 @@ export function TeamMemberDetailDialog({
   onOpenChange,
   open
 }: TeamMemberDetailDialogProps) {
+  const locale = usePublicLocale();
   const imageUrl = member?.imageUrl ?? FALLBACK_IMAGE;
   const title = member ? memberDisplayTitle(member) : '';
 
@@ -95,7 +98,7 @@ export function TeamMemberDetailDialog({
                 ) : null}
                 {!member.email && !member.phone ? (
                   <p className='text-center text-sm text-[var(--brand-muted)]'>
-                    Contact details available through Nature Romp Safaris.
+                    {publicLabel(locale, 'Contact details available through Nature Romp Safaris.')}
                   </p>
                 ) : null}
               </div>
@@ -104,7 +107,7 @@ export function TeamMemberDetailDialog({
             <section className='flex min-w-0 flex-col bg-white md:min-h-0 md:border-l md:border-[var(--brand-line)]'>
               <div className='shrink-0 border-b border-[var(--brand-line)] px-5 py-5 md:px-7'>
                 <p className='text-[10px] font-bold uppercase tracking-[0.16em] text-[var(--brand-accent)]'>
-                  Profile
+                  {publicLabel(locale, 'Profile')}
                 </p>
                 <h3 className='brand-heading mt-2 font-display text-lg text-[var(--brand-primary-dark)] md:text-xl'>
                   {member.roleLabel}
@@ -115,14 +118,14 @@ export function TeamMemberDetailDialog({
                 {member.yearsExperience != null ? (
                   <p className='mt-3 inline-flex items-center gap-2 rounded-full bg-[var(--brand-ivory)] px-3 py-1.5 text-sm text-[var(--brand-ink)]'>
                     <Icons.clock className='h-4 w-4 text-[var(--brand-accent)]' />
-                    {member.yearsExperience} years experience
+                    {member.yearsExperience} {publicLabel(locale, 'years experience')}
                   </p>
                 ) : null}
               </div>
 
               <div className='brand-body px-5 py-5 md:min-h-0 md:flex-1 md:overflow-y-auto md:px-7'>
                 <p className='text-[10px] font-bold uppercase tracking-[0.16em] text-[var(--brand-muted)]'>
-                  Bio
+                  {publicLabel(locale, 'Bio')}
                 </p>
                 <p className='mt-3 whitespace-pre-wrap text-[15px] leading-7 text-[var(--brand-muted)]'>
                   {member.bio || 'Profile details will be added soon.'}
@@ -142,6 +145,7 @@ type TeamMemberCardProps = {
 };
 
 export function TeamMemberCard({ member, onSelect }: TeamMemberCardProps) {
+  const locale = usePublicLocale();
   const imageUrl = member.imageUrl ?? FALLBACK_IMAGE;
   const title = memberDisplayTitle(member);
 
@@ -174,7 +178,9 @@ export function TeamMemberCard({ member, onSelect }: TeamMemberCardProps) {
                 onClick={(event) => event.stopPropagation()}
               >
                 <Icons.mail className='h-4 w-4' />
-                <span className='sr-only'>Email {member.name}</span>
+                <span className='sr-only'>
+                  {publicLabel(locale, 'Email')} {member.name}
+                </span>
               </a>
             ) : null}
             {member.phone ? (
@@ -184,7 +190,9 @@ export function TeamMemberCard({ member, onSelect }: TeamMemberCardProps) {
                 onClick={(event) => event.stopPropagation()}
               >
                 <Icons.phone className='h-4 w-4' />
-                <span className='sr-only'>Call {member.name}</span>
+                <span className='sr-only'>
+                  {publicLabel(locale, 'Call')} {member.name}
+                </span>
               </a>
             ) : null}
           </div>
@@ -195,7 +203,7 @@ export function TeamMemberCard({ member, onSelect }: TeamMemberCardProps) {
           onClick={() => onSelect(member)}
           type='button'
         >
-          Read bio
+          {publicLabel(locale, 'Read bio')}
           <Icons.chevronRight className='h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5' />
         </button>
       </div>

@@ -1,5 +1,7 @@
 'use client';
+import { usePublicLocale } from '@/lib/i18n/use-public-locale';
 
+import { publicLabel } from '@/lib/i18n/public-label';
 import * as React from 'react';
 
 import { Icons } from '@/components/icons';
@@ -110,8 +112,11 @@ function tierTheme(key: PublicExperiencePackageLevel['key']) {
 }
 
 function PriceCell({ currency, price }: { currency: string; price: number | null | undefined }) {
+  const locale = usePublicLocale();
   if (!price) {
-    return <span className='text-xs text-[var(--brand-muted)]'>On request</span>;
+    return (
+      <span className='text-xs text-[var(--brand-muted)]'>{publicLabel(locale, 'On request')}</span>
+    );
   }
 
   return (
@@ -120,7 +125,7 @@ function PriceCell({ currency, price }: { currency: string; price: number | null
         {formatTourPrice(price, currency)}
       </strong>
       <span className='mt-1 text-[10px] font-normal text-[var(--brand-muted)] sm:text-[11px]'>
-        per person
+        {publicLabel(locale, 'per person')}
       </span>
     </span>
   );
@@ -129,14 +134,18 @@ function PriceCell({ currency, price }: { currency: string; price: number | null
 function EmptyPackageGuide({ locale }: { locale: string }) {
   return (
     <div className='brand-contact-credentials-box'>
-      <h3 className='brand-heading font-display text-2xl'>Package Prices On Request</h3>
+      <h3 className='brand-heading font-display text-2xl'>
+        {publicLabel(locale, 'Package Prices On Request')}
+      </h3>
       <p className='brand-body mt-3 max-w-2xl text-sm leading-7'>
-        This experience can be shaped around economy, mid-range, luxury, or high-end comfort levels.
-        Pricing depends on the selected trip, season, lodge availability, and group size.
+        {publicLabel(
+          locale,
+          'This experience can be shaped around economy, mid-range, luxury, or high-end comfort levels. Pricing depends on the selected trip, season, lodge availability, and group size.'
+        )}
       </p>
       <div className='mt-5'>
         <BrandButton href={localePath(locale, '/contact')} size='sm'>
-          Request Package Prices
+          {publicLabel(locale, 'Request Package Prices')}
         </BrandButton>
       </div>
     </div>
@@ -174,7 +183,7 @@ export function ExperiencePackageTabs({ levels, locale }: ExperiencePackageTabsP
       <div
         className='flex flex-wrap justify-center gap-3'
         role='tablist'
-        aria-label='Package levels'
+        aria-label={publicLabel(locale, 'Package levels')}
       >
         {PACKAGE_LEVELS.map((packageLevel) => {
           const level = levelsByKey.get(packageLevel.key);
@@ -228,7 +237,7 @@ export function ExperiencePackageTabs({ levels, locale }: ExperiencePackageTabsP
                   </colgroup>
                   <thead className='brand-pricing-tier__head' style={headStyle}>
                     <tr>
-                      <th scope='col'>Travel period</th>
+                      <th scope='col'>{publicLabel(locale, 'Travel period')}</th>
                       {bands.map((band) => (
                         <th key={band} scope='col'>
                           {formatBandLabel(band)}
@@ -257,7 +266,7 @@ export function ExperiencePackageTabs({ levels, locale }: ExperiencePackageTabsP
               </div>
               {bands.length > 2 ? (
                 <p className='brand-pricing-tier__scroll-hint'>
-                  Swipe the table to see all prices →
+                  {publicLabel(locale, 'Swipe the table to see all prices →')}
                 </p>
               ) : null}
             </div>
@@ -265,7 +274,10 @@ export function ExperiencePackageTabs({ levels, locale }: ExperiencePackageTabsP
             <div className='flex min-h-48 flex-col items-center justify-center gap-3 p-6 text-center'>
               <Icons.info className='h-8 w-8 text-[var(--brand-gold)]' />
               <p className='brand-body max-w-sm text-sm leading-7'>
-                Detailed group-size prices for this level are still being prepared.
+                {publicLabel(
+                  locale,
+                  'Detailed group-size prices for this level are still being prepared.'
+                )}
               </p>
             </div>
           )}
@@ -273,8 +285,10 @@ export function ExperiencePackageTabs({ levels, locale }: ExperiencePackageTabsP
 
         <div className='mt-5 flex flex-col gap-3 border-t border-[rgb(60_81_66/8%)] pt-5 sm:flex-row sm:items-center sm:justify-between'>
           <p className='text-sm leading-6 text-[var(--brand-muted)]'>
-            Prices are per person and vary by travel period, rooming, park fees, and lodge
-            availability.
+            {publicLabel(
+              locale,
+              'Prices are per person and vary by travel period, rooming, park fees, and lodge availability.'
+            )}
           </p>
           <BrandButton
             className='group'
@@ -286,7 +300,7 @@ export function ExperiencePackageTabs({ levels, locale }: ExperiencePackageTabsP
               <Icons.mail className='h-4 w-4 animate-pulse' />
               <Icons.whatsapp className='absolute h-4 w-4 opacity-0 transition-opacity duration-200 group-hover:opacity-100' />
             </span>
-            Enquire
+            {publicLabel(locale, 'Enquire')}
           </BrandButton>
         </div>
       </div>

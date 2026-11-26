@@ -1,3 +1,5 @@
+import { unstable_cache } from 'next/cache';
+import { safariMarkets } from '@/lib/public/safari-markets';
 import type { SupabaseClient } from '@supabase/supabase-js';
 
 import { isPublicLocale, PUBLIC_LOCALES } from '@/lib/i18n';
@@ -38,6 +40,8 @@ export const PAGES_SITEMAP = 'pages';
 
 const ALWAYS_LISTED_PATHS = [
   '',
+  'our-fleet',
+  ...Object.keys(safariMarkets).map((market) => `safaris/${market}`),
   'about',
   'contact',
   'privacy-policy',
@@ -48,7 +52,7 @@ const ALWAYS_LISTED_PATHS = [
 ];
 
 export function sitemapFilePath(name: string) {
-  return `/sitemaps/${name}.xml`;
+  return `/sitemap-${name}.xml`;
 }
 
 export function isSitemapSection(name: string): name is SitemapSection {
@@ -78,43 +82,55 @@ function mapRows(data: unknown): TranslationRow[] {
   });
 }
 
-async function safeRows(
-  query: PromiseLike<{ data: unknown; error: { message?: string } | null }>
+async function readRows(
+  makeQuery: () => {
+    range(
+      from: number,
+      to: number
+    ): PromiseLike<{ data: unknown; error: { message?: string } | null }>;
+  }
 ): Promise<TranslationRow[]> {
-  try {
-    const { data, error } = await query;
-    if (error) return [];
-    return mapRows(data);
-  } catch {
-    return [];
+  const rows: TranslationRow[] = [];
+  const pageSize = 500;
+  for (;;) {
+    const { data, error } = await makeQuery().range(rows.length, rows.length + pageSize - 1);
+    if (error) throw new Error(error.message || 'Unable to read sitemap content');
+    const page = mapRows(data);
+    rows.push(...page);
+    if (page.length < pageSize) return rows;
   }
 }
 
 function translationQuery(table: string, parentSelect: string) {
+  const dateFields = ['package_translations', 'fleet_vehicle_translations'].includes(table)
+    ? 'published_at'
+    : 'published_at, updated_at';
   return sitemapClient()
     .from(table)
-    .select(`locale, slug, published_at, updated_at, ${parentSelect}`)
+    .select(`locale, slug, ${dateFields}, ${parentSelect}`)
     .in('locale', PUBLIC_LOCALES)
-    .not('published_at', 'is', null);
+    .not('published_at', 'is', null)
+    .order('locale')
+    .order('slug');
 }
 
 const SECTION_FETCHERS: Record<SitemapSection, () => Promise<TranslationRow[]>> = {
   tours: () =>
-    safeRows(
+    readRows(() =>
       translationQuery('tour_translations', 'tour:tours!inner(status)').eq(
         'tour.status',
         'published'
       )
     ),
   'safari-packages': () =>
-    safeRows(
+    readRows(() =>
       translationQuery('package_translations', 'package:packages!inner(status)').eq(
         'package.status',
         'published'
       )
     ),
   destinations: () =>
-    safeRows(
+    readRows(() =>
       translationQuery(
         'destination_translations',
         'destination:destinations!inner(status, deleted_at)'
@@ -123,14 +139,14 @@ const SECTION_FETCHERS: Record<SitemapSection, () => Promise<TranslationRow[]>> 
         .is('destination.deleted_at', null)
     ),
   'national-parks': () =>
-    safeRows(
+    readRows(() =>
       translationQuery('national_park_translations', 'park:national_parks!inner(status)').eq(
         'park.status',
         'published'
       )
     ),
   experiences: () =>
-    safeRows(
+    readRows(() =>
       translationQuery(
         'experience_translations',
         'experience:experiences!inner(status, deleted_at)'
@@ -139,7 +155,7 @@ const SECTION_FETCHERS: Record<SitemapSection, () => Promise<TranslationRow[]>> 
         .is('experience.deleted_at', null)
     ),
   accommodations: () =>
-    safeRows(
+    readRows(() =>
       translationQuery(
         'accommodation_translations',
         'accommodation:accommodations!inner(status, deleted_at)'
@@ -148,14 +164,14 @@ const SECTION_FETCHERS: Record<SitemapSection, () => Promise<TranslationRow[]>> 
         .is('accommodation.deleted_at', null)
     ),
   'our-fleet': () =>
-    safeRows(
+    readRows(() =>
       translationQuery('fleet_vehicle_translations', 'vehicle:fleet_vehicles!inner(status)').eq(
         'vehicle.status',
         'published'
       )
     ),
   blog: () =>
-    safeRows(
+    readRows(() =>
       translationQuery('blog_translations', 'post:blog_posts!inner(status, deleted_at)')
         .eq('post.status', 'published')
         .is('post.deleted_at', null)
@@ -184,7 +200,20 @@ function latest(entries: SitemapUrlEntry[]) {
 }
 
 export async function getSectionSitemapUrls(section: SitemapSection) {
-  return rowsToEntries(await SECTION_FETCHERS[section](), section);
+  return unstable_cache(
+    async () =>
+      rowsToEntries(await SECTION_FETCHERS[section](), section).map((row) => ({
+        path: row.path,
+        modified: row.lastModified?.toISOString()
+      })),
+    ['sitemap-section-v2', section, PUBLIC_LOCALES.join(',')],
+    { tags: [`sitemap-${section}`], revalidate: 3600 }
+  )().then((rows) =>
+    rows.map((row) => ({
+      path: row.path,
+      lastModified: row.modified ? new Date(row.modified) : undefined
+    }))
+  );
 }
 
 async function getAllSectionUrls() {
@@ -197,19 +226,24 @@ async function getAllSectionUrls() {
 }
 
 function staticPageUrls(sections: Map<SitemapSection, SitemapUrlEntry[]>): SitemapUrlEntry[] {
-  // A listing page with no published items is a thin page; leave it out until it has content.
-  const listingPaths = SITEMAP_SECTIONS.filter((section) => sections.get(section)?.length);
-  const paths = [...ALWAYS_LISTED_PATHS, ...listingPaths];
-
-  return PUBLIC_LOCALES.flatMap((locale) =>
-    paths.map((path) => {
-      const sectionEntries = isSitemapSection(path) ? sections.get(path) : undefined;
-      return {
-        lastModified: sectionEntries ? latest(sectionEntries) : undefined,
-        path: path ? `/${locale}/${path}` : `/${locale}`
-      };
-    })
-  );
+  return PUBLIC_LOCALES.flatMap((locale) => {
+    const paths = new Set(ALWAYS_LISTED_PATHS);
+    const modified = new Map<string, Date | undefined>();
+    for (const section of SITEMAP_SECTIONS) {
+      const prefix = `/${locale}/${section}/`;
+      const entries = (sections.get(section) ?? []).filter((entry) =>
+        entry.path.startsWith(prefix)
+      );
+      if (entries.length) {
+        paths.add(section);
+        modified.set(section, latest(entries));
+      }
+    }
+    return Array.from(paths, (path) => ({
+      lastModified: modified.get(path),
+      path: path ? `/${locale}/${path}` : `/${locale}`
+    }));
+  });
 }
 
 export async function getPagesSitemapUrls() {

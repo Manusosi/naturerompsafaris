@@ -1,5 +1,6 @@
 'use client';
 
+import { publicLabel } from '@/lib/i18n/public-label';
 import { useRouter } from 'next/navigation';
 
 import {
@@ -69,16 +70,16 @@ export function NationalParkFilters({ active, facets, locale }: NationalParkFilt
       onClear={() => {
         commit({ activities: [], countries: [], regions: [], wildlife: [] });
       }}
-      title='National parks'
+      title={publicLabel(locale, 'National parks')}
     >
       {!hasFacetValues ? (
         <p className='text-sm leading-6 text-[var(--brand-muted)]'>
-          Published park filters will appear here as park guides are added.
+          {publicLabel(locale, 'Published park filters will appear here as park guides are added.')}
         </p>
       ) : null}
 
       {facets.countries.length ? (
-        <ListingFilterGroup title='Country'>
+        <ListingFilterGroup title={publicLabel(locale, 'Country')}>
           {facets.countries.map((country) => (
             <ListingFilterOption
               checked={draft.countries.includes(country)}
@@ -96,7 +97,7 @@ export function NationalParkFilters({ active, facets, locale }: NationalParkFilt
       {facets.regions.length ? (
         <ListingFilterDropdown
           selectedCount={draft.regions.length}
-          title='Region'
+          title={publicLabel(locale, 'Region')}
           triggerLabel='Select regions'
         >
           {facets.regions.map((region) => (
@@ -116,7 +117,7 @@ export function NationalParkFilters({ active, facets, locale }: NationalParkFilt
       {facets.wildlife.length ? (
         <ListingFilterDropdown
           selectedCount={draft.wildlife.length}
-          title='Wildlife'
+          title={publicLabel(locale, 'Wildlife')}
           triggerLabel='Select wildlife'
         >
           {facets.wildlife.map((animal) => (
@@ -136,7 +137,7 @@ export function NationalParkFilters({ active, facets, locale }: NationalParkFilt
       {facets.activities.length ? (
         <ListingFilterDropdown
           selectedCount={draft.activities.length}
-          title='Activities'
+          title={publicLabel(locale, 'Activities')}
           triggerLabel='Select activities'
         >
           {facets.activities.map((activity) => (

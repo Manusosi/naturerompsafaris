@@ -1,5 +1,7 @@
 'use client';
+import { usePublicLocale } from '@/lib/i18n/use-public-locale';
 
+import { publicLabel } from '@/lib/i18n/public-label';
 import { ContactAdvantagesList } from '@/components/public/contact/contact-advantages-list';
 import { ContactScrollReveal } from '@/components/public/contact/contact-scroll-reveal';
 import { ContactSidebarMap } from '@/components/public/contact/contact-sidebar-map';
@@ -14,6 +16,7 @@ type ContactDetailsProps = {
 };
 
 export function ContactDetails({ siteSettings }: ContactDetailsProps) {
+  const locale = usePublicLocale();
   const contactPhone = siteSettings.phonePrimary || BRAND_PHONE;
   const phones = publicCallPhones(siteSettings);
   const whatsappLink = whatsAppHref(
@@ -25,12 +28,16 @@ export function ContactDetails({ siteSettings }: ContactDetailsProps) {
     <aside className='brand-contact-sidebar-inner space-y-8'>
       <ContactScrollReveal>
         <div className='brand-contact-details-block'>
-          <h2 className='brand-contact-sidebar-heading'>Contact Details</h2>
+          <h2 className='brand-contact-sidebar-heading'>
+            {publicLabel(locale, 'Contact Details')}
+          </h2>
 
           <div className='brand-contact-credentials-box'>
             <dl className='brand-contact-sidebar-list'>
               <div className='brand-contact-sidebar-row'>
-                <dt className='brand-contact-sidebar-label'>Mobile &amp; Whatsapp:</dt>
+                <dt className='brand-contact-sidebar-label'>
+                  {publicLabel(locale, 'Mobile & Whatsapp:')}
+                </dt>
                 <dd className='brand-contact-sidebar-value'>
                   <span className='brand-contact-sidebar-phones'>
                     {phones.map((number, index) => (
@@ -58,7 +65,7 @@ export function ContactDetails({ siteSettings }: ContactDetailsProps) {
                         target='_blank'
                       >
                         <Icons.whatsapp aria-hidden />
-                        WhatsApp chat
+                        {publicLabel(locale, 'WhatsApp chat')}
                       </a>
                     </span>
                   </span>
@@ -66,7 +73,7 @@ export function ContactDetails({ siteSettings }: ContactDetailsProps) {
               </div>
 
               <div className='brand-contact-sidebar-row'>
-                <dt className='brand-contact-sidebar-label'>Email:</dt>
+                <dt className='brand-contact-sidebar-label'>{publicLabel(locale, 'Email:')}</dt>
                 <dd className='brand-contact-sidebar-value'>
                   <a
                     className='brand-contact-sidebar-link brand-contact-sidebar-link--email'
@@ -78,7 +85,7 @@ export function ContactDetails({ siteSettings }: ContactDetailsProps) {
               </div>
 
               <div className='brand-contact-sidebar-row'>
-                <dt className='brand-contact-sidebar-label'>Address:</dt>
+                <dt className='brand-contact-sidebar-label'>{publicLabel(locale, 'Address:')}</dt>
                 <dd className='brand-contact-sidebar-value brand-contact-sidebar-address'>
                   <p>{siteSettings.addressShort}</p>
                   <p>{siteSettings.postalAddress || BRAND_CONTACT_DEFAULTS.postalAddress}</p>
@@ -87,14 +94,14 @@ export function ContactDetails({ siteSettings }: ContactDetailsProps) {
             </dl>
           </div>
 
-          <ContactSidebarMap />
+          <ContactSidebarMap locale={locale} />
         </div>
       </ContactScrollReveal>
 
       <ContactScrollReveal>
         <div className='brand-contact-advantages-block'>
           <h3 className='brand-contact-sidebar-heading brand-contact-sidebar-heading--sm'>
-            Advantages of Booking with Nature Romp Safaris
+            {publicLabel(locale, 'Advantages of Booking with Nature Romp Safaris')}
           </h3>
           <div className='brand-contact-credentials-box'>
             <ContactAdvantagesList />

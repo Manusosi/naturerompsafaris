@@ -1,5 +1,7 @@
 'use client';
+import { usePublicLocale } from '@/lib/i18n/use-public-locale';
 
+import { publicLabel } from '@/lib/i18n/public-label';
 import * as React from 'react';
 
 import { cn } from '@/lib/utils';
@@ -79,17 +81,21 @@ function ItineraryDescription({ description }: { description: string }) {
 }
 
 function ItineraryAccommodationOptions({ options }: { options: string[] }) {
+  const locale = usePublicLocale();
   const visibleOptions = options.map((option) => option.trim()).filter(Boolean);
   if (!visibleOptions.length) return null;
 
   return (
     <ul className='brand-body mt-4 list-disc space-y-1.5 pl-5 text-[15px] leading-7'>
       <li>
-        Dinner and overnight at:
+        {publicLabel(locale, 'Dinner and overnight at:')}
         <ul className='mt-1.5 list-[circle] space-y-1 pl-5'>
           {visibleOptions.map((option, index) => (
             <li key={`${index}-${option}`}>
-              <strong className='text-[var(--brand-heading)]'>Option {index + 1}:</strong> {option}
+              <strong className='text-[var(--brand-heading)]'>
+                {publicLabel(locale, 'Option')} {index + 1}:
+              </strong>{' '}
+              {option}
             </li>
           ))}
         </ul>
@@ -99,12 +105,14 @@ function ItineraryAccommodationOptions({ options }: { options: string[] }) {
 }
 
 function ItineraryMealPlan({ mealPlan }: { mealPlan: string }) {
+  const locale = usePublicLocale();
   const value = mealPlan.trim();
   if (!value) return null;
 
   return (
     <p className='brand-body mt-4 text-[15px] leading-7'>
-      <strong className='text-[var(--brand-heading)]'>Meal Plan:</strong> {value}
+      <strong className='text-[var(--brand-heading)]'>{publicLabel(locale, 'Meal Plan:')}</strong>{' '}
+      {value}
     </p>
   );
 }
@@ -157,6 +165,7 @@ function useTimelineProgress(
 }
 
 export function ItineraryTimeline({ days }: ItineraryTimelineProps) {
+  const locale = usePublicLocale();
   const containerRef = React.useRef<HTMLOListElement>(null);
   const markerRefs = React.useRef<(HTMLSpanElement | null)[]>([]);
   const { activeIndex, progress } = useTimelineProgress(containerRef, markerRefs, days.length);
@@ -164,9 +173,14 @@ export function ItineraryTimeline({ days }: ItineraryTimelineProps) {
   if (!days.length) {
     return (
       <div className='mt-6 border border-dashed border-[var(--brand-line)] bg-[var(--brand-ivory)] p-6'>
-        <h3 className='brand-heading font-display text-xl'>Itinerary Pending</h3>
+        <h3 className='brand-heading font-display text-xl'>
+          {publicLabel(locale, 'Itinerary Pending')}
+        </h3>
         <p className='brand-body mt-2 text-sm leading-6'>
-          Add day-by-day routing in the portal so guests can understand how this safari unfolds.
+          {publicLabel(
+            locale,
+            'Add day-by-day routing in the portal so guests can understand how this safari unfolds.'
+          )}
         </p>
       </div>
     );
@@ -209,7 +223,7 @@ export function ItineraryTimeline({ days }: ItineraryTimelineProps) {
             <article className='min-w-0 border-b border-[rgb(60_81_66/8%)] pb-10 last:border-b-0'>
               <div className='py-1'>
                 <span className='text-xs font-bold uppercase tracking-[0.18em] text-[var(--brand-primary)]'>
-                  Day {day.day}
+                  {publicLabel(locale, 'Day')} {day.day}
                 </span>
                 <h3 className='brand-heading mt-2 font-display text-xl leading-tight'>
                   {day.title}

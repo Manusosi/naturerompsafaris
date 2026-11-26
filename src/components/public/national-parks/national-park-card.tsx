@@ -1,3 +1,5 @@
+import { catalogImageUrl } from '@/lib/public/catalog-image';
+import { publicLabel } from '@/lib/i18n/public-label';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -79,7 +81,7 @@ export function NationalParkCard({
                 ? '(max-width: 640px) 100vw, 340px'
                 : '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw'
             }
-            src={item.imageUrl}
+            src={catalogImageUrl(item.imageUrl)}
           />
         ) : (
           <div className='absolute inset-0 flex items-center justify-center bg-gradient-to-br from-[var(--brand-primary)] to-[var(--brand-primary-dark)]'>
@@ -112,7 +114,7 @@ export function NationalParkCard({
                 onChange={() => onCompareToggle(item.id)}
                 type='checkbox'
               />
-              Compare
+              {publicLabel(locale, 'Compare')}
             </label>
           ) : null}
         </div>
@@ -175,7 +177,7 @@ export function NationalParkCard({
 
         <div className='brand-dual-actions mt-auto border-t border-[var(--brand-line)] pt-4'>
           <BrandButton href={href} size='sm' variant='accent-outline'>
-            Explore Park
+            {publicLabel(locale, 'Explore Park')}
             <Icons.arrowRight className='h-3.5 w-3.5' />
           </BrandButton>
           <BrandButton
@@ -183,7 +185,7 @@ export function NationalParkCard({
             size='sm'
             variant={item.tourCount ? 'accent' : 'accent-outline'}
           >
-            View Safaris
+            {publicLabel(locale, 'View Safaris')}
             <Icons.arrowRight className='h-3.5 w-3.5' />
           </BrandButton>
         </div>

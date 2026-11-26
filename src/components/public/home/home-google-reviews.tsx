@@ -1,5 +1,7 @@
 'use client';
+import { usePublicLocale } from '@/lib/i18n/use-public-locale';
 
+import { publicLabel } from '@/lib/i18n/public-label';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { Icons } from '@/components/icons';
@@ -122,10 +124,10 @@ function GoogleReviewCard({
   onToggle: () => void;
   review: HomeReviewItem;
 }) {
-  const canExpand = review.body.length > REVIEW_PREVIEW_LENGTH;
-  const preview = canExpand
-    ? `${review.body.slice(0, REVIEW_PREVIEW_LENGTH).trim()}...`
-    : review.body;
+  const locale = usePublicLocale();
+  const body = publicLabel(locale, review.body);
+  const canExpand = body.length > REVIEW_PREVIEW_LENGTH;
+  const preview = canExpand ? `${body.slice(0, REVIEW_PREVIEW_LENGTH).trim()}...` : body;
   const dateLabel = formatReviewDate(review.reviewDate);
 
   return (
@@ -138,7 +140,7 @@ function GoogleReviewCard({
         >
           &ldquo;
         </span>
-        {expanded || !canExpand ? review.body : preview}
+        {expanded || !canExpand ? body : preview}
       </blockquote>
       {canExpand ? (
         <button
@@ -182,6 +184,7 @@ function GoogleReviewCard({
 }
 
 function GoogleReviewsSlider({ items }: { items: HomeReviewItem[] }) {
+  const locale = usePublicLocale();
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [reduceMotion, setReduceMotion] = useState(false);
   const [index, setIndex] = useState(0);
@@ -282,7 +285,7 @@ function GoogleReviewsSlider({ items }: { items: HomeReviewItem[] }) {
       }}
     >
       <button
-        aria-label='Previous reviews'
+        aria-label={publicLabel(locale, 'Previous reviews')}
         className='absolute left-0 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center text-[var(--brand-heading)] transition-opacity hover:opacity-60'
         onClick={() => goTo(index - 1)}
         type='button'
@@ -290,7 +293,7 @@ function GoogleReviewsSlider({ items }: { items: HomeReviewItem[] }) {
         <Icons.chevronLeft className='h-5 w-5' />
       </button>
       <button
-        aria-label='Next reviews'
+        aria-label={publicLabel(locale, 'Next reviews')}
         className='absolute right-0 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center text-[var(--brand-heading)] transition-opacity hover:opacity-60'
         onClick={() => goTo(index + 1)}
         type='button'
@@ -323,6 +326,7 @@ function GoogleReviewsSlider({ items }: { items: HomeReviewItem[] }) {
 }
 
 export function HomeGoogleReviews({ reviews }: { reviews?: HomeReviewItem[] }) {
+  const locale = usePublicLocale();
   const items = selectGoogleReviews(reviews);
 
   return (
@@ -332,9 +336,12 @@ export function HomeGoogleReviews({ reviews }: { reviews?: HomeReviewItem[] }) {
     >
       <div className='brand-container brand-section'>
         <SectionHeader
-          description='Open the Nature Romp Safaris page on SafariBookings, Tripadvisor, or Google.'
-          eyebrow='Guest reviews'
-          title='Our customer reviews'
+          description={publicLabel(
+            locale,
+            'Open the Nature Romp Safaris page on SafariBookings, Tripadvisor, or Google.'
+          )}
+          eyebrow={publicLabel(locale, 'Guest reviews')}
+          title={publicLabel(locale, 'Our customer reviews')}
           titleId='home-reviews-heading'
         />
 

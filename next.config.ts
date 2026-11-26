@@ -8,6 +8,7 @@ const baseConfig: NextConfig = {
   devIndicators: false,
   output: process.env.BUILD_STANDALONE === 'true' ? 'standalone' : undefined,
   experimental: {
+    globalNotFound: true,
     optimizePackageImports: [
       '@tabler/icons-react',
       '@radix-ui/react-icons',
@@ -46,7 +47,7 @@ const baseConfig: NextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'aboxocmprjtkprzcvxns.supabase.co',
+        hostname: new URL(process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://aboxocmprjtkprzcvxns.supabase.co').hostname,
         port: ''
       },
       {
@@ -60,8 +61,18 @@ const baseConfig: NextConfig = {
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production'
   },
+  async headers() {
+    return [{
+      source: '/images/catalog/:file',
+      headers: [{ key: 'Cache-Control', value: 'public, max-age=31536000, immutable' }]
+    }];
+  },
   async rewrites() {
     return [
+      {
+        source: '/sitemap-:section.xml',
+        destination: '/sitemaps/:section.xml'
+      },
       {
         source: '/favicon.ico',
         destination: '/api/site-favicon'

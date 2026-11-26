@@ -1,5 +1,9 @@
 'use client';
 
+import { catalogImageUrl } from '@/lib/public/catalog-image';
+import { usePublicLocale } from '@/lib/i18n/use-public-locale';
+
+import { publicLabel } from '@/lib/i18n/public-label';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 
@@ -13,6 +17,7 @@ type AccommodationGalleryProps = {
 };
 
 export function AccommodationGallery({ images, title }: AccommodationGalleryProps) {
+  const locale = usePublicLocale();
   const [activeIndex, setActiveIndex] = useState(0);
   const touchStartX = useRef(0);
   const touchDeltaX = useRef(0);
@@ -103,7 +108,7 @@ export function AccommodationGallery({ images, title }: AccommodationGalleryProp
         {hasMultiple ? (
           <>
             <button
-              aria-label='Previous image'
+              aria-label={publicLabel(locale, 'Previous image')}
               className='absolute left-3 top-1/2 z-10 flex size-10 -translate-y-1/2 items-center justify-center rounded-full bg-black/45 text-white transition-colors hover:bg-black/65'
               onClick={showPrevious}
               type='button'
@@ -111,7 +116,7 @@ export function AccommodationGallery({ images, title }: AccommodationGalleryProp
               <Icons.chevronLeft className='size-5' />
             </button>
             <button
-              aria-label='Next image'
+              aria-label={publicLabel(locale, 'Next image')}
               className='absolute right-3 top-1/2 z-10 flex size-10 -translate-y-1/2 items-center justify-center rounded-full bg-black/45 text-white transition-colors hover:bg-black/65'
               onClick={showNext}
               type='button'
@@ -162,7 +167,7 @@ export function AccommodationGallery({ images, title }: AccommodationGalleryProp
                     className='object-cover'
                     fill
                     sizes='120px'
-                    src={image.url}
+                    src={catalogImageUrl(image.url)}
                   />
                 ) : null}
               </button>

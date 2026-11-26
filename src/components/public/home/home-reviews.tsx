@@ -1,5 +1,7 @@
 'use client';
+import { usePublicLocale } from '@/lib/i18n/use-public-locale';
 
+import { publicLabel } from '@/lib/i18n/public-label';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { Icons } from '@/components/icons';
@@ -25,6 +27,7 @@ function Stars({ rating }: { rating: number }) {
 }
 
 function ReviewSlide({ review }: { review: HomeReview }) {
+  const locale = usePublicLocale();
   return (
     <figure className='mx-auto flex max-w-3xl flex-col items-center px-2 text-center md:px-8'>
       <Stars rating={review.rating} />
@@ -34,7 +37,8 @@ function ReviewSlide({ review }: { review: HomeReview }) {
       <figcaption className='mt-7'>
         <p className='brand-heading font-display text-lg'>{review.guestName}</p>
         <p className='mt-1 text-xs uppercase tracking-[0.12em] text-[var(--brand-muted)]'>
-          {review.location ? `${review.location} · ` : ''}via {review.source}
+          {review.location ? `${review.location} · ` : ''}
+          {publicLabel(locale, 'via')} {review.source}
         </p>
       </figcaption>
     </figure>
@@ -42,6 +46,7 @@ function ReviewSlide({ review }: { review: HomeReview }) {
 }
 
 export function HomeReviews() {
+  const locale = usePublicLocale();
   const [active, setActive] = useState(0);
   const [paused, setPaused] = useState(false);
   const count = HOME_REVIEWS.length;
@@ -72,15 +77,15 @@ export function HomeReviews() {
   return (
     <section
       aria-roledescription='carousel'
-      aria-label='Guest reviews'
+      aria-label={publicLabel(locale, 'Guest reviews')}
       className='border-t border-[var(--brand-line)] bg-white'
     >
       <div className='brand-container brand-section'>
         {/* Header — descriptive, not boxed */}
         <div className='mx-auto max-w-2xl text-center'>
-          <p className='brand-eyebrow'>Do Not Take Our Word For It</p>
+          <p className='brand-eyebrow'>{publicLabel(locale, 'Do Not Take Our Word For It')}</p>
           <h2 className='brand-heading mt-3 font-display text-[clamp(2rem,4vw,3.25rem)] leading-[1.15]'>
-            What Our Clients Say
+            {publicLabel(locale, 'What Our Clients Say')}
           </h2>
           <div className='mt-5 flex flex-wrap items-center justify-center gap-x-4 gap-y-3'>
             <span className='inline-flex items-center gap-1'>
@@ -97,7 +102,7 @@ export function HomeReviews() {
             </span>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              alt='Tripadvisor'
+              alt={publicLabel(locale, 'Tripadvisor')}
               className='h-6 w-auto'
               height={24}
               src='/assets/tripadvisor-logo-primary.svg'
@@ -136,7 +141,7 @@ export function HomeReviews() {
         {/* Controls */}
         <div className='mt-10 flex items-center justify-center gap-6'>
           <button
-            aria-label='Previous review'
+            aria-label={publicLabel(locale, 'Previous review')}
             className='inline-flex h-10 w-10 items-center justify-center rounded-full border border-[var(--brand-line)] text-[var(--brand-heading)] transition-colors hover:border-[var(--brand-gold)] hover:text-[var(--brand-gold)]'
             onClick={() => go(active - 1)}
             type='button'
@@ -162,7 +167,7 @@ export function HomeReviews() {
           </div>
 
           <button
-            aria-label='Next review'
+            aria-label={publicLabel(locale, 'Next review')}
             className='inline-flex h-10 w-10 items-center justify-center rounded-full border border-[var(--brand-line)] text-[var(--brand-heading)] transition-colors hover:border-[var(--brand-gold)] hover:text-[var(--brand-gold)]'
             onClick={() => go(active + 1)}
             type='button'

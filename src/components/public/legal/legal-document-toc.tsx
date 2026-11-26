@@ -2,12 +2,14 @@
 
 import { useEffect, useState } from 'react';
 
+import { publicLabel } from '@/lib/i18n/public-label';
 import { Icons } from '@/components/icons';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import type { LegalSection } from '@/lib/public/legal-content';
 import { cn } from '@/lib/utils';
 
 type LegalDocumentTocProps = {
+  locale: string;
   sections: LegalSection[];
 };
 
@@ -55,7 +57,7 @@ function TocList({ activeId, onNavigate, sections }: TocListProps) {
 const tocCardClasses =
   'rounded-[var(--brand-radius)] border border-[var(--brand-line)] bg-[var(--brand-ivory)] p-5';
 
-export function LegalDocumentToc({ sections }: LegalDocumentTocProps) {
+export function LegalDocumentToc({ locale, sections }: LegalDocumentTocProps) {
   const [activeId, setActiveId] = useState<string | null>(sections[0]?.id ?? null);
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -93,7 +95,7 @@ export function LegalDocumentToc({ sections }: LegalDocumentTocProps) {
         <div className={tocCardClasses}>
           <CollapsibleTrigger className='flex w-full items-center justify-between gap-3 text-left'>
             <span className='brand-heading text-sm font-semibold uppercase tracking-[0.12em]'>
-              On this page
+              {publicLabel(locale, 'On this page')}
             </span>
             <Icons.chevronDown
               aria-hidden
@@ -114,14 +116,14 @@ export function LegalDocumentToc({ sections }: LegalDocumentTocProps) {
       </Collapsible>
 
       <nav
-        aria-label='On this page'
+        aria-label={publicLabel(locale, 'On this page')}
         className={cn(
           'hidden h-fit lg:block lg:sticky lg:top-[calc(var(--brand-topbar-h)+var(--brand-header-h)+1rem)]',
           tocCardClasses
         )}
       >
         <h2 className='brand-heading text-sm font-semibold uppercase tracking-[0.12em]'>
-          On this page
+          {publicLabel(locale, 'On this page')}
         </h2>
         <div className='mt-3'>
           <TocList activeId={activeId} sections={sections} />

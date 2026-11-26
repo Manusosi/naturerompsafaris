@@ -1,3 +1,5 @@
-export default function PortalSegmentLayout({ children }: { children: React.ReactNode }) {
-  return children;
-}
+export {
+  DefaultDocument as default,
+  generateMetadata,
+  generateViewport
+} from '@/components/layout/site-document';

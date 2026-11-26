@@ -1,5 +1,7 @@
 'use client';
+import { usePublicLocale } from '@/lib/i18n/use-public-locale';
 
+import { publicLabel } from '@/lib/i18n/public-label';
 import { useEffect, useRef } from 'react';
 
 import {
@@ -32,6 +34,7 @@ const MENU_GROUP_FILTERS = [
 ];
 
 export function ExperienceListingFilters({ active, onChange }: ExperienceListingFiltersProps) {
+  const locale = usePublicLocale();
   const draftRef = useRef(active);
 
   useEffect(() => {
@@ -57,20 +60,20 @@ export function ExperienceListingFilters({ active, onChange }: ExperienceListing
       activeCount={activeCount}
       clearLabel='Clear all'
       onClear={clear}
-      title='Experiences'
+      title={publicLabel(locale, 'Experiences')}
     >
-      <ListingFilterGroup title='Show'>
+      <ListingFilterGroup title={publicLabel(locale, 'Show')}>
         <ListingFilterOption
           checked={activeCount === 0}
           id='filter-all-experiences'
-          label='All experiences'
+          label={publicLabel(locale, 'All experiences')}
           name='experience-scope'
           type='radio'
           onChange={clear}
         />
       </ListingFilterGroup>
 
-      <ListingFilterGroup title='Country'>
+      <ListingFilterGroup title={publicLabel(locale, 'Country')}>
         {BRAND_PUBLIC_COUNTRIES.map((country) => (
           <ListingFilterOption
             checked={active.countries.includes(country.id)}
@@ -89,7 +92,7 @@ export function ExperienceListingFilters({ active, onChange }: ExperienceListing
         ))}
       </ListingFilterGroup>
 
-      <ListingFilterGroup title='Collection'>
+      <ListingFilterGroup title={publicLabel(locale, 'Collection')}>
         {MENU_GROUP_FILTERS.map((entry) => (
           <ListingFilterOption
             checked={active.groups.includes(entry.value)}

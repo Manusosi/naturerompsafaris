@@ -1,3 +1,4 @@
+import { publicLabel } from '@/lib/i18n/public-label';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -98,7 +99,7 @@ export function ExperienceDetailShell({
         >
           <div className='brand-container'>
             <section className='mx-auto max-w-4xl text-center'>
-              <p className='brand-eyebrow'>Experience Guide</p>
+              <p className='brand-eyebrow'>{publicLabel(locale, 'Experience Guide')}</p>
               <h2 className='brand-heading mt-3 font-display text-[clamp(2rem,4vw,3.2rem)] leading-tight'>
                 {guideHeading}
               </h2>
@@ -122,9 +123,9 @@ export function ExperienceDetailShell({
                 id='experience-expect'
               >
                 <div className='mx-auto max-w-2xl text-center'>
-                  <p className='brand-eyebrow'>What To Expect</p>
+                  <p className='brand-eyebrow'>{publicLabel(locale, 'What To Expect')}</p>
                   <h2 className='brand-heading mt-3 font-display text-3xl leading-tight'>
-                    The Experience At a Glance
+                    {publicLabel(locale, 'The Experience At a Glance')}
                   </h2>
                 </div>
                 <div className='mt-8 grid gap-x-10 gap-y-0 md:grid-cols-2'>
@@ -178,9 +179,12 @@ export function ExperienceDetailShell({
             <div className='brand-container'>
               <SectionHeader
                 align='left'
-                description='Lodges and camps featured on linked safari routes. Each stay is chosen for location, comfort, and access to the wildlife areas that define this experience.'
-                eyebrow='Where To Stay'
-                title='Recommended Safari Lodges'
+                description={publicLabel(
+                  locale,
+                  'Lodges and camps featured on linked safari routes. Each stay is chosen for location, comfort, and access to the wildlife areas that define this experience.'
+                )}
+                eyebrow={publicLabel(locale, 'Where To Stay')}
+                title={publicLabel(locale, 'Recommended Safari Lodges')}
               />
               <div className='mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3'>
                 {accommodations.map((accommodation) => (
@@ -229,7 +233,7 @@ export function ExperienceDetailShell({
                           className='inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wide text-[var(--brand-primary)] transition-colors hover:text-[var(--brand-gold)]'
                           href={accommodation.href}
                         >
-                          View Lodge
+                          {publicLabel(locale, 'View Lodge')}
                           <Icons.arrowRight className='h-3.5 w-3.5' />
                         </Link>
                       </div>
@@ -248,9 +252,11 @@ export function ExperienceDetailShell({
           <div aria-hidden className='absolute inset-0 bg-black/55' />
           <div className='brand-container brand-section relative flex justify-center'>
             <div className='w-full max-w-xl rounded-[var(--brand-radius)] bg-white p-8 text-center shadow-2xl md:p-10'>
-              <p className='brand-eyebrow'>Plan With Nature Romp Safaris</p>
+              <p className='brand-eyebrow'>
+                {publicLabel(locale, 'Plan With Nature Romp Safaris')}
+              </p>
               <h2 className='brand-heading mt-3 font-display text-3xl leading-tight'>
-                Ready to start planning?
+                {publicLabel(locale, 'Ready to start planning?')}
               </h2>
               <p className='brand-body mx-auto mt-3 max-w-md'>
                 {isMountainLayout
@@ -262,7 +268,7 @@ export function ExperienceDetailShell({
                   {isMountainLayout ? 'Plan My Climb' : 'Plan My Safari'}
                 </BrandButton>
                 <BrandButton href={localePath(locale, '/experiences')} variant='accent-outline'>
-                  All Experiences
+                  {publicLabel(locale, 'All Experiences')}
                 </BrandButton>
               </BrandButtonGroup>
             </div>

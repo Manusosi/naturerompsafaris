@@ -39,3 +39,29 @@ export async function translateKeywords(value: unknown, targetLocale: string): P
   if (!keywords.length) return [];
   return translateStringList(keywords, targetLocale);
 }
+
+export async function translateTourDetails(tour: Record<string, unknown>, locale: string) {
+  const itinerary = Array.isArray(tour.itinerary_days) ? tour.itinerary_days : [];
+  const days = [];
+  for (const day of itinerary) {
+    if (!day || typeof day !== 'object') continue;
+    const fields = ['title', 'description', 'mealPlan', 'meal_plan'].filter(
+      (field) => typeof day[field] === 'string' && day[field].trim()
+    );
+    const values = await translateStringList(
+      fields.map((field) => day[field]),
+      locale
+    );
+    days.push({ ...day, ...Object.fromEntries(fields.map((field, i) => [field, values[i]])) });
+  }
+
+  return {
+    itinerary_days: days,
+    inclusions: await translateKeywords(tour.inclusions, locale),
+    exclusions: await translateKeywords(tour.exclusions, locale),
+    important_notice:
+      typeof tour.important_notice === 'string'
+        ? await translateText(tour.important_notice, locale)
+        : null
+  };
+}

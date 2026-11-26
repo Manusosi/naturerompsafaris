@@ -29,7 +29,7 @@ export async function PublicShell({ children, locale }: PublicShellProps) {
   const footerColumns = buildFooterNavigation(locale);
 
   return (
-    <div className={cn('public-site min-h-screen', publicSiteFontClassName)}>
+    <div lang={locale} className={cn('public-site min-h-screen', publicSiteFontClassName)}>
       <SitePhotosProvider photos={photos}>
         <SiteHeader locale={locale} navItems={navItems} siteSettings={siteSettings} />
         <main>{children}</main>

@@ -1,3 +1,5 @@
+import SiteDocument from '@/components/layout/site-document';
+export { generateViewport } from '@/components/layout/site-document';
 import { DashboardShell } from '@/components/layout/dashboard-shell';
 import type { Metadata } from 'next';
 import { cookies } from 'next/headers';
@@ -15,5 +17,9 @@ export default async function DashboardLayout({ children }: { children: React.Re
   const cookieStore = await cookies();
   const defaultOpen = cookieStore.get('sidebar_state')?.value === 'true';
 
-  return <DashboardShell defaultOpen={defaultOpen}>{children}</DashboardShell>;
+  return (
+    <SiteDocument>
+      <DashboardShell defaultOpen={defaultOpen}>{children}</DashboardShell>
+    </SiteDocument>
+  );
 }

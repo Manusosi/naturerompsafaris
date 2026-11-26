@@ -1,5 +1,7 @@
 'use client';
+import { usePublicLocale } from '@/lib/i18n/use-public-locale';
 
+import { publicLabel } from '@/lib/i18n/public-label';
 import * as React from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
@@ -121,7 +123,7 @@ function DestinationInquiryForm({
           <div className='grid gap-4 sm:grid-cols-2'>
             <form.AppField name='name'>
               {(field) => (
-                <FormField label='Full name *'>
+                <FormField label={publicLabel(locale, 'Full name *')}>
                   <input
                     className={fieldClassName}
                     name={field.name}
@@ -136,7 +138,7 @@ function DestinationInquiryForm({
             </form.AppField>
             <form.AppField name='email'>
               {(field) => (
-                <FormField label='Email *'>
+                <FormField label={publicLabel(locale, 'Email *')}>
                   <input
                     className={fieldClassName}
                     name={field.name}
@@ -154,13 +156,13 @@ function DestinationInquiryForm({
 
           <form.AppField name='phone'>
             {(field) => (
-              <FormField label='Phone (optional)'>
+              <FormField label={publicLabel(locale, 'Phone (optional)')}>
                 <input
                   className={fieldClassName}
                   name={field.name}
                   onBlur={field.handleBlur}
                   onChange={(event) => field.handleChange(event.target.value)}
-                  placeholder='+254 712 345 678 (include country code)'
+                  placeholder={publicLabel(locale, '+254 712 345 678 (include country code)')}
                   type='tel'
                   value={field.state.value}
                 />
@@ -170,7 +172,9 @@ function DestinationInquiryForm({
           </form.AppField>
 
           <div>
-            <span className={labelClassName}>Preferred travel dates (optional)</span>
+            <span className={labelClassName}>
+              {publicLabel(locale, 'Preferred travel dates (optional)')}
+            </span>
             <form.AppField name='travelStartDate'>
               {(startField) => (
                 <form.AppField name='travelEndDate'>
@@ -201,10 +205,10 @@ function DestinationInquiryForm({
           <form.AppField name='travelers'>
             {(field) => (
               <div>
-                <span className={labelClassName}>Travellers *</span>
+                <span className={labelClassName}>{publicLabel(locale, 'Travellers *')}</span>
                 <div className='brand-traveler-stepper mt-1.5'>
                   <button
-                    aria-label='Decrease travellers'
+                    aria-label={publicLabel(locale, 'Decrease travellers')}
                     className='brand-traveler-stepper-btn'
                     disabled={field.state.value <= 1}
                     onClick={() => field.handleChange(Math.max(1, field.state.value - 1))}
@@ -216,7 +220,7 @@ function DestinationInquiryForm({
                     {field.state.value}
                   </span>
                   <button
-                    aria-label='Increase travellers'
+                    aria-label={publicLabel(locale, 'Increase travellers')}
                     className='brand-traveler-stepper-btn'
                     onClick={() => field.handleChange(field.state.value + 1)}
                     type='button'
@@ -231,13 +235,16 @@ function DestinationInquiryForm({
 
           <form.AppField name='message'>
             {(field) => (
-              <FormField label='Your message (optional)'>
+              <FormField label={publicLabel(locale, 'Your message (optional)')}>
                 <textarea
                   className={cn(fieldClassName, 'min-h-24 resize-y')}
                   name={field.name}
                   onBlur={field.handleBlur}
                   onChange={(event) => field.handleChange(event.target.value)}
-                  placeholder='Tell us what you would like to see and do on this safari.'
+                  placeholder={publicLabel(
+                    locale,
+                    'Tell us what you would like to see and do on this safari.'
+                  )}
                   value={field.state.value}
                 />
               </FormField>
@@ -259,7 +266,10 @@ function DestinationInquiryForm({
             {mutation.isPending ? 'Sending...' : 'Send Enquiry'}
           </form.SubmitButton>
           <p className='text-xs text-[var(--brand-muted)]'>
-            No payment is collected here. We aim to respond within 24 hours.
+            {publicLabel(
+              locale,
+              'No payment is collected here. We aim to respond within 24 hours.'
+            )}
           </p>
           {submitStatus === 'error' ? (
             <p className='text-sm text-red-700'>
@@ -275,6 +285,7 @@ function DestinationInquiryForm({
 }
 
 export function DestinationInquiryPanel(props: DestinationInquiryPanelProps) {
+  const locale = usePublicLocale();
   const [showForm, setShowForm] = React.useState(false);
   const formRef = React.useRef<HTMLDivElement>(null);
 
@@ -294,14 +305,16 @@ export function DestinationInquiryPanel(props: DestinationInquiryPanelProps) {
     <div className='space-y-4'>
       <div className='brand-contact-credentials-box'>
         <p className='text-xs font-semibold uppercase tracking-wide text-[var(--brand-muted)]'>
-          Plan your trip
+          {publicLabel(locale, 'Plan your trip')}
         </p>
         <p className='mt-1 font-display text-2xl text-[var(--brand-brown)]'>
-          Visit {props.destinationName}
+          {publicLabel(locale, 'Visit')} {props.destinationName}
         </p>
         <p className='mt-2 text-sm leading-6 text-[var(--brand-muted)]'>
-          Tell us your dates and group size and our safari experts will build a tailor-made
-          itinerary for this destination.
+          {publicLabel(
+            locale,
+            'Tell us your dates and group size and our safari experts will build a tailor-made itinerary for this destination.'
+          )}
         </p>
         <div className='mt-6'>
           <button
@@ -310,7 +323,7 @@ export function DestinationInquiryPanel(props: DestinationInquiryPanelProps) {
             onClick={handleToggleForm}
             type='button'
           >
-            Enquire About This Destination
+            {publicLabel(locale, 'Enquire About This Destination')}
             <Icons.chevronDown
               className={cn('size-4 transition-transform', showForm && 'rotate-180')}
             />
@@ -320,9 +333,11 @@ export function DestinationInquiryPanel(props: DestinationInquiryPanelProps) {
 
       {showForm ? (
         <div className='brand-contact-credentials-box' ref={formRef}>
-          <h2 className='brand-heading font-display text-lg'>Start your enquiry</h2>
+          <h2 className='brand-heading font-display text-lg'>
+            {publicLabel(locale, 'Start your enquiry')}
+          </h2>
           <p className='mt-1 text-sm text-[var(--brand-muted)]'>
-            Enquiring about{' '}
+            {publicLabel(locale, 'Enquiring about')}{' '}
             <strong className='text-[var(--brand-ink)]'>{props.destinationName}</strong>
           </p>
           <div className='mt-5'>

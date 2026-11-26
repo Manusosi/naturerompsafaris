@@ -1,5 +1,6 @@
 'use client';
 
+import { publicLabel } from '@/lib/i18n/public-label';
 import Image from 'next/image';
 
 import { Icons } from '@/components/icons';
@@ -23,14 +24,15 @@ export function HomeWhyChooseUs({ locale }: { locale: string }) {
         <div className='grid items-start gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-x-16 lg:gap-y-0'>
           <ScrollReveal className='lg:pt-2' from='left'>
             <h2 className='brand-heading font-display text-[clamp(2rem,4vw,3rem)] leading-[1.08]'>
-              Who We Are
+              {publicLabel(locale, 'Who We Are')}
             </h2>
             <span className='brand-gold-line brand-gold-line--left' />
             <div className='mt-7 max-w-xl space-y-5'>
               <p className='brand-body text-base leading-8 md:text-[1.05rem]'>
-                Nature Romp Safaris is a trusted East African travel company crafting personalized
-                Kenya Tanzania safari adventures, wildlife holidays, beach extensions, mountain
-                climbing trips and private safari itineraries.
+                {publicLabel(
+                  locale,
+                  'Nature Romp Safaris is a trusted East African travel company crafting personalized Kenya Tanzania safari adventures, wildlife holidays, beach extensions, mountain climbing trips and private safari itineraries.'
+                )}
               </p>
               <p className='brand-body text-base leading-8 md:text-[1.05rem]'>
                 Our team focuses on clear communication, reliable transport, local expertise and
@@ -39,7 +41,7 @@ export function HomeWhyChooseUs({ locale }: { locale: string }) {
             </div>
             <div className='mt-8'>
               <BrandButton href={`${localePath(locale, '/about')}#who-we-are`} variant='primary'>
-                Learn more
+                {publicLabel(locale, 'Learn more')}
                 <Icons.arrowRight className='h-4 w-4' />
               </BrandButton>
             </div>

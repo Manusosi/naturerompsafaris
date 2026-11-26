@@ -1,5 +1,6 @@
 'use client';
 
+import { publicLabel } from '@/lib/i18n/public-label';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -14,21 +15,21 @@ import { cn } from '@/lib/utils';
 
 const HOME_COUNTRY_TILES = [
   {
-    href: '/tours?country=kenya',
+    href: '/safaris/kenya',
     imageAlt: 'Maasai Mara plains on a Kenya safari with Nature Romp Safaris',
     imageSlot: 'home-dest-kenya' as const,
     label: 'Kenya safaris',
     body: 'Maasai Mara big cats, Amboseli elephants under Kilimanjaro, Tsavo, and the migration on the Kenyan side of the river.'
   },
   {
-    href: '/tours?country=tanzania',
+    href: '/safaris/tanzania',
     imageAlt: 'Serengeti wildlife on a Tanzania safari with Nature Romp Safaris',
     imageSlot: 'home-dest-tanzania' as const,
     label: 'Tanzania safaris',
     body: 'Serengeti plains, Ngorongoro Crater, Kilimanjaro, and a northern circuit paced so you are not rushing between parks.'
   },
   {
-    href: '/tours',
+    href: '/safaris/kenya-tanzania',
     imageAlt: 'Combined Kenya and Tanzania safari with Nature Romp Safaris',
     imageSlot: 'home-dest-combined' as const,
     label: 'Kenya and Tanzania safaris',
@@ -72,7 +73,11 @@ export function HomeDestinationsMap({
           (showCountryTiles || kenyaTanzaniaMap) && 'pb-[clamp(4.25rem,7.5vw,6.75rem)]'
         )}
       >
-        <SectionHeader description={description} eyebrow={eyebrow || undefined} title={title} />
+        <SectionHeader
+          description={publicLabel(locale, description)}
+          eyebrow={eyebrow ? publicLabel(locale, eyebrow) : undefined}
+          title={publicLabel(locale, title)}
+        />
 
         {showCountryTiles ? (
           <div className='mt-12 grid gap-6 md:grid-cols-3'>
@@ -96,11 +101,13 @@ export function HomeDestinationsMap({
                   />
                   <span className='absolute inset-x-0 bottom-0 p-5 lg:p-6'>
                     <span className='block font-display text-[1.35rem] leading-tight text-white lg:text-[1.5rem]'>
-                      {tile.label}
+                      {publicLabel(locale, tile.label)}
                     </span>
-                    <span className='mt-2 block text-sm leading-6 text-white/88'>{tile.body}</span>
+                    <span className='mt-2 block text-sm leading-6 text-white/88'>
+                      {publicLabel(locale, tile.body)}
+                    </span>
                     <span className='mt-4 inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wide text-[var(--brand-gold)]'>
-                      View safaris
+                      {publicLabel(locale, 'View safaris')}
                       <Icons.arrowRight className='h-3 w-3 transition-transform group-hover:translate-x-1' />
                     </span>
                   </span>

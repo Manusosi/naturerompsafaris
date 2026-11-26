@@ -1,4 +1,6 @@
-/** Publish-time translation is manual only — use portal backfill when needed. */
-export function scheduleAutoTranslate(_task: () => Promise<void>): void {
-  return;
+import { after } from 'next/server';
+import { isAutoTranslateEnabled } from './auto-translate-config';
+
+export function scheduleAutoTranslate(task: () => Promise<void>): void {
+  if (isAutoTranslateEnabled()) after(task);
 }

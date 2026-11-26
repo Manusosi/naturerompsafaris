@@ -1,3 +1,4 @@
+import { publicLabel } from '@/lib/i18n/public-label';
 import type { Metadata } from 'next';
 
 import { PublicPageHero } from '@/components/public/public-page-hero';
@@ -126,7 +127,7 @@ export default async function ToursPage({ params, searchParams }: ToursPageProps
       <PublicPageHero
         breadcrumbs={[{ href: localePath(locale), label: 'Home' }, { label: 'Safari Tours' }]}
         description={toursPageDescription}
-        eyebrow='Safari Tours'
+        eyebrow={publicLabel(locale, 'Safari Tours')}
         hero={pageHero}
         imageAlt={hero.imageAlt}
         imageUrl={hero.imageUrl}

@@ -1,5 +1,7 @@
 'use client';
+import { usePublicLocale } from '@/lib/i18n/use-public-locale';
 
+import { publicLabel } from '@/lib/i18n/public-label';
 import * as React from 'react';
 
 import { Icons } from '@/components/icons';
@@ -98,8 +100,11 @@ function PriceCell({
   price: number | null | undefined;
   showCaption?: boolean;
 }) {
+  const locale = usePublicLocale();
   if (!price) {
-    return <span className='text-xs text-[var(--brand-muted)]'>On request</span>;
+    return (
+      <span className='text-xs text-[var(--brand-muted)]'>{publicLabel(locale, 'On request')}</span>
+    );
   }
 
   return (
@@ -114,7 +119,7 @@ function PriceCell({
       </strong>
       {showCaption ? (
         <span className='mt-1 text-[10px] font-normal text-[var(--brand-muted)] sm:text-[11px]'>
-          per person
+          {publicLabel(locale, 'per person')}
         </span>
       ) : null}
     </span>
@@ -160,12 +165,17 @@ function PricingTableIntro({
 }
 
 function PricingOnRequest() {
+  const locale = usePublicLocale();
   return (
     <div className='brand-contact-credentials-box'>
-      <h3 className='brand-heading font-display text-xl'>Pricing on Request</h3>
+      <h3 className='brand-heading font-display text-xl'>
+        {publicLabel(locale, 'Pricing on Request')}
+      </h3>
       <p className='brand-body mt-2 text-sm leading-6'>
-        Pricing can vary by dates, group size, and lodge availability. Send an enquiry and the team
-        will prepare the correct quote.
+        {publicLabel(
+          locale,
+          'Pricing can vary by dates, group size, and lodge availability. Send an enquiry and the team will prepare the correct quote.'
+        )}
       </p>
       <button
         className='mt-5 inline-flex items-center gap-2 rounded-[var(--brand-button-radius)] border border-[var(--brand-primary)] px-4 py-2.5 text-xs font-bold uppercase tracking-wide text-[var(--brand-primary)] transition hover:bg-[var(--brand-primary)] hover:text-white'
@@ -173,13 +183,14 @@ function PricingOnRequest() {
         type='button'
       >
         <Icons.mail className='h-4 w-4' />
-        Request Prices
+        {publicLabel(locale, 'Request Prices')}
       </button>
     </div>
   );
 }
 
 function PricingTierTables({ tiers }: { tiers: PublicTourPricingTier[] }) {
+  const locale = usePublicLocale();
   if (!tiers.length) return <PricingOnRequest />;
 
   return (
@@ -224,13 +235,13 @@ function PricingTierTables({ tiers }: { tiers: PublicTourPricingTier[] }) {
                     </colgroup>
                     <thead className='brand-pricing-tier__head' style={headStyle}>
                       <tr>
-                        {dayTrip ? null : <th scope='col'>Season</th>}
+                        {dayTrip ? null : <th scope='col'>{publicLabel(locale, 'Season')}</th>}
                         {bands.map((band) => (
                           <th key={band} scope='col'>
                             {formatBandLabel(band)}
                           </th>
                         ))}
-                        <th scope='col'>Enquire</th>
+                        <th scope='col'>{publicLabel(locale, 'Enquire')}</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -264,7 +275,7 @@ function PricingTierTables({ tiers }: { tiers: PublicTourPricingTier[] }) {
                               type='button'
                             >
                               <Icons.mail className='h-3.5 w-3.5 shrink-0' />
-                              Book
+                              {publicLabel(locale, 'Book')}
                             </button>
                           </td>
                         </tr>
@@ -274,7 +285,7 @@ function PricingTierTables({ tiers }: { tiers: PublicTourPricingTier[] }) {
                 </div>
                 {bands.length > 2 ? (
                   <p className='brand-pricing-tier__scroll-hint'>
-                    Swipe the table to see all prices →
+                    {publicLabel(locale, 'Swipe the table to see all prices →')}
                   </p>
                 ) : null}
               </div>
@@ -282,7 +293,10 @@ function PricingTierTables({ tiers }: { tiers: PublicTourPricingTier[] }) {
               <div className='flex min-h-36 flex-col items-center justify-center gap-3 p-6 text-center'>
                 <Icons.info className='h-7 w-7 text-[var(--brand-gold)]' />
                 <p className='brand-body max-w-sm text-sm leading-7'>
-                  This tier is available, but seasonal prices have not been published yet.
+                  {publicLabel(
+                    locale,
+                    'This tier is available, but seasonal prices have not been published yet.'
+                  )}
                 </p>
                 <button
                   className={cn(
@@ -293,7 +307,7 @@ function PricingTierTables({ tiers }: { tiers: PublicTourPricingTier[] }) {
                   type='button'
                 >
                   <Icons.mail className='h-4 w-4' />
-                  Enquire
+                  {publicLabel(locale, 'Enquire')}
                 </button>
               </div>
             )}

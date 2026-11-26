@@ -1,3 +1,4 @@
+import { publicLabel } from '@/lib/i18n/public-label';
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
@@ -84,11 +85,11 @@ export default async function FleetVehicleDetailPage({ params }: FleetVehiclePag
         />
         <div className='brand-container relative z-10 py-12'>
           <nav
-            aria-label='Breadcrumb'
+            aria-label={publicLabel(locale, 'Breadcrumb')}
             className='mb-8 flex flex-wrap items-center justify-center gap-x-3 text-sm font-semibold uppercase tracking-[0.14em] text-white/75'
           >
             <a className='transition-colors hover:text-white' href={localePath(locale)}>
-              Home
+              {publicLabel(locale, 'Home')}
             </a>
             <span aria-hidden className='text-white/50'>
               |
@@ -97,7 +98,7 @@ export default async function FleetVehicleDetailPage({ params }: FleetVehiclePag
               className='transition-colors hover:text-white'
               href={localePath(locale, '/our-fleet')}
             >
-              Our Fleet
+              {publicLabel(locale, 'Our Fleet')}
             </a>
           </nav>
           <div className='mx-auto max-w-3xl text-center'>
@@ -135,8 +136,10 @@ export default async function FleetVehicleDetailPage({ params }: FleetVehiclePag
             ) : (
               <div className='rounded-[var(--brand-radius)] border border-[var(--brand-line)] bg-[var(--brand-ivory)] p-5 md:col-span-3'>
                 <p className='brand-body text-[var(--brand-muted)]'>
-                  Vehicle facts will appear here once capacity and feature details are added in the
-                  portal.
+                  {publicLabel(
+                    locale,
+                    'Vehicle facts will appear here once capacity and feature details are added in the portal.'
+                  )}
                 </p>
               </div>
             )}
@@ -147,9 +150,9 @@ export default async function FleetVehicleDetailPage({ params }: FleetVehiclePag
       <section className='brand-section bg-white'>
         <div className='brand-container grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,1fr)_340px] lg:items-start'>
           <article className='min-w-0'>
-            <p className='brand-eyebrow'>Fleet Detail</p>
+            <p className='brand-eyebrow'>{publicLabel(locale, 'Fleet Detail')}</p>
             <h2 className='brand-heading mt-3 font-display text-[clamp(1.9rem,3.5vw,2.75rem)] leading-tight'>
-              Built for comfortable safari days
+              {publicLabel(locale, 'Built for comfortable safari days')}
             </h2>
 
             {vehicle.descriptionHtml ? (
@@ -161,14 +164,18 @@ export default async function FleetVehicleDetailPage({ params }: FleetVehiclePag
               <p className='brand-body mt-7 max-w-3xl text-base leading-8'>{vehicle.summary}</p>
             ) : (
               <p className='brand-body mt-7 max-w-3xl text-base leading-8 text-[var(--brand-muted)]'>
-                Add a public description in the portal to describe this vehicle's comfort,
-                photography setup, luggage space, and route suitability.
+                {publicLabel(
+                  locale,
+                  "Add a public description in the portal to describe this vehicle's comfort, photography setup, luggage space, and route suitability."
+                )}
               </p>
             )}
 
             {vehicle.features.length ? (
               <div className='mt-10'>
-                <h3 className='brand-heading font-display text-2xl'>Vehicle Features</h3>
+                <h3 className='brand-heading font-display text-2xl'>
+                  {publicLabel(locale, 'Vehicle Features')}
+                </h3>
                 <ul className='mt-5 grid gap-3 sm:grid-cols-2'>
                   {vehicle.features.map((feature) => (
                     <li
@@ -185,7 +192,9 @@ export default async function FleetVehicleDetailPage({ params }: FleetVehiclePag
 
             {vehicle.gallery.length > 1 ? (
               <div className='mt-12'>
-                <h3 className='brand-heading font-display text-2xl'>Gallery</h3>
+                <h3 className='brand-heading font-display text-2xl'>
+                  {publicLabel(locale, 'Gallery')}
+                </h3>
                 <div className='mt-5 grid gap-4 sm:grid-cols-2'>
                   {vehicle.gallery.map((image) => (
                     <div
@@ -210,23 +219,27 @@ export default async function FleetVehicleDetailPage({ params }: FleetVehiclePag
 
           <aside className='sticky top-[calc(var(--brand-topbar-h)+var(--brand-header-h)+1rem)] rounded-[var(--brand-radius)] border border-[var(--brand-line)] bg-[var(--brand-primary-dark)] p-6 text-white'>
             <p className='text-xs font-bold uppercase tracking-[0.16em] text-white/60'>
-              Plan With This Vehicle
+              {publicLabel(locale, 'Plan With This Vehicle')}
             </p>
-            <h2 className='mt-3 font-display text-3xl leading-tight'>Ask for availability</h2>
+            <h2 className='mt-3 font-display text-3xl leading-tight'>
+              {publicLabel(locale, 'Ask for availability')}
+            </h2>
             <p className='mt-4 text-sm leading-7 text-white/75'>
-              Share your route, dates, group size, and comfort expectations. Our team will confirm
-              the best vehicle match for the safari.
+              {publicLabel(
+                locale,
+                'Share your route, dates, group size, and comfort expectations. Our team will confirm the best vehicle match for the safari.'
+              )}
             </p>
             <BrandButtonGroup className='mt-6'>
               <BrandButton href={localePath(locale, '/contact')} variant='gold'>
-                Enquire Now
+                {publicLabel(locale, 'Enquire Now')}
               </BrandButton>
               <BrandButton
                 className='border-white/35'
                 href={localePath(locale, '/tours')}
                 variant='gold-outline'
               >
-                View Safari Tours
+                {publicLabel(locale, 'View Safari Tours')}
               </BrandButton>
             </BrandButtonGroup>
           </aside>
@@ -234,7 +247,11 @@ export default async function FleetVehicleDetailPage({ params }: FleetVehiclePag
       </section>
 
       {vehicle.faqs.length ? (
-        <FaqSection faqs={vehicle.faqs} headingId='fleet-faq-heading' title='Fleet questions' />
+        <FaqSection
+          faqs={vehicle.faqs}
+          headingId='fleet-faq-heading'
+          title={publicLabel(locale, 'Fleet questions')}
+        />
       ) : null}
     </main>
   );

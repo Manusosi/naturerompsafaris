@@ -1,5 +1,7 @@
 'use client';
+import { usePublicLocale } from '@/lib/i18n/use-public-locale';
 
+import { publicLabel } from '@/lib/i18n/public-label';
 import * as React from 'react';
 
 import { Icons } from '@/components/icons';
@@ -15,6 +17,7 @@ function openIntent(intent: string) {
 
 /** Top-of-article social sharing row. Builds intents from the live URL. */
 export function ArticleShare({ title, className }: { title: string; className?: string }) {
+  const locale = usePublicLocale();
   const [copied, setCopied] = React.useState(false);
 
   const url = () => encodeURIComponent(currentUrl());
@@ -37,10 +40,10 @@ export function ArticleShare({ title, className }: { title: string; className?: 
     <div className={cn('flex flex-wrap items-center gap-2', className)}>
       <span className='mr-1 inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-[var(--brand-muted)]'>
         <Icons.share className='size-4' />
-        Share
+        {publicLabel(locale, 'Share')}
       </span>
       <button
-        aria-label='Share on X'
+        aria-label={publicLabel(locale, 'Share on X')}
         className={buttonClass}
         onClick={() => openIntent(`https://twitter.com/intent/tweet?url=${url()}&text=${text()}`)}
         type='button'
@@ -48,7 +51,7 @@ export function ArticleShare({ title, className }: { title: string; className?: 
         <Icons.twitter className='size-4' />
       </button>
       <button
-        aria-label='Share on Facebook'
+        aria-label={publicLabel(locale, 'Share on Facebook')}
         className={buttonClass}
         onClick={() => openIntent(`https://www.facebook.com/sharer/sharer.php?u=${url()}`)}
         type='button'
@@ -56,7 +59,7 @@ export function ArticleShare({ title, className }: { title: string; className?: 
         <Icons.facebook className='size-4' />
       </button>
       <button
-        aria-label='Share on LinkedIn'
+        aria-label={publicLabel(locale, 'Share on LinkedIn')}
         className={buttonClass}
         onClick={() => openIntent(`https://www.linkedin.com/sharing/share-offsite/?url=${url()}`)}
         type='button'
@@ -64,7 +67,7 @@ export function ArticleShare({ title, className }: { title: string; className?: 
         <Icons.linkedin className='size-4' />
       </button>
       <button
-        aria-label='Share on WhatsApp'
+        aria-label={publicLabel(locale, 'Share on WhatsApp')}
         className={buttonClass}
         onClick={() => openIntent(`https://wa.me/?text=${text()}%20${url()}`)}
         type='button'
@@ -72,7 +75,7 @@ export function ArticleShare({ title, className }: { title: string; className?: 
         <Icons.whatsapp className='size-4' />
       </button>
       <button
-        aria-label='Copy link'
+        aria-label={publicLabel(locale, 'Copy link')}
         className={cn(
           buttonClass,
           copied && 'border-[var(--brand-primary)] text-[var(--brand-primary)]'

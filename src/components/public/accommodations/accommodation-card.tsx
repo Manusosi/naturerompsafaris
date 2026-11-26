@@ -1,3 +1,4 @@
+import { catalogImageUrl } from '@/lib/public/catalog-image';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -59,7 +60,7 @@ export function AccommodationCard({ item, variant = 'grid' }: AccommodationCardP
                 ? '(max-width: 640px) 100vw, 320px'
                 : '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw'
             }
-            src={item.imageUrl}
+            src={catalogImageUrl(item.imageUrl)}
           />
         ) : (
           <div className='absolute inset-0 bg-[var(--brand-primary-light)]' />

@@ -1,5 +1,6 @@
 'use client';
 
+import { publicLabel } from '@/lib/i18n/public-label';
 import * as React from 'react';
 
 import { Icons } from '@/components/icons';
@@ -70,7 +71,7 @@ export function ExperienceTripsExplorer({
   return (
     <div className='brand-container'>
       <div className='mx-auto max-w-3xl text-center'>
-        <p className='brand-eyebrow'>Under This Experience</p>
+        <p className='brand-eyebrow'>{publicLabel(locale, 'Under This Experience')}</p>
         <h2 className='brand-heading mt-3 font-display text-[clamp(2rem,4vw,3rem)] leading-tight'>
           {title}
         </h2>
@@ -86,7 +87,7 @@ export function ExperienceTripsExplorer({
         {!hideFilters ? (
           <aside className='brand-contact-credentials-box h-fit lg:sticky lg:top-[calc(var(--brand-sticky-offset)+5.25rem)]'>
             <div className='space-y-6'>
-              <FilterGroup label='Duration'>
+              <FilterGroup label={publicLabel(locale, 'Duration')}>
                 {durationOptions.map((option) => (
                   <FilterButton
                     active={duration === option.value}
@@ -99,9 +100,9 @@ export function ExperienceTripsExplorer({
               </FilterGroup>
 
               {routeOptions.length ? (
-                <FilterGroup label='Route / Park Area'>
+                <FilterGroup label={publicLabel(locale, 'Route / Park Area')}>
                   <FilterButton active={route === 'all'} onClick={() => setRoute('all')}>
-                    All Routes
+                    {publicLabel(locale, 'All Routes')}
                   </FilterButton>
                   {routeOptions.map((option) => (
                     <FilterButton
@@ -122,7 +123,8 @@ export function ExperienceTripsExplorer({
           {!hideFilters ? (
             <div className='mb-6 flex flex-wrap items-center justify-between gap-3'>
               <p className='text-sm font-medium text-[var(--brand-muted)]'>
-                {visibleTours.length} of {filteredTours.length} matching {itemLabelPlural} shown
+                {visibleTours.length} {publicLabel(locale, 'of')} {filteredTours.length}{' '}
+                {publicLabel(locale, 'matching')} {itemLabelPlural} {publicLabel(locale, 'shown')}
               </p>
               {(duration !== 'all' || route !== 'all') && (
                 <button
@@ -134,7 +136,7 @@ export function ExperienceTripsExplorer({
                   type='button'
                 >
                   <Icons.close className='h-3.5 w-3.5' />
-                  Clear Filters
+                  {publicLabel(locale, 'Clear Filters')}
                 </button>
               )}
             </div>

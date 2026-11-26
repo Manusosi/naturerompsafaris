@@ -1,5 +1,7 @@
 'use client';
+import { usePublicLocale } from '@/lib/i18n/use-public-locale';
 
+import { publicLabel } from '@/lib/i18n/public-label';
 import {
   Accordion,
   AccordionContent,
@@ -15,14 +17,15 @@ type ExperienceFaqSectionProps = {
 };
 
 export function ExperienceFaqSection({ faqs }: ExperienceFaqSectionProps) {
+  const locale = usePublicLocale();
   if (!faqs.length) return null;
 
   return (
     <ExperienceScrollReveal className='brand-section border-t border-[var(--brand-line)] bg-white'>
       <div className='brand-container max-w-3xl'>
-        <p className='brand-eyebrow'>Questions</p>
+        <p className='brand-eyebrow'>{publicLabel(locale, 'Questions')}</p>
         <h2 className='brand-heading mt-3 font-display text-[clamp(2rem,4vw,2.75rem)] leading-tight'>
-          Frequently Asked Questions
+          {publicLabel(locale, 'Frequently Asked Questions')}
         </h2>
         <span aria-hidden className='brand-gold-line brand-gold-line--left' />
 

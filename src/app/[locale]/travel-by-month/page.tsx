@@ -1,3 +1,5 @@
+export const metadata = { robots: { index: false, follow: true } };
+
 import { createListingPage } from '@/components/public/listing-page-template';
 
 export default createListingPage({

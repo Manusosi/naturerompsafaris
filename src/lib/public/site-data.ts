@@ -1016,7 +1016,8 @@ function buildTourCatalogFacets(tours: PublicTour[]): PublicTourCatalogFacets {
 
 async function fetchPublishedTourRows(
   locale: string,
-  tourIds?: string[]
+  tourIds?: string[],
+  limit?: number
 ): Promise<TourTranslationListRow[]> {
   const supabase = createGenericClient();
   let query = supabase
@@ -1025,9 +1026,7 @@ async function fetchPublishedTourRows(
       `
       slug,
       title,
-      overview,
       excerpt,
-      faqs,
       tour:tours!inner(
         id,
         status,
@@ -1036,13 +1035,6 @@ async function fetchPublishedTourRows(
         price_from,
         catalog_group,
         countries,
-        start_location,
-        end_location,
-        important_notice,
-        itinerary_days,
-        route_waypoints,
-        inclusions,
-        exclusions,
         gallery
       ),
       og_image:media_assets!tour_translations_og_image_id_fkey(url, alt)
@@ -1057,7 +1049,8 @@ async function fetchPublishedTourRows(
     query = query.in('tour_id', tourIds);
   }
 
-  const { data } = await query;
+  if (limit !== undefined) query = query.limit(limit);
+  const { data } = await query.throwOnError();
   return (data ?? []) as TourTranslationListRow[];
 }
 
@@ -1080,14 +1073,22 @@ async function buildToursFromRows(
   return mapTourListRows(linkLocale, rows, pricingByTourId, relationLabels, mediaById);
 }
 
+const getCachedTourList = unstable_cache(
+  async (locale: string) => {
+    const { contentLocale, rows } = await resolvePublishedContentLocale(locale, (resolvedLocale) =>
+      fetchPublishedTourRows(resolvedLocale)
+    );
+    return buildToursFromRows(locale, rows, contentLocale);
+  },
+  ['public-tour-catalog-v3'],
+  { revalidate: 300, tags: ['tours'] }
+);
+
 export async function getPublicTourCatalog(
   locale: string,
   filters: PublicTourCatalogFilters = {}
 ): Promise<{ facets: PublicTourCatalogFacets; tours: PublicTour[] }> {
-  const { contentLocale, rows } = await resolvePublishedContentLocale(locale, (resolvedLocale) =>
-    fetchPublishedTourRows(resolvedLocale)
-  );
-  const allTours = await buildToursFromRows(locale, rows, contentLocale);
+  const allTours = await getCachedTourList(locale);
   const facets = buildTourCatalogFacets(allTours);
 
   const tours = allTours
@@ -1110,9 +1111,9 @@ export async function getPublicTours(locale: string, limit = 6): Promise<PublicT
 
 async function fetchPublicTours(locale: string, limit = 6): Promise<PublicTour[]> {
   const { contentLocale, rows } = await resolvePublishedContentLocale(locale, (resolvedLocale) =>
-    fetchPublishedTourRows(resolvedLocale)
+    fetchPublishedTourRows(resolvedLocale, undefined, limit)
   );
-  return buildToursFromRows(locale, rows.slice(0, limit), contentLocale);
+  return buildToursFromRows(locale, rows, contentLocale);
 }
 
 export async function getPublicToursByIds(
@@ -1219,7 +1220,8 @@ export async function getPublicTourDetail(
     .eq('slug', slug)
     .eq('tour.status', 'published')
     .not('published_at', 'is', null)
-    .maybeSingle<TourTranslationListRow>();
+    .maybeSingle<TourTranslationListRow>()
+    .throwOnError();
 
   if (!data && locale !== DEFAULT_LOCALE) {
     contentLocale = DEFAULT_LOCALE;
@@ -1255,7 +1257,8 @@ export async function getPublicTourDetail(
       .eq('slug', slug)
       .eq('tour.status', 'published')
       .not('published_at', 'is', null)
-      .maybeSingle<TourTranslationListRow>());
+      .maybeSingle<TourTranslationListRow>()
+      .throwOnError());
   }
 
   if (!data) return null;
@@ -1265,7 +1268,20 @@ export async function getPublicTourDetail(
   if (!summary || !tour) return null;
 
   const galleryIds = parseStringArray(tour.gallery);
-  const itineraryDaysRaw = parseItineraryDays(tour.itinerary_days);
+  const localized =
+    contentLocale !== DEFAULT_LOCALE && data.overview && typeof data.overview === 'object'
+      ? (
+          data.overview as {
+            tourDetails?: {
+              itinerary_days?: unknown;
+              inclusions?: unknown;
+              exclusions?: unknown;
+              important_notice?: string | null;
+            };
+          }
+        ).tourDetails
+      : undefined;
+  const itineraryDaysRaw = parseItineraryDays(localized?.itinerary_days ?? tour.itinerary_days);
   const itineraryImageIds = itineraryDaysRaw.map((day) => day.imageId).filter(Boolean);
   const mediaById = await resolveMediaByIds([...new Set([...galleryIds, ...itineraryImageIds])]);
   const gallery = galleryIds.flatMap((id) => {
@@ -1286,11 +1302,11 @@ export async function getPublicTourDetail(
     accommodations: await getRouteAccommodations(locale, summary.id),
     descriptionHtml: parseRichTextHtml(data.overview),
     endLocation: tour.end_location ?? null,
-    exclusions: parseStringArray(tour.exclusions),
+    exclusions: parseStringArray(localized?.exclusions ?? tour.exclusions),
     faqs: normalizeDirectAnswers(data.faqs),
     gallery,
-    importantNotice: tour.important_notice ?? null,
-    inclusions: parseStringArray(tour.inclusions),
+    importantNotice: localized?.important_notice ?? tour.important_notice ?? null,
+    inclusions: parseStringArray(localized?.inclusions ?? tour.inclusions),
     itineraryDays,
     routeLegs: parseRouteLegs(tour.route_waypoints),
     startLocation: tour.start_location ?? null

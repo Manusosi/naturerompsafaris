@@ -1,3 +1,4 @@
+import { catalogImageUrl } from '@/lib/public/catalog-image';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -31,7 +32,7 @@ export function BlogCard({ post, titleTag: TitleTag = 'h2' }: BlogCardProps) {
             className='object-cover transition-transform duration-500 group-hover:scale-105'
             fill
             sizes='(max-width:768px) 100vw, 33vw'
-            src={post.imageUrl}
+            src={catalogImageUrl(post.imageUrl)}
           />
         ) : (
           <div className='absolute inset-0 bg-[var(--brand-primary-light)]' />

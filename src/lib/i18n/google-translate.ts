@@ -30,12 +30,10 @@ async function callGoogleTranslate(
   if (!segments.length) return [];
 
   const apiKey = getApiKey();
-  const url = new URL(GOOGLE_TRANSLATE_URL);
-  url.searchParams.set('key', apiKey);
 
-  const response = await fetch(url.toString(), {
+  const response = await fetch(GOOGLE_TRANSLATE_URL, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', 'X-Goog-Api-Key': apiKey },
     body: JSON.stringify({
       q: segments,
       source: 'en',
@@ -50,7 +48,13 @@ async function callGoogleTranslate(
   }
 
   const translations = payload.data?.translations ?? [];
-  return segments.map((segment, index) => translations[index]?.translatedText ?? segment);
+  if (translations.length !== segments.length) {
+    throw new Error('Google Translate returned an incomplete response.');
+  }
+  return translations.map(({ translatedText }) => {
+    if (!translatedText?.trim()) throw new Error('Google Translate returned an empty translation.');
+    return translatedText;
+  });
 }
 
 function splitHtmlSegments(html: string): string[] {

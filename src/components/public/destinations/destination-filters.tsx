@@ -1,3 +1,4 @@
+import { publicLabel } from '@/lib/i18n/public-label';
 import {
   ListingFilterGroup,
   ListingFilterNavItem,
@@ -31,14 +32,14 @@ export function DestinationFilters({
       activeCount={activeCountry ? 1 : 0}
       clearHref={activeCountry ? basePath : undefined}
       clearLabel='Clear'
-      title='Destinations'
+      title={publicLabel(locale, 'Destinations')}
     >
-      <ListingFilterGroup title='Browse by country'>
+      <ListingFilterGroup title={publicLabel(locale, 'Browse by country')}>
         <ListingFilterNavItem
           active={!activeCountry}
           count={totalCount}
           href={basePath}
-          label='All destinations'
+          label={publicLabel(locale, 'All destinations')}
         />
         {facets.map((facet) => (
           <ListingFilterNavItem

@@ -27,7 +27,7 @@ export function AboutPageContent({ hero, locale, reviews }: AboutPageContentProp
         title={ABOUT_HERO_DEFAULTS.title}
       />
       <AboutStoryIntro locale={locale} />
-      <HomePartners />
+      <HomePartners locale={locale} />
       <HomeDestinationsMap
         description={ABOUT_OPERATIONS.description}
         eyebrow=''

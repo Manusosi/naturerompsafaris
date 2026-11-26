@@ -1,6 +1,8 @@
 'use client';
 
+import { publicLabel } from '@/lib/i18n/public-label';
 import Image from 'next/image';
+import { getHomeHeroImage } from '@/lib/public/home-hero-images';
 import { useEffect, useState } from 'react';
 
 import { Icons } from '@/components/icons';
@@ -52,6 +54,38 @@ function resolveHomeSubheading(hero?: PageHero | null): string {
   return subheading;
 }
 
+function SlidePhoto({ alt, first, url }: { alt: string; first: boolean; url: string }) {
+  const variants = getHomeHeroImage(url);
+  if (!variants) {
+    return (
+      <Image
+        alt={alt}
+        className='object-cover'
+        fill
+        fetchPriority={first ? 'high' : undefined}
+        loading='eager'
+        sizes='100vw'
+        src={url}
+      />
+    );
+  }
+  return (
+    <picture>
+      <source media='(max-width: 640px)' srcSet={variants.mobile.src} />
+      {/* Each imported image has a content-hashed URL and is already sized and encoded. */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        alt={alt}
+        className='absolute inset-0 h-full w-full object-cover'
+        fetchPriority={first ? 'high' : undefined}
+        height={variants.desktop.height}
+        width={variants.desktop.width}
+        src={variants.desktop.src}
+      />
+    </picture>
+  );
+}
+
 export function HomeHero({
   locale,
   hero,
@@ -85,23 +119,29 @@ export function HomeHero({
     configuredSlides && configuredSlides.length > 0 ? configuredSlides : fallbackSlides;
   const videoId = hero?.type === 'youtube' ? youtubeVideoId(hero.youtubeUrl) : null;
 
-  const heading = resolveHomeHeading(hero);
-  const subheading = resolveHomeSubheading(hero);
+  const heading = publicLabel(locale, resolveHomeHeading(hero));
+  const subheading = publicLabel(locale, resolveHomeSubheading(hero));
   const primaryCtaLabel = hero?.ctaLabel ?? 'Plan My Safari';
   const primaryCtaHref = hero?.ctaHref ? localePath(locale, hero.ctaHref) : contactHref;
 
-  const [activeSlide, setActiveSlide] = useState(0);
+  const [slideStep, setSlideStep] = useState(0);
+  const [preloadNext, setPreloadNext] = useState(false);
+  const activeSlide = slideStep % Math.max(heroSlides.length, 1);
 
   useEffect(() => {
     if (videoId) return;
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (reduced || heroSlides.length <= 1) return;
 
+    const preloadTimer = window.setTimeout(() => setPreloadNext(true), HERO_SLIDE_INTERVAL / 2);
     const interval = window.setInterval(() => {
-      setActiveSlide((current) => (current + 1) % heroSlides.length);
+      setSlideStep((step) => step + 1);
     }, HERO_SLIDE_INTERVAL);
 
-    return () => window.clearInterval(interval);
+    return () => {
+      window.clearTimeout(preloadTimer);
+      window.clearInterval(interval);
+    };
   }, [heroSlides.length, videoId]);
 
   return (
@@ -125,11 +165,11 @@ export function HomeHero({
             className='pointer-events-none absolute left-1/2 top-1/2 h-[56.25vw] min-h-full w-[177.78vh] min-w-full -translate-x-1/2 -translate-y-1/2'
             loading='lazy'
             src={`https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&controls=0&loop=1&playlist=${videoId}&playsinline=1&rel=0&modestbranding=1&showinfo=0`}
-            title='Background video'
+            title={publicLabel(locale, 'Background video')}
           />
         </>
       ) : (
-        heroSlides.map((slide, index) => (
+        heroSlides.slice(0, slideStep + (preloadNext ? 2 : 1)).map((slide, index) => (
           <div
             aria-hidden={index !== activeSlide}
             className='absolute inset-0 transition-opacity duration-1000'
@@ -148,15 +188,10 @@ export function HomeHero({
                 <source src={slide.mediaUrl} />
               </video>
             ) : (
-              <Image
-                alt={slide.alt ?? 'Nature Romp Safaris'}
-                className='object-cover'
-                fetchPriority={index === 0 ? 'high' : undefined}
-                fill
-                loading={index === 0 ? 'eager' : 'lazy'}
-                priority={index === 0}
-                sizes='100vw'
-                src={slide.mediaUrl}
+              <SlidePhoto
+                alt={publicLabel(locale, slide.alt ?? 'Nature Romp Safaris')}
+                first={index === 0}
+                url={slide.mediaUrl}
               />
             )}
           </div>
@@ -185,10 +220,10 @@ export function HomeHero({
                 variant='accent'
               >
                 <Icons.compass className='h-4 w-4 shrink-0' />
-                {primaryCtaLabel}
+                {publicLabel(locale, primaryCtaLabel)}
               </BrandButton>
               <BrandButton href={toursHref} variant='gold-outline'>
-                View Safari Tours
+                {publicLabel(locale, 'View Safari Tours')}
                 <Icons.arrowRight className='h-4 w-4 shrink-0' />
               </BrandButton>
             </BrandButtonGroup>
@@ -206,7 +241,8 @@ export function HomeHero({
                   src={BRAND_GOOGLE_REVIEWS.logoPath}
                   width={20}
                 />
-                Google {BRAND_GOOGLE_REVIEWS.rating} average
+                {publicLabel(locale, 'Google')} {BRAND_GOOGLE_REVIEWS.rating}{' '}
+                {publicLabel(locale, 'average')}
               </a>
               <span aria-hidden className='hidden h-4 w-px bg-white/35 sm:block' />
               <a
@@ -222,7 +258,7 @@ export function HomeHero({
                   src={BRAND_TRIPADVISOR.logoPath}
                   width={84}
                 />
-                Tripadvisor reviews
+                {publicLabel(locale, 'Tripadvisor reviews')}
               </a>
             </div>
           </div>

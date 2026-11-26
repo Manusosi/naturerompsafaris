@@ -90,8 +90,55 @@ export async function getMediaByIds(ids: string[]): Promise<MediaAsset[]> {
   return ids.map((id) => byId.get(id)).filter((asset): asset is MediaAsset => Boolean(asset));
 }
 
-export async function uploadMediaFile(file: File): Promise<MediaAsset> {
+async function optimizePhoto(original: File): Promise<File> {
+  if (original.type !== 'image/jpeg' || typeof createImageBitmap !== 'function') return original;
+  let bitmap: ImageBitmap | undefined;
+  try {
+    bitmap = await createImageBitmap(original);
+    const scale = Math.min(1, 2400 / Math.max(bitmap.width, bitmap.height));
+    const canvas = document.createElement('canvas');
+    canvas.width = Math.max(1, Math.round(bitmap.width * scale));
+    canvas.height = Math.max(1, Math.round(bitmap.height * scale));
+    const context = canvas.getContext('2d');
+    if (!context) return original;
+    context.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+    const blob = await new Promise<Blob | null>((resolve) =>
+      canvas.toBlob(resolve, 'image/webp', 0.83)
+    );
+    if (!blob || blob.type !== 'image/webp' || blob.size >= original.size) return original;
+    return new File([blob], original.name.replace(/\.[^.]+$/, '') + '.webp', { type: blob.type });
+  } catch {
+    return original;
+  } finally {
+    bitmap?.close();
+  }
+}
+
+async function mediaIdForFile(file: File): Promise<string> {
+  const digest = new Uint8Array(await crypto.subtle.digest('SHA-256', await file.arrayBuffer()));
+  // A UUIDv8 derived from the original bytes makes retries and concurrent uploads converge.
+  digest[6] = (digest[6] & 0x0f) | 0x80;
+  digest[8] = (digest[8] & 0x3f) | 0x80;
+  const hex = Array.from(digest.slice(0, 16), (byte) => byte.toString(16).padStart(2, '0')).join(
+    ''
+  );
+  return [
+    hex.slice(0, 8),
+    hex.slice(8, 12),
+    hex.slice(12, 16),
+    hex.slice(16, 20),
+    hex.slice(20)
+  ].join('-');
+}
+
+export async function uploadMediaFile(original: File): Promise<MediaAsset> {
   const supabase = createClient();
+  const id = await mediaIdForFile(original);
+  const existingAsset = () => supabase.from('media_assets').select('*').eq('id', id).maybeSingle();
+  const existing = await existingAsset();
+  if (existing.error) throw new Error(existing.error.message);
+  if (existing.data) return toAsset(existing.data);
+  const file = await optimizePhoto(original);
   const path = buildPath(file);
 
   const { error: uploadError } = await supabase.storage
@@ -105,6 +152,7 @@ export async function uploadMediaFile(file: File): Promise<MediaAsset> {
   const { data, error } = await supabase
     .from('media_assets')
     .insert({
+      id,
       bucket: MEDIA_BUCKET,
       path,
       url: publicUrl.publicUrl,
@@ -116,8 +164,14 @@ export async function uploadMediaFile(file: File): Promise<MediaAsset> {
     .single();
 
   if (error) {
-    // Roll back the orphaned object so storage and the table stay in sync.
-    await supabase.storage.from(MEDIA_BUCKET).remove([path]);
+    // Resolve an ambiguous insert response before removing the newly uploaded object.
+    const winner = await existingAsset();
+    if (winner.error) throw new Error(winner.error.message);
+    if (winner.data?.path !== path) {
+      const cleanup = await supabase.storage.from(MEDIA_BUCKET).remove([path]);
+      if (cleanup.error) throw new Error(cleanup.error.message);
+    }
+    if (winner.data) return toAsset(winner.data);
     throw new Error(error.message);
   }
 

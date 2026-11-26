@@ -1,5 +1,6 @@
 'use client';
 
+import { publicLabel } from '@/lib/i18n/public-label';
 import { AboutMissionCommitment } from '@/components/public/about/about-mission-commitment';
 import { AboutStoryIntro } from '@/components/public/about/about-story-intro';
 import { HomeDestinationsMap } from '@/components/public/home/home-destinations-map';
@@ -34,7 +35,7 @@ export function WhoWeAreTab({ locale }: { locale: string }) {
 
         <div className='brand-container brand-section relative mx-auto max-w-4xl text-center'>
           <h2 className='font-display text-[clamp(2rem,4vw,3rem)] leading-tight text-white'>
-            Our Vision
+            {publicLabel(locale, 'Our Vision')}
           </h2>
           <span aria-hidden className='brand-gold-line mt-5' />
           <blockquote className='mt-8'>

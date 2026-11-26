@@ -1,3 +1,4 @@
+import { publicLabel } from '@/lib/i18n/public-label';
 import type { Metadata } from 'next';
 
 import type { PageHeroKey } from '@/lib/public/page-heroes';
@@ -30,8 +31,8 @@ export async function buildListingPageMetadata({
   locale
 }: ListingMetadataInput): Promise<Metadata> {
   const pageHero = heroKey ? await getPageHero(heroKey) : null;
-  const title = pageHero?.heading ?? defaultTitle;
-  const description = pageHero?.subheading ?? defaultDescription;
+  const title = publicLabel(locale, pageHero?.heading ?? defaultTitle);
+  const description = publicLabel(locale, pageHero?.subheading ?? defaultDescription);
   const localePrefix = `/${locale}`;
   const hasLocalePrefix =
     canonicalPath === localePrefix || canonicalPath.startsWith(`${localePrefix}/`);

@@ -1,3 +1,4 @@
+import { publicLabel } from '@/lib/i18n/public-label';
 import { TourCard } from '@/components/public/cards/content-cards';
 import { EmptyState } from '@/components/public/page-shell';
 import { SectionHeader } from '@/components/public/ui/section-header';
@@ -8,7 +9,7 @@ export function HomeFeaturedTours({ locale, tours }: { locale: string; tours: Pu
   return (
     <section className='brand-section bg-[var(--brand-warm-gray)]'>
       <div className='brand-container'>
-        <SectionHeader title='Highlighted safari trips' />
+        <SectionHeader title={publicLabel(locale, 'Highlighted safari trips')} />
         {tours.length ? (
           <div className='mt-12 grid gap-6 md:grid-cols-2 xl:grid-cols-3'>
             {tours.map((tour) => (
@@ -33,7 +34,7 @@ export function HomeFeaturedTours({ locale, tours }: { locale: string; tours: Pu
               actionHref={localePath(locale, '/contact')}
               actionLabel='Plan a Custom Safari'
               message='Published tours will appear here once they are added through the Nature Romp CMS.'
-              title='No tours published yet'
+              title={publicLabel(locale, 'No tours published yet')}
             />
           </div>
         )}
